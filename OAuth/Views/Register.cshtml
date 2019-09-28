@@ -1,41 +1,56 @@
 @model Crm.Identity.OAuth.ViewModels.AuthorizeViewModel
 
-@* http://localhost:9000/OAuth/Authorize?client_id=site&response_type=token&scope=accounts&state=ABCDEFGH&redirect_uri=localhost:3000 *@
-
 <!Doctype html>
 <html>
 <head>
-    <title>Lite Identity</title>
+    <title>Identity</title>
 
     <meta charset="utf-8"/>
 </head>
 <body>
 
-<form method="post" action="/oauth/authorize">
+<form method="post" action="/oauth/register">
     @Html.AntiForgeryToken()
 
-    @if (Model.IsInvalidCredentials)
-    {
-        <p style="color:red;">Не правильный логин или пароль</p>
-    }
+    <label>Фамилия:</label><br/>
+    <input type="text" name="Surname"/><br/><br/>
 
-    <label>Логин:</label><br/>
-    <input type="text" name="Key"/><br/><br/>
+    <label>Имя (обязательно):</label><br/>
+    <input type="text" name="Name" required="required"/><br/><br/>
 
-    <label>Пароль:</label><br/>
-    <input type="text" name="Password"/><br/><br/>
+    <label>Пол:</label><br/>
+    <select name="Gender">
+        <option selected="selected">Не выбрано</option>
+        <option value="1">Мужской</option>
+        <option value="2">Женский</option>
+    </select><br/><br/>
 
-    <label>Запомнить:</label><br/>
-    <input type="checkbox" name="RememberState"/><br/><br/>
+    <label>Дата рождения:</label><br/>
+    <input type="date" name="BirthDate"/><br/><br/>
 
-    <input type="submit" value="Войти"/>
+    <label>Логин (обязательно):</label><br/>
+    <input type="text" name="Login" required="required"/><br/><br/>
 
+    <label>Email (обязательно):</label><br/>
+    <input type="email" name="Email" required="required"/><br/><br/>
+
+    <label>Телефон (обязательно):</label><br/>
+    <input type="tel" name="Phone" required="required"/><br/><br/>
+
+    <label>Пароль (обязательно):</label><br/>
+    <input type="password" name="Password" required="required"/><br/><br/>
+
+    <label>Пароль (повторно):</label><br/>
+    <input type="password" name="PasswordConfirmation" required="required"/><br/><br/>
+    
+    <input type="submit" value="Зарегистрироваться"/>
+
+    <input type="hidden" name="client_id" value="@Model.ClientId"/>
+    <input type="hidden" name="scope" value="@Model.Scope"/>
     <input type="hidden" name="state" value="@Model.State"/>
     <input type="hidden" name="response_type" value="@Model.ResponseType"/>
     <input type="hidden" name="redirect_uri" value="@Model.RedirectUri"/>
 </form>
-
-<a href="/">Зарегистрироваться</a>
 
 </body>
 </html>

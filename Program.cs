@@ -1,23 +1,25 @@
 ﻿using System.Threading.Tasks;
+using Ajupov.Infrastructure.All.ApiDocumentation;
+using Ajupov.Infrastructure.All.Configuration;
+using Ajupov.Infrastructure.All.Hosting;
+using Ajupov.Infrastructure.All.HotStorage;
+using Ajupov.Infrastructure.All.Logging;
+using Ajupov.Infrastructure.All.Metrics;
+using Ajupov.Infrastructure.All.Migrations;
+using Ajupov.Infrastructure.All.Mvc;
+using Ajupov.Infrastructure.All.Orm;
+using Ajupov.Infrastructure.All.Tracing;
 using Crm.Identity.Clients.Services;
 using Crm.Identity.Clients.Storages;
 using Crm.Identity.Identities.Services;
 using Crm.Identity.Identities.Storages;
+using Crm.Identity.OAuth.Filters;
 using Crm.Identity.OAuth.Options;
 using Crm.Identity.OAuth.Services;
 using Crm.Identity.Profiles.Services;
 using Crm.Identity.Profiles.Storages;
-using Infrastructure.All.ApiDocumentation;
-using Infrastructure.All.Configuration;
-using Infrastructure.All.Hosting;
-using Infrastructure.All.HotStorage;
-using Infrastructure.All.Logging;
-using Infrastructure.All.Metrics;
-using Infrastructure.All.Migrations;
-using Infrastructure.All.Mvc;
-using Infrastructure.All.Orm;
-using Infrastructure.All.Tracing;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -33,7 +35,7 @@ namespace Crm.Identity
                     .ConfigureHost()
                     .ConfigureLogging()
                     .ConfigureServices((builder, services) => services
-                        .ConfigureMvc()
+                        .ConfigureMvc(typeof(ValidationFilter))
                         .ConfigureTracing()
                         .ConfigureApiDocumentation()
                         .ConfigureMetrics(builder.Configuration)
@@ -69,6 +71,7 @@ namespace Crm.Identity
                             };
                         }))
                     .Configure(builder => builder
+                        .UseDeveloperExceptionPage()
                         .UseApiDocumentationsMiddleware()
                         .UseMigrationsMiddleware()
                         .UseMetricsMiddleware()

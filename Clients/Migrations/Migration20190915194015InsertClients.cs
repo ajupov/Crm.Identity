@@ -27,13 +27,13 @@ namespace Crm.Identity.Clients.Migrations
                 {
                     Id = Guid.NewGuid(),
                     ClientId = clientId,
-                    Value = "accounts"
+                    Value = "products"
                 });
         }
 
         public override void Down()
         {
-            Delete.FromTable("Clients").Row(new {ClientId = "site"});
+            Delete.FromTable("Clients").Row(new {ClientId = "spa-site"});
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Ajupov.Infrastructure.All.Mvc;
 using Ajupov.Utils.All.String;
 using Crm.Identity.Clients.Services;
 using Crm.Identity.OAuth.Attributes.Security;
@@ -9,7 +10,6 @@ using Crm.Identity.OAuth.Models.Register;
 using Crm.Identity.OAuth.Models.Tokens;
 using Crm.Identity.OAuth.Services;
 using Crm.Identity.OAuth.ViewModels;
-using Infrastructure.All.Mvc;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Crm.Identity.OAuth.Controllers
@@ -136,6 +136,8 @@ namespace Crm.Identity.OAuth.Controllers
             {
                 return Redirect(request.redirect_uri);
             }
+
+            // Registration
 
             return RedirectToAction("Authorize");
         }

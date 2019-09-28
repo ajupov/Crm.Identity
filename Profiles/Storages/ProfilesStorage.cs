@@ -1,6 +1,6 @@
-﻿using Crm.Identity.Profiles.Models;
-using Infrastructure.All.Orm;
-using Infrastructure.All.Orm.Settings;
+﻿using Ajupov.Infrastructure.All.Orm;
+using Ajupov.Infrastructure.All.Orm.Settings;
+using Crm.Identity.Profiles.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 

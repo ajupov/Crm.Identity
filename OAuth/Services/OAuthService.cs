@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+using Ajupov.Infrastructure.All.HotStorage.HotStorage;
 using Crm.Identity.Identities.Extensions;
 using Crm.Identity.Identities.Models;
 using Crm.Identity.Identities.Requests;
@@ -16,7 +17,6 @@ using Crm.Identity.OAuth.Options;
 using Crm.Identity.Profiles.Models;
 using Crm.Identity.Profiles.Services;
 using Infrastructure.All.Generator;
-using Infrastructure.All.HotStorage.HotStorage;
 using Infrastructure.All.Http;
 using Microsoft.IdentityModel.Tokens;
 

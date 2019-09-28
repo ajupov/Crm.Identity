@@ -1,12 +1,9 @@
 @model Crm.Identity.OAuth.ViewModels.AuthorizeViewModel
 
-@* http://localhost:9000/OAuth/Authorize?client_id=site&response_type=token&scope=accounts&state=ABCDEFGH&redirect_uri=localhost:3000 *@
-
 <!Doctype html>
 <html>
 <head>
-    <title>Lite Identity</title>
-
+    <title>Identity</title>
     <meta charset="utf-8"/>
 </head>
 <body>
@@ -23,7 +20,7 @@
     <input type="text" name="Key"/><br/><br/>
 
     <label>Пароль:</label><br/>
-    <input type="text" name="Password"/><br/><br/>
+    <input type="password" name="Password"/><br/><br/>
 
     <label>Запомнить:</label><br/>
     <input type="checkbox" name="RememberState"/><br/><br/>
@@ -35,7 +32,7 @@
     <input type="hidden" name="redirect_uri" value="@Model.RedirectUri"/>
 </form>
 
-<a href="/">Зарегистрироваться</a>
+<a href="/oauth/register?client_id=@Model.ClientId&response_type=@Model.ResponseType&scope=@Model.Scope&state=@Model.State&redirect_uri=@Model.RedirectUri">Зарегистрироваться</a>
 
 </body>
 </html>
