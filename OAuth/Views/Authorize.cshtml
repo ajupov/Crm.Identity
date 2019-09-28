@@ -1,0 +1,41 @@
+@model Crm.Identity.OAuth.ViewModels.AuthorizeViewModel
+
+@* http://localhost:9000/OAuth/Authorize?client_id=site&response_type=token&scope=accounts&state=ABCDEFGH&redirect_uri=localhost:3000 *@
+
+<!Doctype html>
+<html>
+<head>
+    <title>Lite Identity</title>
+
+    <meta charset="utf-8"/>
+</head>
+<body>
+
+<form method="post" action="/oauth/authorize">
+    @Html.AntiForgeryToken()
+
+    @if (Model.IsInvalidCredentials)
+    {
+        <p style="color:red;">Не правильный логин или пароль</p>
+    }
+
+    <label>Логин:</label><br/>
+    <input type="text" name="Key"/><br/><br/>
+
+    <label>Пароль:</label><br/>
+    <input type="text" name="Password"/><br/><br/>
+
+    <label>Запомнить:</label><br/>
+    <input type="checkbox" name="RememberState"/><br/><br/>
+
+    <input type="submit" value="Войти"/>
+
+    <input type="hidden" name="state" value="@Model.State"/>
+    <input type="hidden" name="response_type" value="@Model.ResponseType"/>
+    <input type="hidden" name="redirect_uri" value="@Model.RedirectUri"/>
+</form>
+
+<a href="/">Зарегистрироваться</a>
+
+</body>
+</html>
