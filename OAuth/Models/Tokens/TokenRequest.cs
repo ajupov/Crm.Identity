@@ -1,37 +1,28 @@
-using Crm.Identity.OAuth.Attributes.Validation;
-using Newtonsoft.Json;
+using Ajupov.Identity.OAuth.Attributes.Validation;
 
-namespace Crm.Identity.OAuth.Models.Tokens
+namespace Ajupov.Identity.OAuth.Models.Tokens
 {
     public class TokenRequest
     {
         [GrandTypeValidation]
-        [JsonProperty("grant_type")]
-        public string GrantType { get; set; }
+        public string grant_type { get; set; }
 
         [ClientIdValidation]
-        [JsonProperty("client_id")]
-        public string ClientId { get; set; }
+        public string client_id { get; set; }
 
         [ClientSecretValidation]
-        [JsonProperty("client_secret")]
-        public string ClientSecret { get; set; }
+        public string client_secret { get; set; }
 
         [CodeValidation]
-        [JsonProperty("code")]
-        public string Code { get; set; }
+        public string code { get; set; }
 
-        [JsonProperty("username")]
-        public string Username { get; set; }
+        public string username { get; set; }
 
-        [JsonProperty("password")]
-        public string Password { get; set; }
+        public string password { get; set; }
 
-        [JsonProperty("refresh_token")]
-        public string RefreshToken { get; set; }
+        public string refresh_token { get; set; }
 
-        [RedirectUriWithStateValidation]
-        [JsonProperty("redirect_uri")]
-        public string RedirectUri { get; set; }
+        [RedirectUriValidation]
+        public string redirect_uri { get; set; }
     }
 }

@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Ajupov.Identity.Profiles.Helpers;
+using Ajupov.Identity.Profiles.Models;
+using Ajupov.Identity.Profiles.Requests;
+using Ajupov.Identity.Profiles.Storages;
 using Ajupov.Utils.All.String;
-using Crm.Identity.Profiles.Helpers;
-using Crm.Identity.Profiles.Models;
-using Crm.Identity.Profiles.Requests;
-using Crm.Identity.Profiles.Storages;
 using Microsoft.EntityFrameworkCore;
 
-namespace Crm.Identity.Profiles.Services
+namespace Ajupov.Identity.Profiles.Services
 {
     public class ProfilesService : IProfilesService
     {
@@ -24,12 +24,14 @@ namespace Crm.Identity.Profiles.Services
         public Task<Profile> GetAsync(Guid id, CancellationToken ct)
         {
             return _profilesStorage.Profiles
+                .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == id, ct);
         }
 
         public Task<List<Profile>> GetListAsync(IEnumerable<Guid> ids, CancellationToken ct)
         {
             return _profilesStorage.Profiles
+                .AsNoTracking()
                 .Where(x => ids.Contains(x.Id))
                 .ToListAsync(ct);
         }
@@ -37,6 +39,7 @@ namespace Crm.Identity.Profiles.Services
         public Task<List<Profile>> GetPagedListAsync(ProfilesGetPagedListRequest request, CancellationToken ct)
         {
             return _profilesStorage.Profiles
+                .AsNoTracking()
                 .Where(x =>
                     (request.Surname.IsEmpty() || EF.Functions.Like(x.Surname, $"{request.Surname}%")) &&
                     (request.Name.IsEmpty() || EF.Functions.Like(x.Name, $"{request.Name}%")) &&
@@ -57,17 +60,19 @@ namespace Crm.Identity.Profiles.Services
 
         public async Task<Guid> CreateAsync(Profile profile, CancellationToken ct)
         {
-            var newUser = new Profile
+            var newProfile = new Profile
             {
+                Id = Guid.NewGuid(),
                 Surname = profile.Surname,
                 Name = profile.Name,
                 BirthDate = profile.BirthDate,
                 Gender = profile.Gender,
-                AvatarUrl = profile.AvatarUrl,
-                CreateDateTime = DateTime.UtcNow,
+                IsLocked = false,
+                IsDeleted = false,
+                CreateDateTime = DateTime.UtcNow
             };
 
-            var entry = await _profilesStorage.AddAsync(newUser, ct);
+            var entry = await _profilesStorage.AddAsync(newProfile, ct);
             await _profilesStorage.SaveChangesAsync(ct);
 
             return entry.Entity.Id;
@@ -79,7 +84,6 @@ namespace Crm.Identity.Profiles.Services
             oldProfile.Name = profile.Name;
             oldProfile.BirthDate = profile.BirthDate;
             oldProfile.Gender = profile.Gender;
-            oldProfile.AvatarUrl = profile.AvatarUrl;
             oldProfile.IsLocked = profile.IsLocked;
             oldProfile.IsDeleted = profile.IsDeleted;
             oldProfile.ModifyDateTime = DateTime.UtcNow;

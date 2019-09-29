@@ -1,24 +1,33 @@
-﻿//using System;
-//using System.Threading.Tasks;
-//using Identity.Identities.Models;
-//using Identity.Users.Models;
-//
-//namespace Identity.Registration.Services
-//{
-//    public interface IRegistrationService
-//    {
-//        Task<User> CreateUserAsync(
-//            string surname = null,
-//            string name = null,
-//            DateTime? birthDate = null,
-//            UserGender gender);
-//
-//        Task<Identities.Models.Identity> CreateLoginIdentityAsync(User user, string login, string passwordHash);
-//
-//        Task<Identities.Models.Identity> CreateEmailIdentityAsync(User user, string email, string passwordHash, bool needVerify = true);
-//
-//        Task<Identities.Models.Identity> CreateExternalIdentityAsync(User user, IdentityType identityType, string externalValue);
-//
-//        Task SendEmailConfirmationUrlAsync(string email, string verifyUrl);
-//    }
-//}
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Ajupov.Identity.Profiles.Models;
+
+namespace Ajupov.Identity.Registration.Services
+{
+    public interface IRegistrationService
+    {
+        Task<bool> IsLoginExistsAsync(string login, CancellationToken ct);
+
+        Task<bool> IsEmailExistsAsync(string email, CancellationToken ct);
+
+        Task<bool> IsPhoneExistsAsync(string phone, CancellationToken ct);
+
+        Task RegisterAsync(
+            string surname,
+            string name,
+            ProfileGender gender,
+            DateTime birthDate,
+            string login,
+            string email,
+            string phone,
+            string password,
+            string ipAddress,
+            string userAgent,
+            CancellationToken ct);
+
+        Task SendEmailConfirmationEmailAsync(string email, string ipAddress, string userAgent, CancellationToken ct);
+
+        Task SendPhoneConfirmationSmsAsync(string phone, string ipAddress, string userAgent, CancellationToken ct);
+    }
+}

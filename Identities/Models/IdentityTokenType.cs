@@ -1,4 +1,4 @@
-namespace Crm.Identity.Identities.Models
+namespace Ajupov.Identity.Identities.Models
 {
     public enum IdentityTokenType : byte
     {

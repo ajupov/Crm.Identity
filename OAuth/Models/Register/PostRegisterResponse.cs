@@ -1,4 +1,4 @@
-﻿namespace Crm.Identity.OAuth.Models.Register
+﻿namespace Ajupov.Identity.OAuth.Models.Register
 {
     public class PostRegisterResponse
     {

@@ -1,6 +1,6 @@
 ﻿using FluentMigrator;
 
-namespace Crm.Identity.Identities.Migrations
+namespace Ajupov.Identity.Identities.Migrations
 {
     [Migration(20190525175248)]
     public class Migration20190525175248AddTableIdentityTokens : Migration
@@ -14,7 +14,9 @@ namespace Crm.Identity.Identities.Migrations
                 .WithColumn("Value").AsString().NotNullable()
                 .WithColumn("CreateDateTime").AsDateTime2().NotNullable()
                 .WithColumn("ExpirationDateTime").AsDateTime2().NotNullable()
-                .WithColumn("UseDateTime").AsDateTime2().Nullable();
+                .WithColumn("UseDateTime").AsDateTime2().Nullable()
+                .WithColumn("IpAddress").AsString(15).Nullable()
+                .WithColumn("UserAgent").AsString(256).Nullable();
 
             Create.PrimaryKey("PK_IdentityTokens_Id").OnTable("IdentityTokens")
                 .Column("Id");

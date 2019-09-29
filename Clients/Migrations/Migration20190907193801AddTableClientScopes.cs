@@ -1,6 +1,6 @@
 ﻿using FluentMigrator;
 
-namespace Crm.Identity.Clients.Migrations
+namespace Ajupov.Identity.Clients.Migrations
 {
     [Migration(20190907193801)]
     public class Migration20190907193801AddTableClientScopes : Migration

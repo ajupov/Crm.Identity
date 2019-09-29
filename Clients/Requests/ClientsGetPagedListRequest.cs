@@ -1,6 +1,6 @@
 using System;
 
-namespace Crm.Identity.Clients.Requests
+namespace Ajupov.Identity.Clients.Requests
 {
     public class ClientsGetPagedListRequest
     {

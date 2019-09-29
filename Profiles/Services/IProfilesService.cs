@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Crm.Identity.Profiles.Models;
-using Crm.Identity.Profiles.Requests;
+using Ajupov.Identity.Profiles.Models;
+using Ajupov.Identity.Profiles.Requests;
 
-namespace Crm.Identity.Profiles.Services
+namespace Ajupov.Identity.Profiles.Services
 {
     public interface IProfilesService
     {

@@ -1,7 +1,7 @@
 using System.Linq;
-using Crm.Identity.Identities.Models;
+using Ajupov.Identity.Identities.Models;
 
-namespace Crm.Identity.Identities.Extensions
+namespace Ajupov.Identity.Identities.Extensions
 {
     public static class IdentityTypeExtensions
     {

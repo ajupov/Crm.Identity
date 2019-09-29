@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Crm.Identity.Clients.Helpers;
-using Crm.Identity.Clients.Models;
-using Crm.Identity.Clients.Requests;
-using Crm.Identity.Clients.Storages;
+using Ajupov.Identity.Clients.Helpers;
+using Ajupov.Identity.Clients.Models;
+using Ajupov.Identity.Clients.Requests;
+using Ajupov.Identity.Clients.Storages;
 using Microsoft.EntityFrameworkCore;
 
-namespace Crm.Identity.Clients.Services
+namespace Ajupov.Identity.Clients.Services
 {
     public class ClientsService : IClientsService
     {
@@ -23,6 +23,7 @@ namespace Crm.Identity.Clients.Services
         public Task<Client> GetAsync(Guid id, CancellationToken ct)
         {
             return _storage.Clients
+                .AsNoTracking()
                 .Include(x => x.Scopes)
                 .FirstOrDefaultAsync(x => x.Id == id, ct);
         }
@@ -30,6 +31,7 @@ namespace Crm.Identity.Clients.Services
         public Task<Client> GetByClientIdAsync(string clientId, CancellationToken ct)
         {
             return _storage.Clients
+                .AsNoTracking()
                 .Include(x => x.Scopes)
                 .FirstOrDefaultAsync(x => x.ClientId == clientId, ct);
         }
@@ -37,6 +39,7 @@ namespace Crm.Identity.Clients.Services
         public Task<List<Client>> GetListAsync(IEnumerable<Guid> ids, CancellationToken ct)
         {
             return _storage.Clients
+                .AsNoTracking()
                 .Where(x => ids.Contains(x.Id))
                 .ToListAsync(ct);
         }
@@ -44,6 +47,7 @@ namespace Crm.Identity.Clients.Services
         public Task<List<Client>> GetPagedListAsync(ClientsGetPagedListRequest request, CancellationToken ct)
         {
             return _storage.Clients
+                .AsNoTracking()
                 .Where(x =>
                     (!request.IsLocked.HasValue || x.IsLocked == request.IsLocked) &&
                     (!request.IsDeleted.HasValue || x.IsDeleted == request.IsDeleted) &&

@@ -1,30 +1,34 @@
 ﻿using System.Threading.Tasks;
+using Ajupov.Identity.Clients.Services;
+using Ajupov.Identity.Clients.Storages;
+using Ajupov.Identity.Identities.Services;
+using Ajupov.Identity.Identities.Storages;
+using Ajupov.Identity.OAuth.Filters;
+using Ajupov.Identity.OAuth.Options;
+using Ajupov.Identity.OAuth.Services;
+using Ajupov.Identity.Profiles.Services;
+using Ajupov.Identity.Profiles.Storages;
+using Ajupov.Identity.Registration.Services;
+using Ajupov.Identity.Registration.Settings;
 using Ajupov.Infrastructure.All.ApiDocumentation;
 using Ajupov.Infrastructure.All.Configuration;
 using Ajupov.Infrastructure.All.Hosting;
 using Ajupov.Infrastructure.All.HotStorage;
 using Ajupov.Infrastructure.All.Logging;
+using Ajupov.Infrastructure.All.MailSending;
 using Ajupov.Infrastructure.All.Metrics;
 using Ajupov.Infrastructure.All.Migrations;
 using Ajupov.Infrastructure.All.Mvc;
 using Ajupov.Infrastructure.All.Orm;
+using Ajupov.Infrastructure.All.SmsSending;
 using Ajupov.Infrastructure.All.Tracing;
-using Crm.Identity.Clients.Services;
-using Crm.Identity.Clients.Storages;
-using Crm.Identity.Identities.Services;
-using Crm.Identity.Identities.Storages;
-using Crm.Identity.OAuth.Filters;
-using Crm.Identity.OAuth.Options;
-using Crm.Identity.OAuth.Services;
-using Crm.Identity.Profiles.Services;
-using Crm.Identity.Profiles.Storages;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Crm.Identity
+namespace Ajupov.Identity
 {
     public static class Program
     {
@@ -40,15 +44,19 @@ namespace Crm.Identity
                         .ConfigureApiDocumentation()
                         .ConfigureMetrics(builder.Configuration)
                         .ConfigureMigrator(builder.Configuration)
+                        .ConfigureMailSending(builder.Configuration)
+                        .ConfigureSmsSending(builder.Configuration)
                         .ConfigureOrm<ClientsStorage>(builder.Configuration)
                         .ConfigureOrm<IdentitiesStorage>(builder.Configuration)
                         .ConfigureOrm<ProfilesStorage>(builder.Configuration)
                         .ConfigureHotStorage(builder.Configuration)
+                        .Configure<VerifyEmailSettings>(builder.Configuration.GetSection("VerifyEmailSettings"))
                         .AddTransient<IClientsService, ClientsService>()
                         .AddTransient<IIdentitiesService, IdentitiesService>()
                         .AddTransient<IIdentityTokensService, IdentityTokensService>()
                         .AddTransient<IProfilesService, ProfilesService>()
                         .AddTransient<IOAuthService, OAuthService>()
+                        .AddTransient<IRegistrationService, RegistrationService>()
                         .AddAuthentication(x =>
                         {
                             x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;

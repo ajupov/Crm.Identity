@@ -1,160 +1,219 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Threading.Tasks;
-//using UserPermission = Crm.Modules.Users.Models.UserPermission;
-//
-//namespace Identity.Registration.Services
-//{
-//    public class RegistrationService : IRegistrationService
-//    {
-//        private readonly IMailSender _mailService;
-//        private readonly AccountsStorage _accountsStorage;
-//        private readonly UsersStorage _usersStorage;
-//        private readonly IdentitiesStorage _identitiesStorage;
-//
-//        public RegistrationService(
-//            IMailSender mailService,
-//            AccountsStorage accountsStorage,
-//            UsersStorage usersStorage,
-//            IdentitiesStorage identitiesStorage)
-//        {
-//            _mailService = mailService;
-//            _accountsStorage = accountsStorage;
-//            _usersStorage = usersStorage;
-//            _identitiesStorage = identitiesStorage;
-//        }
-//
-//        public async Task<Account> CreateAccountAsync()
-//        {
-//            var account = new Account
-//            {
-//                Id = default(int),
-//                IsLocked = false,
-//                IsDeleted = false,
-//                CreateDate = DateTime.Now,
-//                Settings = null
-//            };
-//
-//            var entry = await _accountsStorage.AddAsync(account);
-//            await _accountsStorage.SaveChangesAsync();
-//
-//            return entry.Entity;
-//        }
-//
-//        public async Task<User> CreateUserAsync(Account account, string surname = null, string name = null, 
-//            DateTime? birthDate = null, UserGender gender = UserGender.None)
-//        {
-//            var user = new User
-//            {
-//                Id = default(int),
-//                AccountId = account.Id,
-//                Surname = surname,
-//                Name = name,
-//                Patronymic = default(string),
-//                BirthDate = birthDate,
-//                Gender = gender,
-//                AvatarUrl = null,
-//                CreateDate = DateTime.Now,
-//                IsLocked = false,
-//                IsDeleted = false,
-//                Permissions = new List<UserPermission>
-//                {
-//                    new UserPermission
-//                    {
-//                        Id = default(int),
-//                        UserId = default(int),
-//                        Permission = Modules.Users.Enums.UserPermission.AccountOwner
-//                    }
-//                }
-//            };
-//
-//            var entry = await _usersStorage.AddAsync(user);
-//            await _usersStorage.SaveChangesAsync();
-//
-//            return entry.Entity;
-//        }
-//
-//        public async Task<Identity> CreateLoginIdentityAsync(User user, string login, string passwordHash)
-//        {
-//            var identity = new Identity
-//            {
-//                Id = default(int),
-//                UserId = user.Id,
-//                Type = IdentityType.LoginAndPassword,
-//                Key = login,
-//                PasswordHash = passwordHash,
-//                IsPrimary = false,
-//                IsVerified = true,
-//                CreateDate = DateTime.Now
-//            };
-//
-//            var entry = await _identitiesStorage.AddAsync(identity);
-//            await _identitiesStorage.SaveChangesAsync();
-//
-//            return entry.Entity;
-//        }
-//
-//        public async Task<Identity> CreateEmailIdentityAsync(User user, string email, string passwordHash, bool needVerify = true)
-//        {
-//            var now = DateTime.Now;
-//            var code = Generator.GenerateAlphaNumbericString(256);
-//
-//            var identityByEmail = new Identity
-//            {
-//                Id = default(int),
-//                UserId = user.Id,
-//                Type = IdentityType.EmailAndPassword,
-//                Key = email,
-//                PasswordHash = passwordHash,
-//                IsPrimary = true,
-//                IsVerified = !needVerify,
-//                CreateDate = now,
-//                Tokens = new List<IdentityToken>
-//                {
-//                    new IdentityToken
-//                    {
-//                        Id = default(int),
-//                        IdentityId = default(int),
-//                        Value = code,
-//                        CreateDate = now,
-//                        ExpirationDate = now.AddDays(1),
-//                        UseDate = null
-//                    }
-//                }
-//            };
-//
-//            var entry = await _identitiesStorage.AddAsync(identityByEmail);
-//            await _identitiesStorage.SaveChangesAsync();
-//
-//            return entry.Entity;
-//        }
-//
-//        public async Task<Identity> CreateExternalIdentityAsync(User user, IdentityType identityType, string externalValue)
-//        {
-//            var identity = new Identity
-//            {
-//                Id = default(int),
-//                UserId = user.Id,
-//                Type = identityType,
-//                Key = externalValue,
-//                PasswordHash = null,
-//                IsPrimary = false,
-//                IsVerified = true,
-//                CreateDate = DateTime.Now
-//            };
-//
-//            var entry = await _identitiesStorage.AddAsync(identity);
-//            await _identitiesStorage.SaveChangesAsync();
-//
-//            return entry.Entity;
-//        }
-//
-//        public Task SendEmailConfirmationUrlAsync(string email, string verifyUrl)
-//        {
-//            const string subject = "Подтверждение почты";
-//            var message = $"Пожалуйста, подтвердите свою почту, нажав на <a href='{verifyUrl}'>ссылку</a>.";
-//
-//            return _mailService.SendSystemAsync(email, subject, message);
-//        }
-//    }
-//}
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Ajupov.Identity.Identities.Models;
+using Ajupov.Identity.Identities.Services;
+using Ajupov.Identity.Profiles.Models;
+using Ajupov.Identity.Profiles.Services;
+using Ajupov.Identity.Registration.Settings;
+using Ajupov.Infrastructure.All.MailSending.MailSender;
+using Ajupov.Infrastructure.All.SmsSending.SmsSender;
+using Ajupov.Utils.All.Password;
+using Infrastructure.All.Generator;
+using Microsoft.Extensions.Options;
+
+namespace Ajupov.Identity.Registration.Services
+{
+    public class RegistrationService : IRegistrationService
+    {
+        private readonly VerifyEmailSettings _settings;
+        private readonly IProfilesService _profilesService;
+        private readonly IIdentitiesService _identitiesService;
+        private readonly IIdentityTokensService _identityTokensService;
+        private readonly IMailSender _mailSender;
+        private readonly ISmsSender _smsSender;
+
+        public RegistrationService(
+            IOptions<VerifyEmailSettings> settings,
+            IProfilesService profilesService,
+            IIdentitiesService identitiesService,
+            IIdentityTokensService identityTokensService,
+            IMailSender mailSender,
+            ISmsSender smsSender)
+        {
+            _settings = settings.Value;
+            _profilesService = profilesService;
+            _identitiesService = identitiesService;
+            _identityTokensService = identityTokensService;
+            _mailSender = mailSender;
+            _smsSender = smsSender;
+        }
+
+        public Task<bool> IsLoginExistsAsync(string login, CancellationToken ct)
+        {
+            return _identitiesService.IsExistByKeyAndTypeAsync(login, IdentityType.LoginAndPassword, ct);
+        }
+
+        public Task<bool> IsEmailExistsAsync(string email, CancellationToken ct)
+        {
+            return _identitiesService.IsExistByKeyAndTypeAsync(email, IdentityType.EmailAndPassword, ct);
+        }
+
+        public Task<bool> IsPhoneExistsAsync(string phone, CancellationToken ct)
+        {
+            return _identitiesService.IsExistByKeyAndTypeAsync(phone, IdentityType.PhoneAndPassword, ct);
+        }
+
+        public async Task RegisterAsync(
+            string surname,
+            string name,
+            ProfileGender gender,
+            DateTime birthDate,
+            string login,
+            string email,
+            string phone,
+            string password,
+            string ipAddress,
+            string userAgent,
+            CancellationToken ct)
+        {
+            var profile = new Profile
+            {
+                Surname = surname,
+                Name = name,
+                BirthDate = birthDate,
+                Gender = gender
+            };
+
+            profile.Id = await _profilesService.CreateAsync(profile, ct);
+
+            var passwordHash = Password.ToPasswordHash(password);
+
+            await CreateLoginIdentityAsync(profile.Id, login, passwordHash, ct);
+            await CreateEmailIdentityAsync(profile.Id, email, passwordHash, ipAddress, userAgent, ct);
+            await CreatePhoneIdentityAsync(profile.Id, phone, passwordHash, ipAddress, userAgent, ct);
+        }
+
+        public async Task SendEmailConfirmationEmailAsync(
+            string email,
+            string ipAddress,
+            string userAgent,
+            CancellationToken ct)
+        {
+            var now = DateTime.UtcNow;
+            var code = Generator.GenerateAlphaNumericString(256);
+            var identityTypes = new[] {IdentityType.EmailAndPassword};
+            var identity = await _identitiesService.GetByKeyAndTypesAsync(email, identityTypes, ct);
+
+            var token = new IdentityToken
+            {
+                IdentityId = identity.Id,
+                Type = IdentityTokenType.EmailValidation,
+                Value = code,
+                CreateDateTime = now,
+                ExpirationDateTime = now.AddDays(1),
+                IpAddress = ipAddress,
+                UserAgent = userAgent
+            };
+
+            await _identityTokensService.CreateAsync(token, ct);
+            await SendEmailConfirmationCodeAsync(email, code);
+        }
+
+        public async Task SendPhoneConfirmationSmsAsync(
+            string phone,
+            string ipAddress,
+            string userAgent,
+            CancellationToken ct)
+        {
+            var now = DateTime.UtcNow;
+            var code = new Random().Next(0, 9999).ToString("0000");
+            var identityTypes = new[] {IdentityType.PhoneAndPassword};
+            var identity = await _identitiesService.GetByKeyAndTypesAsync(phone, identityTypes, ct);
+
+            var token = new IdentityToken
+            {
+                IdentityId = identity.Id,
+                Type = IdentityTokenType.PhoneValidation,
+                Value = code,
+                CreateDateTime = now,
+                ExpirationDateTime = now.AddMinutes(10),
+                IpAddress = ipAddress,
+                UserAgent = userAgent
+            };
+
+            await _identityTokensService.CreateAsync(token, ct);
+            await SendPhoneConfirmationCodeAsync(phone, code);
+        }
+
+        private async Task CreateLoginIdentityAsync(
+            Guid profileId,
+            string login,
+            string passwordHash,
+            CancellationToken ct)
+        {
+            var loginIdentity = new Identities.Models.Identity
+            {
+                ProfileId = profileId,
+                Type = IdentityType.LoginAndPassword,
+                Key = login,
+                PasswordHash = passwordHash,
+                IsPrimary = true,
+                IsVerified = true
+            };
+
+            await _identitiesService.CreateAsync(loginIdentity, ct);
+        }
+
+        private async Task CreateEmailIdentityAsync(
+            Guid profileId,
+            string email,
+            string passwordHash,
+            string ipAddress,
+            string userAgent,
+            CancellationToken ct)
+        {
+            var emailIdentity = new Identities.Models.Identity
+            {
+                ProfileId = profileId,
+                Type = IdentityType.EmailAndPassword,
+                Key = email,
+                PasswordHash = passwordHash,
+                IsPrimary = true,
+                IsVerified = false
+            };
+
+            await _identitiesService.CreateAsync(emailIdentity, ct);
+            await SendEmailConfirmationEmailAsync(email, ipAddress, userAgent, ct);
+        }
+
+        private async Task CreatePhoneIdentityAsync(
+            Guid profileId,
+            string phone,
+            string passwordHash,
+            string ipAddress,
+            string userAgent,
+            CancellationToken ct)
+        {
+            var phoneIdentity = new Identities.Models.Identity
+            {
+                ProfileId = profileId,
+                Type = IdentityType.PhoneAndPassword,
+                Key = phone,
+                PasswordHash = passwordHash,
+                IsPrimary = true,
+                IsVerified = false
+            };
+
+            await _identitiesService.CreateAsync(phoneIdentity, ct);
+            await SendPhoneConfirmationSmsAsync(phone, ipAddress, userAgent, ct);
+        }
+
+        private Task SendEmailConfirmationCodeAsync(string email, string code)
+        {
+            const string subject = "Email verification";
+            var uri = string.Format(_settings.VerifyUriPattern, code);
+            var message = $"Click <a href='{uri}'>here</a> for verify email.";
+
+            return _mailSender.SendAsync(_settings.FromName, _settings.FromAddress, subject, new[] {email}, true,
+                message);
+        }
+
+        private Task SendPhoneConfirmationCodeAsync(string phone, string code)
+        {
+            var message = $"Confirmation code - {code}.";
+
+            return _smsSender.SendAsync(phone, message);
+        }
+    }
+}

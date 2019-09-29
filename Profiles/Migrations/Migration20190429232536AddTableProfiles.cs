@@ -1,6 +1,6 @@
 ﻿using FluentMigrator;
 
-namespace Crm.Identity.Profiles.Migrations
+namespace Ajupov.Identity.Profiles.Migrations
 {
     [Migration(20190429232536)]
     public class Migration20190429232536AddTableProfiles : Migration
@@ -11,10 +11,8 @@ namespace Crm.Identity.Profiles.Migrations
                 .WithColumn("Id").AsGuid().NotNullable()
                 .WithColumn("Surname").AsString(256).NotNullable()
                 .WithColumn("Name").AsString(256).NotNullable()
-                .WithColumn("Patronymic").AsString(256).NotNullable()
                 .WithColumn("BirthDate").AsDateTime2().Nullable()
                 .WithColumn("Gender").AsByte().Nullable()
-                .WithColumn("AvatarUrl").AsString(2048).NotNullable()
                 .WithColumn("IsLocked").AsBoolean().NotNullable()
                 .WithColumn("IsDeleted").AsBoolean().NotNullable()
                 .WithColumn("CreateDateTime").AsDateTime2().NotNullable()

@@ -1,7 +1,7 @@
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Crm.Identity.OAuth.Options
+namespace Ajupov.Identity.OAuth.Options
 {
     public class AuthOptions
     {

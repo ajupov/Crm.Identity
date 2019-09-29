@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Ajupov.Identity.Identities.Helpers;
+using Ajupov.Identity.Identities.Models;
+using Ajupov.Identity.Identities.Requests;
+using Ajupov.Identity.Identities.Storages;
 using Ajupov.Utils.All.Password;
-using Crm.Identity.Identities.Helpers;
-using Crm.Identity.Identities.Models;
-using Crm.Identity.Identities.Requests;
-using Crm.Identity.Identities.Storages;
 using Microsoft.EntityFrameworkCore;
 
-namespace Crm.Identity.Identities.Services
+namespace Ajupov.Identity.Identities.Services
 {
     public class IdentitiesService : IIdentitiesService
     {
@@ -24,12 +24,14 @@ namespace Crm.Identity.Identities.Services
         public Task<Models.Identity> GetAsync(Guid id, CancellationToken ct)
         {
             return _storage.Identities
+                .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == id, ct);
         }
 
         public Task<Models.Identity[]> GetListAsync(IEnumerable<Guid> ids, CancellationToken ct)
         {
             return _storage.Identities
+                .AsNoTracking()
                 .Where(x => ids.Contains(x.Id))
                 .ToArrayAsync(ct);
         }
@@ -40,7 +42,15 @@ namespace Crm.Identity.Identities.Services
             CancellationToken ct)
         {
             return _storage.Identities
+                .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Key == key && types.Contains(x.Type), ct);
+        }
+
+        public Task<bool> IsExistByKeyAndTypeAsync(string key, IdentityType type, CancellationToken ct)
+        {
+            return _storage.Identities
+                .AsNoTracking()
+                .AnyAsync(x => x.Key == key && x.Type == type, ct);
         }
 
         public Task<Models.Identity[]> GetPagedListAsync(
@@ -48,6 +58,7 @@ namespace Crm.Identity.Identities.Services
             CancellationToken ct)
         {
             return _storage.Identities
+                .AsNoTracking()
                 .Where(x =>
                     (request.ProfileId == x.ProfileId) &&
                     (request.Types == null || !request.Types.Any() || request.Types.Contains(x.Type)) &&

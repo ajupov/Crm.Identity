@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Crm.Identity.Profiles.Models
+namespace Ajupov.Identity.Profiles.Models
 {
     public class Profile
     {
@@ -13,8 +13,6 @@ namespace Crm.Identity.Profiles.Models
         public DateTime? BirthDate { get; set; }
 
         public ProfileGender? Gender { get; set; }
-
-        public string AvatarUrl { get; set; }
 
         public bool IsLocked { get; set; }
 

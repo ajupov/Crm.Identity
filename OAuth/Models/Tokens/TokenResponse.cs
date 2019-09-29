@@ -1,7 +1,7 @@
 using Ajupov.Utils.All.String;
 using Newtonsoft.Json;
 
-namespace Crm.Identity.OAuth.Models.Tokens
+namespace Ajupov.Identity.OAuth.Models.Tokens
 {
     public class TokenResponse
     {

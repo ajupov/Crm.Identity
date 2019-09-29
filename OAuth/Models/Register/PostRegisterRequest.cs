@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Crm.Identity.OAuth.Attributes.Validation;
-using Crm.Identity.Profiles.Models;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using Ajupov.Identity.OAuth.Attributes.Validation;
+using Ajupov.Identity.Profiles.Models;
 
-namespace Crm.Identity.OAuth.Models.Register
+namespace Ajupov.Identity.OAuth.Models.Register
 {
     public class PostRegisterRequest
     {
@@ -18,7 +19,7 @@ namespace Crm.Identity.OAuth.Models.Register
         public ProfileGender Gender { get; set; }
 
         [DataType(DataType.Date)]
-        public string BirthDate { get; set; }
+        public DateTime BirthDate { get; set; }
 
         [Required]
         [StringLength(256)]
@@ -64,7 +65,7 @@ namespace Crm.Identity.OAuth.Models.Register
         [StateValidation]
         public string state { get; set; }
 
-        [RedirectUriWithStateValidation]
+        [RedirectUriValidation]
         public string redirect_uri { get; set; }
     }
 }

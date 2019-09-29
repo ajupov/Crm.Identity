@@ -1,4 +1,4 @@
-namespace Crm.Identity.OAuth.Models.Types
+namespace Ajupov.Identity.OAuth.Models.Types
 {
     public static class TokenType
     {

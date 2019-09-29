@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace Crm.Identity.OAuth.Attributes.Security
+namespace Ajupov.Identity.OAuth.Attributes.Security
 {
     public class SecurityHeadersAttribute : ActionFilterAttribute
     {

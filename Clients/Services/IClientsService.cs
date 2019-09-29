@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Crm.Identity.Clients.Models;
-using Crm.Identity.Clients.Requests;
+using Ajupov.Identity.Clients.Models;
+using Ajupov.Identity.Clients.Requests;
 
-namespace Crm.Identity.Clients.Services
+namespace Ajupov.Identity.Clients.Services
 {
     public interface IClientsService
     {

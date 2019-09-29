@@ -1,7 +1,7 @@
 ﻿using System.Linq;
-using Crm.Identity.Clients.Models;
+using Ajupov.Identity.Clients.Models;
 
-namespace Crm.Identity.Clients.Helpers
+namespace Ajupov.Identity.Clients.Helpers
 {
     public static class ClientsSortingHelper
     {

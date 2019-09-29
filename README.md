@@ -1,3 +1,3 @@
-# Crm.Identity
+# Ajupov.Identity
 
-Identity server for CRM.
+Identity server.

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Crm.Identity.Clients.Models
+namespace Ajupov.Identity.Clients.Models
 {
     public class Client
     {

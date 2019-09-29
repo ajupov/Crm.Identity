@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
-using Crm.Identity.OAuth.Models.Types;
+using Ajupov.Identity.OAuth.Models.Types;
 
-namespace Crm.Identity.OAuth.Attributes.Validation
+namespace Ajupov.Identity.OAuth.Attributes.Validation
 {
     public class TokenTypeValidationAttribute : ValidationAttribute
     {

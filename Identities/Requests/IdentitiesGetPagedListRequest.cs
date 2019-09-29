@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Crm.Identity.Identities.Models;
+using Ajupov.Identity.Identities.Models;
 
-namespace Crm.Identity.Identities.Requests
+namespace Ajupov.Identity.Identities.Requests
 {
     public class IdentitiesGetPagedListRequest
     {

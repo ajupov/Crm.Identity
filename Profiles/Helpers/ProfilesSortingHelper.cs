@@ -1,7 +1,7 @@
 ﻿using System.Linq;
-using Crm.Identity.Profiles.Models;
+using Ajupov.Identity.Profiles.Models;
 
-namespace Crm.Identity.Profiles.Helpers
+namespace Ajupov.Identity.Profiles.Helpers
 {
     public static class ProfilesSortingHelper
     {

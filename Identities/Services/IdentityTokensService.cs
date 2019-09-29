@@ -2,11 +2,11 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Crm.Identity.Identities.Models;
-using Crm.Identity.Identities.Storages;
+using Ajupov.Identity.Identities.Models;
+using Ajupov.Identity.Identities.Storages;
 using Microsoft.EntityFrameworkCore;
 
-namespace Crm.Identity.Identities.Services
+namespace Ajupov.Identity.Identities.Services
 {
     public class IdentityTokensService : IIdentityTokensService
     {
@@ -20,12 +20,14 @@ namespace Crm.Identity.Identities.Services
         public Task<IdentityToken> GetAsync(Guid identityId, string value, CancellationToken ct)
         {
             return _storage.IdentityTokens
+                .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.IdentityId == identityId && x.Value == value, ct);
         }
 
         public Task<IdentityToken> GetByValueAsync(IdentityTokenType type, string value, CancellationToken ct)
         {
             return _storage.IdentityTokens
+                .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Type == type && x.Value == value, ct);
         }
 

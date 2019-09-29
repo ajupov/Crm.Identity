@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Crm.Identity.Registration.Models
+namespace Ajupov.Identity.Registration.Models
 {
     public class ConfirmEmailRequestModel
     {

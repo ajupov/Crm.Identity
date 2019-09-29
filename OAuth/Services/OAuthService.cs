@@ -5,22 +5,22 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+using Ajupov.Identity.Identities.Extensions;
+using Ajupov.Identity.Identities.Models;
+using Ajupov.Identity.Identities.Requests;
+using Ajupov.Identity.Identities.Services;
+using Ajupov.Identity.OAuth.Models.Authorize;
+using Ajupov.Identity.OAuth.Models.Tokens;
+using Ajupov.Identity.OAuth.Models.Types;
+using Ajupov.Identity.OAuth.Options;
+using Ajupov.Identity.Profiles.Models;
+using Ajupov.Identity.Profiles.Services;
 using Ajupov.Infrastructure.All.HotStorage.HotStorage;
-using Crm.Identity.Identities.Extensions;
-using Crm.Identity.Identities.Models;
-using Crm.Identity.Identities.Requests;
-using Crm.Identity.Identities.Services;
-using Crm.Identity.OAuth.Models.Authorize;
-using Crm.Identity.OAuth.Models.Tokens;
-using Crm.Identity.OAuth.Models.Types;
-using Crm.Identity.OAuth.Options;
-using Crm.Identity.Profiles.Models;
-using Crm.Identity.Profiles.Services;
 using Infrastructure.All.Generator;
 using Infrastructure.All.Http;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Crm.Identity.OAuth.Services
+namespace Ajupov.Identity.OAuth.Services
 {
     public class OAuthService : IOAuthService
     {
@@ -49,47 +49,56 @@ namespace Crm.Identity.OAuth.Services
         }
 
         public async Task<PostAuthorizeResponse> AuthorizeAsync(
-            PostAuthorizeRequest request,
+            string login,
+            string password,
+            bool isRemember,
+            string responseType,
+            string redirectUri,
             string userAgent,
             string ipAddress,
             CancellationToken ct)
         {
             var identityTypes = IdentityTypeExtensions.TypesWithPassword;
-            var identity = await _identitiesService.GetByKeyAndTypesAsync(request.Login, identityTypes, ct);
+            var identity = await _identitiesService.GetByKeyAndTypesAsync(login, identityTypes, ct);
             if (identity == null)
             {
-                return PostAuthorizeResponse.ErrorResponse;
+                return new PostAuthorizeResponse(redirectUri, true);
             }
 
             var user = await _profilesService.GetAsync(identity.ProfileId, ct);
             if (user == null)
             {
-                return PostAuthorizeResponse.ErrorResponse;
+                return new PostAuthorizeResponse(redirectUri, true);
             }
 
-            var isPasswordCorrect = _identitiesService.IsPasswordCorrect(identity, request.Password);
+            var isPasswordCorrect = _identitiesService.IsPasswordCorrect(identity, password);
             if (!isPasswordCorrect)
             {
-                return PostAuthorizeResponse.ErrorResponse;
+                return new PostAuthorizeResponse(redirectUri, true);
             }
 
-            var parameters = await GetRedirectUrlParametersAsync(request, user, identity, userAgent, ipAddress, ct);
-            var redirectUri = request.redirect_uri.AddParameters(parameters);
+            var parameters =
+                await GetRedirectUrlParametersAsync(responseType, redirectUri, user, identity, userAgent, ipAddress,
+                    ct);
 
-            return new PostAuthorizeResponse(redirectUri);
+            return new PostAuthorizeResponse(redirectUri.AddParameters(parameters));
         }
 
         public async Task<TokenResponse> GetTokenAsync(
-            TokenRequest request,
-            ClaimsPrincipal claimsPrincipal,
+            string grandType,
+            string code,
+            string redirectUri,
+            string userName,
+            string password,
+            string refreshToken,
             string userAgent,
             string ipAddress,
             CancellationToken ct)
         {
-            switch (request.GrantType)
+            switch (grandType)
             {
                 case GrandType.AuthorizationCode:
-                    var identityId = _hotStorage.GetValue<Guid>(request.Code);
+                    var identityId = _hotStorage.GetValue<Guid>(code);
                     var identityByCode = await _identitiesService.GetAsync(identityId, ct);
                     if (identityByCode == null)
                     {
@@ -102,9 +111,8 @@ namespace Crm.Identity.OAuth.Services
                         return new TokenResponse("Invalid code");
                     }
 
-                    var accessTokenByCode =
-                        await CreateAccessTokenAsync(request.RedirectUri, userByCode, identityByCode, userAgent,
-                            ipAddress, ct);
+                    var accessTokenByCode = await CreateAccessTokenAsync(redirectUri, userByCode, identityByCode,
+                        userAgent, ipAddress, ct);
                     var refreshTokenByCode = await CreateRefreshTokenAsync(identityByCode, userAgent, ipAddress, ct);
 
                     return new TokenResponse(accessTokenByCode.Value, refreshTokenByCode.Value, "bearer",
@@ -113,7 +121,7 @@ namespace Crm.Identity.OAuth.Services
                 case GrandType.Password:
                     var identityTypes = IdentityTypeExtensions.TypesWithPassword;
                     var identityByPassword =
-                        await _identitiesService.GetByKeyAndTypesAsync(request.Username, identityTypes, ct);
+                        await _identitiesService.GetByKeyAndTypesAsync(userName, identityTypes, ct);
                     if (identityByPassword == null)
                     {
                         return new TokenResponse("Invalid credentials");
@@ -125,15 +133,14 @@ namespace Crm.Identity.OAuth.Services
                         return new TokenResponse("Invalid credentials");
                     }
 
-                    var isPasswordCorrect = _identitiesService.IsPasswordCorrect(identityByPassword, request.Password);
+                    var isPasswordCorrect = _identitiesService.IsPasswordCorrect(identityByPassword, password);
                     if (!isPasswordCorrect)
                     {
                         return new TokenResponse("Invalid credentials");
                     }
 
-                    var accessTokenByPassword =
-                        await CreateAccessTokenAsync(request.RedirectUri, userByPassword, identityByPassword, userAgent,
-                            ipAddress, ct);
+                    var accessTokenByPassword = await CreateAccessTokenAsync(redirectUri, userByPassword,
+                        identityByPassword, userAgent, ipAddress, ct);
                     var refreshTokenByPassword =
                         await CreateRefreshTokenAsync(identityByPassword, userAgent, ipAddress, ct);
 
@@ -143,7 +150,7 @@ namespace Crm.Identity.OAuth.Services
                 case GrandType.RefreshToken:
 
                     var oldRefreshToken = await _identityTokensService.GetByValueAsync(IdentityTokenType.RefreshToken,
-                        request.RefreshToken, ct);
+                        refreshToken, ct);
 
                     if (oldRefreshToken.ExpirationDateTime > DateTime.UtcNow)
                     {
@@ -154,7 +161,7 @@ namespace Crm.Identity.OAuth.Services
                     var userByRefresh = await _profilesService.GetAsync(identityByRefresh.ProfileId, ct);
 
                     var accessTokenByRefresh =
-                        await CreateAccessTokenAsync(request.RedirectUri, userByRefresh, identityByRefresh, userAgent,
+                        await CreateAccessTokenAsync(redirectUri, userByRefresh, identityByRefresh, userAgent,
                             ipAddress, ct);
                     var refreshTokenByRefresh =
                         await CreateRefreshTokenAsync(identityByRefresh, userAgent, ipAddress, ct);
@@ -168,21 +175,22 @@ namespace Crm.Identity.OAuth.Services
         }
 
         private async Task<(string key, object value)[]> GetRedirectUrlParametersAsync(
-            PostAuthorizeRequest request,
+            string responseType,
+            string redirectUri,
             Profile profile,
             Identities.Models.Identity identity,
             string userAgent,
             string ipAddress,
             CancellationToken ct)
         {
-            switch (request.response_type)
+            switch (responseType)
             {
                 case ResponseType.Code:
                     return GetCodeUriParameters(identity);
                 case ResponseType.Token:
-                    return await GetTokensUriParametersAsync(request, profile, identity, userAgent, ipAddress, ct);
+                    return await GetTokensUriParametersAsync(redirectUri, profile, identity, userAgent, ipAddress, ct);
                 default:
-                    throw new ArgumentOutOfRangeException(request.response_type);
+                    throw new ArgumentOutOfRangeException(responseType);
             }
         }
 
@@ -199,15 +207,14 @@ namespace Crm.Identity.OAuth.Services
         }
 
         private async Task<(string key, object value)[]> GetTokensUriParametersAsync(
-            PostAuthorizeRequest request,
+            string redirectUri,
             Profile profile,
             Identities.Models.Identity identity,
             string userAgent,
             string ipAddress,
             CancellationToken ct)
         {
-            var accessToken =
-                await CreateAccessTokenAsync(request.redirect_uri, profile, identity, userAgent, ipAddress, ct);
+            var accessToken = await CreateAccessTokenAsync(redirectUri, profile, identity, userAgent, ipAddress, ct);
             var refreshToken = await CreateRefreshTokenAsync(identity, userAgent, ipAddress, ct);
 
             return new (string key, object value)[]

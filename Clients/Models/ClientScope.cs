@@ -1,6 +1,6 @@
 using System;
 
-namespace Crm.Identity.Clients.Models
+namespace Ajupov.Identity.Clients.Models
 {
     public class ClientScope
     {

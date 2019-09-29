@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Ajupov.Utils.All.String;
 
-namespace Crm.Identity.OAuth.Attributes.Validation
+namespace Ajupov.Identity.OAuth.Attributes.Validation
 {
     public class ExpiresInValidationAttribute : ValidationAttribute
     {

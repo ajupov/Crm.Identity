@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Crm.Identity.Identities.Models
+namespace Ajupov.Identity.Identities.Models
 {
     public class IdentityToken
     {

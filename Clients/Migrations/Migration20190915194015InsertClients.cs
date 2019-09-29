@@ -1,7 +1,7 @@
 ﻿using System;
 using FluentMigrator;
 
-namespace Crm.Identity.Clients.Migrations
+namespace Ajupov.Identity.Clients.Migrations
 {
     [Migration(20190915194015)]
     public class Migration20190915194015InsertClients : Migration

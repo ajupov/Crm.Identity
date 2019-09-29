@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Crm.Identity.Identities.Models;
+using Ajupov.Identity.Identities.Models;
 
-namespace Crm.Identity.Identities.Services
+namespace Ajupov.Identity.Identities.Services
 {
     public interface IIdentityTokensService
     {

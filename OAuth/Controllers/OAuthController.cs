@@ -1,18 +1,19 @@
 ﻿using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Ajupov.Identity.Clients.Services;
+using Ajupov.Identity.OAuth.Attributes.Security;
+using Ajupov.Identity.OAuth.Models.Authorize;
+using Ajupov.Identity.OAuth.Models.Register;
+using Ajupov.Identity.OAuth.Models.Tokens;
+using Ajupov.Identity.OAuth.Services;
+using Ajupov.Identity.OAuth.ViewModels;
+using Ajupov.Identity.Registration.Services;
 using Ajupov.Infrastructure.All.Mvc;
 using Ajupov.Utils.All.String;
-using Crm.Identity.Clients.Services;
-using Crm.Identity.OAuth.Attributes.Security;
-using Crm.Identity.OAuth.Models.Authorize;
-using Crm.Identity.OAuth.Models.Register;
-using Crm.Identity.OAuth.Models.Tokens;
-using Crm.Identity.OAuth.Services;
-using Crm.Identity.OAuth.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Crm.Identity.OAuth.Controllers
+namespace Ajupov.Identity.OAuth.Controllers
 {
     [SecurityHeaders]
     [Route("OAuth")]
@@ -20,11 +21,16 @@ namespace Crm.Identity.OAuth.Controllers
     {
         private readonly IOAuthService _oauthService;
         private readonly IClientsService _clientsService;
+        private readonly IRegistrationService _registrationService;
 
-        public OAuthController(IOAuthService oauthService, IClientsService clientsService)
+        public OAuthController(
+            IOAuthService oauthService,
+            IClientsService clientsService,
+            IRegistrationService registrationService)
         {
             _oauthService = oauthService;
             _clientsService = clientsService;
+            _registrationService = registrationService;
         }
 
         // Show authorize form
@@ -49,7 +55,7 @@ namespace Crm.Identity.OAuth.Controllers
             }
 
             var model = new AuthorizeViewModel(request.client_id, request.response_type, request.scope,
-                request.redirect_uri, request.state, false);
+                request.redirect_uri, request.state);
 
             return View("~/OAuth/Views/Authorize.cshtml", model);
         }
@@ -75,8 +81,8 @@ namespace Crm.Identity.OAuth.Controllers
                 return Redirect(request.redirect_uri);
             }
 
-            var model = new AuthorizeViewModel(request.client_id, request.response_type, request.scope,
-                request.redirect_uri, request.state, false);
+            var model = new RegisterViewModel(request.client_id, request.response_type, request.scope,
+                request.redirect_uri, request.state);
 
             return View("~/OAuth/Views/Register.cshtml", model);
         }
@@ -103,8 +109,9 @@ namespace Crm.Identity.OAuth.Controllers
                 return Redirect(request.redirect_uri);
             }
 
-            var response = await _oauthService.AuthorizeAsync(request, UserAgent, IpAddress, ct);
-            if (response.HasError)
+            var response = await _oauthService.AuthorizeAsync(request.Login, request.Password, request.IsRemember,
+                request.response_type, request.redirect_uri, UserAgent, IpAddress, ct);
+            if (response.IsInvalidCredentials)
             {
                 var model = new AuthorizeViewModel(request.client_id, request.response_type, request.scope,
                     request.redirect_uri, request.state, true);
@@ -137,19 +144,42 @@ namespace Crm.Identity.OAuth.Controllers
                 return Redirect(request.redirect_uri);
             }
 
-            // Registration
+            var isLoginExists = await _registrationService.IsLoginExistsAsync(request.Login, ct);
+            var isEmailExists = await _registrationService.IsEmailExistsAsync(request.Email, ct);
+            var isPhoneExists = await _registrationService.IsPhoneExistsAsync(request.Phone, ct);
 
-            return RedirectToAction("Authorize");
+            if (isLoginExists || isEmailExists || isPhoneExists)
+            {
+                var model = new RegisterViewModel(request.client_id, request.response_type, request.scope,
+                    request.redirect_uri, request.state, isLoginExists, isEmailExists, isPhoneExists);
+
+                return View("~/OAuth/Views/Register.cshtml", model);
+            }
+
+            await _registrationService.RegisterAsync(request.Surname, request.Name, request.Gender, request.BirthDate,
+                request.Login, request.Email, request.Phone, request.Password, IpAddress, UserAgent, ct);
+
+            var response = await _oauthService.AuthorizeAsync(request.Login, request.Password, false,
+                request.response_type, request.redirect_uri, UserAgent, IpAddress, ct);
+            if (response.IsInvalidCredentials)
+            {
+                var model = new AuthorizeViewModel(request.client_id, request.response_type, request.scope,
+                    request.redirect_uri, request.state, true);
+
+                return View("~/OAuth/Views/Authorize.cshtml", model);
+            }
+
+            return Redirect(response.RedirectUri);
         }
 
         // Return new tokens
         [HttpPost("Token")]
         public async Task<ActionResult<TokenResponse>> Token(TokenRequest request, CancellationToken ct)
         {
-            var client = await _clientsService.GetByClientIdAsync(request.ClientId, ct);
+            var client = await _clientsService.GetByClientIdAsync(request.client_id, ct);
             if (client == null)
             {
-                return BadRequest(request.ClientId);
+                return BadRequest(request.client_id);
             }
 
             if (client.IsLocked || client.IsDeleted || client.ClientSecret.IsEmpty() ||
@@ -158,22 +188,23 @@ namespace Crm.Identity.OAuth.Controllers
                 return Forbid();
             }
 
-            if (request.ClientSecret != client.ClientSecret)
+            if (request.client_secret != client.ClientSecret)
             {
-                return BadRequest(request.ClientSecret);
+                return BadRequest(request.client_secret);
             }
 
-            if (!Regex.IsMatch(request.RedirectUri, client.RedirectUriPattern))
+            if (!Regex.IsMatch(request.redirect_uri, client.RedirectUriPattern))
             {
-                return BadRequest(request.RedirectUri);
+                return BadRequest(request.redirect_uri);
             }
 
             if (_oauthService.IsAuthorized(HttpContext.User))
             {
-                return Redirect(request.RedirectUri);
+                return Redirect(request.redirect_uri);
             }
 
-            var response = await _oauthService.GetTokenAsync(request, HttpContext.User, UserAgent, IpAddress, ct);
+            var response = await _oauthService.GetTokenAsync(request.grant_type, request.code, request.redirect_uri,
+                request.username, request.password, request.refresh_token, UserAgent, IpAddress, ct);
             if (response.HasError)
             {
                 return BadRequest(response.Error);
