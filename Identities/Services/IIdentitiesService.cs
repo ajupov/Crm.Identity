@@ -13,7 +13,7 @@ namespace Ajupov.Identity.Identities.Services
 
         Task<Models.Identity[]> GetListAsync(IEnumerable<Guid> ids, CancellationToken ct);
 
-        Task<Models.Identity> GetByKeyAndTypesAsync(
+        Task<Models.Identity> GetVerifiedByKeyAndTypesAsync(
             string key,
             IEnumerable<IdentityType> types,
             CancellationToken ct);
@@ -36,10 +36,6 @@ namespace Ajupov.Identity.Identities.Services
         Task VerifyAsync(IEnumerable<Guid> ids, CancellationToken ct);
 
         Task UnverifyAsync(IEnumerable<Guid> ids, CancellationToken ct);
-
-        Task SetAsPrimaryAsync(IEnumerable<Guid> ids, CancellationToken ct);
-
-        Task ResetAsPrimaryAsync(IEnumerable<Guid> ids, CancellationToken ct);
 
         bool IsPasswordCorrect(Models.Identity identity, string password);
     }

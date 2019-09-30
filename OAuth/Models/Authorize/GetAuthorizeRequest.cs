@@ -22,5 +22,7 @@ namespace Ajupov.Identity.OAuth.Models.Authorize
 
         [RedirectUriValidation]
         public string redirect_uri { get; set; }
+
+        public bool IsInvalidCredentials { get; set; }
     }
 }

@@ -17,16 +17,18 @@
     }
 
     <label>Логин:</label><br/>
-    <input type="text" name="Key"/><br/><br/>
+    <input type="text" name="Login" required="required"/><br/><br/>
 
     <label>Пароль:</label><br/>
-    <input type="password" name="Password"/><br/><br/>
+    <input type="password" name="Password" required="required"/><br/><br/>
 
     <label>Запомнить:</label><br/>
     <input type="checkbox" name="RememberState"/><br/><br/>
 
     <input type="submit" value="Войти"/>
 
+    <input type="hidden" name="client_id" value="@Model.ClientId"/>
+    <input type="hidden" name="scope" value="@Model.Scope"/>
     <input type="hidden" name="state" value="@Model.State"/>
     <input type="hidden" name="response_type" value="@Model.ResponseType"/>
     <input type="hidden" name="redirect_uri" value="@Model.RedirectUri"/>

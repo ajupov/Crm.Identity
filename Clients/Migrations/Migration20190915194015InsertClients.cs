@@ -16,7 +16,7 @@ namespace Ajupov.Identity.Clients.Migrations
                     Id = clientId,
                     ClientId = "spa-site",
                     ClientSecret = "spa-site",
-                    RedirectUriPattern = "localhost:3000",
+                    RedirectUriPattern = "http://localhost:3000",
                     IsLocked = false,
                     IsDeleted = false,
                     CreateDateTime = DateTime.UtcNow

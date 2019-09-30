@@ -14,8 +14,6 @@ namespace Ajupov.Identity.Identities.Models
 
         public string PasswordHash { get; set; }
 
-        public bool IsPrimary { get; set; }
-
         public bool IsVerified { get; set; }
 
         public DateTime CreateDateTime { get; set; }

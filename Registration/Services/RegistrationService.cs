@@ -10,6 +10,7 @@ using Ajupov.Infrastructure.All.MailSending.MailSender;
 using Ajupov.Infrastructure.All.SmsSending.SmsSender;
 using Ajupov.Utils.All.Password;
 using Infrastructure.All.Generator;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace Ajupov.Identity.Registration.Services
@@ -17,6 +18,7 @@ namespace Ajupov.Identity.Registration.Services
     public class RegistrationService : IRegistrationService
     {
         private readonly VerifyEmailSettings _settings;
+        private readonly ILogger<RegistrationService> _logger;
         private readonly IProfilesService _profilesService;
         private readonly IIdentitiesService _identitiesService;
         private readonly IIdentityTokensService _identityTokensService;
@@ -25,6 +27,7 @@ namespace Ajupov.Identity.Registration.Services
 
         public RegistrationService(
             IOptions<VerifyEmailSettings> settings,
+            ILogger<RegistrationService> logger,
             IProfilesService profilesService,
             IIdentitiesService identitiesService,
             IIdentityTokensService identityTokensService,
@@ -32,6 +35,7 @@ namespace Ajupov.Identity.Registration.Services
             ISmsSender smsSender)
         {
             _settings = settings.Value;
+            _logger = logger;
             _profilesService = profilesService;
             _identitiesService = identitiesService;
             _identityTokensService = identityTokensService;
@@ -93,7 +97,7 @@ namespace Ajupov.Identity.Registration.Services
             var now = DateTime.UtcNow;
             var code = Generator.GenerateAlphaNumericString(256);
             var identityTypes = new[] {IdentityType.EmailAndPassword};
-            var identity = await _identitiesService.GetByKeyAndTypesAsync(email, identityTypes, ct);
+            var identity = await _identitiesService.GetVerifiedByKeyAndTypesAsync(email, identityTypes, ct);
 
             var token = new IdentityToken
             {
@@ -119,7 +123,7 @@ namespace Ajupov.Identity.Registration.Services
             var now = DateTime.UtcNow;
             var code = new Random().Next(0, 9999).ToString("0000");
             var identityTypes = new[] {IdentityType.PhoneAndPassword};
-            var identity = await _identitiesService.GetByKeyAndTypesAsync(phone, identityTypes, ct);
+            var identity = await _identitiesService.GetVerifiedByKeyAndTypesAsync(phone, identityTypes, ct);
 
             var token = new IdentityToken
             {
@@ -148,7 +152,6 @@ namespace Ajupov.Identity.Registration.Services
                 Type = IdentityType.LoginAndPassword,
                 Key = login,
                 PasswordHash = passwordHash,
-                IsPrimary = true,
                 IsVerified = true
             };
 
@@ -169,7 +172,6 @@ namespace Ajupov.Identity.Registration.Services
                 Type = IdentityType.EmailAndPassword,
                 Key = email,
                 PasswordHash = passwordHash,
-                IsPrimary = true,
                 IsVerified = false
             };
 
@@ -191,7 +193,6 @@ namespace Ajupov.Identity.Registration.Services
                 Type = IdentityType.PhoneAndPassword,
                 Key = phone,
                 PasswordHash = passwordHash,
-                IsPrimary = true,
                 IsVerified = false
             };
 
@@ -205,15 +206,31 @@ namespace Ajupov.Identity.Registration.Services
             var uri = string.Format(_settings.VerifyUriPattern, code);
             var message = $"Click <a href='{uri}'>here</a> for verify email.";
 
-            return _mailSender.SendAsync(_settings.FromName, _settings.FromAddress, subject, new[] {email}, true,
-                message);
+            try
+            {
+                return _mailSender.SendAsync(_settings.FromName, _settings.FromAddress, subject, new[] {email}, true,
+                    message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return Task.CompletedTask;
+            }
         }
 
         private Task SendPhoneConfirmationCodeAsync(string phone, string code)
         {
             var message = $"Confirmation code - {code}.";
 
-            return _smsSender.SendAsync(phone, message);
+            try
+            {
+                return _smsSender.SendAsync(phone, message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return Task.CompletedTask;
+            }
         }
     }
 }

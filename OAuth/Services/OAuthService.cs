@@ -18,6 +18,7 @@ using Ajupov.Identity.Profiles.Services;
 using Ajupov.Infrastructure.All.HotStorage.HotStorage;
 using Infrastructure.All.Generator;
 using Infrastructure.All.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Ajupov.Identity.OAuth.Services
@@ -41,25 +42,19 @@ namespace Ajupov.Identity.OAuth.Services
             _identityTokensService = identityTokensService;
         }
 
-        public bool IsAuthorized(ClaimsPrincipal claimsPrincipal)
-        {
-            var claim = claimsPrincipal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
-
-            return claim != null;
-        }
-
         public async Task<PostAuthorizeResponse> AuthorizeAsync(
             string login,
             string password,
             bool isRemember,
             string responseType,
             string redirectUri,
+            string state,
             string userAgent,
             string ipAddress,
             CancellationToken ct)
         {
             var identityTypes = IdentityTypeExtensions.TypesWithPassword;
-            var identity = await _identitiesService.GetByKeyAndTypesAsync(login, identityTypes, ct);
+            var identity = await _identitiesService.GetVerifiedByKeyAndTypesAsync(login, identityTypes, ct);
             if (identity == null)
             {
                 return new PostAuthorizeResponse(redirectUri, true);
@@ -77,9 +72,8 @@ namespace Ajupov.Identity.OAuth.Services
                 return new PostAuthorizeResponse(redirectUri, true);
             }
 
-            var parameters =
-                await GetRedirectUrlParametersAsync(responseType, redirectUri, user, identity, userAgent, ipAddress,
-                    ct);
+            var parameters = await GetRedirectUrlParametersAsync(responseType, redirectUri, state, user, identity,
+                userAgent, ipAddress, ct);
 
             return new PostAuthorizeResponse(redirectUri.AddParameters(parameters));
         }
@@ -121,7 +115,7 @@ namespace Ajupov.Identity.OAuth.Services
                 case GrandType.Password:
                     var identityTypes = IdentityTypeExtensions.TypesWithPassword;
                     var identityByPassword =
-                        await _identitiesService.GetByKeyAndTypesAsync(userName, identityTypes, ct);
+                        await _identitiesService.GetVerifiedByKeyAndTypesAsync(userName, identityTypes, ct);
                     if (identityByPassword == null)
                     {
                         return new TokenResponse("Invalid credentials");
@@ -177,6 +171,7 @@ namespace Ajupov.Identity.OAuth.Services
         private async Task<(string key, object value)[]> GetRedirectUrlParametersAsync(
             string responseType,
             string redirectUri,
+            string state,
             Profile profile,
             Identities.Models.Identity identity,
             string userAgent,
@@ -186,15 +181,16 @@ namespace Ajupov.Identity.OAuth.Services
             switch (responseType)
             {
                 case ResponseType.Code:
-                    return GetCodeUriParameters(identity);
+                    return GetCodeUriParameters(identity, state);
                 case ResponseType.Token:
-                    return await GetTokensUriParametersAsync(redirectUri, profile, identity, userAgent, ipAddress, ct);
+                    return await GetTokensUriParametersAsync(redirectUri, state, profile, identity, userAgent,
+                        ipAddress, ct);
                 default:
                     throw new ArgumentOutOfRangeException(responseType);
             }
         }
 
-        private (string key, object value)[] GetCodeUriParameters(Identities.Models.Identity identity)
+        private (string key, object value)[] GetCodeUriParameters(Identities.Models.Identity identity, string state)
         {
             var code = Generator.GenerateAlphaNumericString(8);
 
@@ -202,12 +198,14 @@ namespace Ajupov.Identity.OAuth.Services
 
             return new (string key, object value)[]
             {
+                ("state", state),
                 ("code", code)
             };
         }
 
         private async Task<(string key, object value)[]> GetTokensUriParametersAsync(
             string redirectUri,
+            string state,
             Profile profile,
             Identities.Models.Identity identity,
             string userAgent,
@@ -219,10 +217,11 @@ namespace Ajupov.Identity.OAuth.Services
 
             return new (string key, object value)[]
             {
+                ("state", state),
                 ("token_type", "bearer"),
                 ("access_token", accessToken.Value),
                 ("refresh_token", refreshToken.Value),
-                ("expires_in", TimeSpan.FromDays(1).TotalSeconds)
+                ("expires_in", TimeSpan.FromDays(1).TotalSeconds),
             };
         }
 
@@ -284,17 +283,20 @@ namespace Ajupov.Identity.OAuth.Services
 
         private async Task<Claim[]> GetClaimsAsync(Profile profile, CancellationToken ct)
         {
-            var parameter = new IdentitiesGetPagedListRequest
+            var identityTypes = new List<IdentityType>
+            {
+                IdentityType.EmailAndPassword,
+                IdentityType.PhoneAndPassword
+            };
+
+            var request = new IdentitiesGetPagedListRequest
             {
                 ProfileId = profile.Id,
-                IsVerified = true,
-                Types = new List<IdentityType>
-                {
-                    IdentityType.EmailAndPassword,
-                    IdentityType.PhoneAndPassword
-                }
+                Types = identityTypes,
+                Limit = identityTypes.Count
             };
-            var allIdentities = await _identitiesService.GetPagedListAsync(parameter, ct);
+
+            var allIdentities = await _identitiesService.GetPagedListAsync(request, ct);
             var email = allIdentities.FirstOrDefault(x => x.Type == IdentityType.EmailAndPassword)?.Key;
             var phone = allIdentities.FirstOrDefault(x => x.Type == IdentityType.PhoneAndPassword)?.Key;
 

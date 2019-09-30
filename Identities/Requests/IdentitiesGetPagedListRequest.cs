@@ -10,8 +10,6 @@ namespace Ajupov.Identity.Identities.Requests
 
         public List<IdentityType> Types { get; set; }
 
-        public bool? IsPrimary { get; set; }
-
         public bool? IsVerified { get; set; }
 
         public DateTime? MinCreateDateTime { get; set; }

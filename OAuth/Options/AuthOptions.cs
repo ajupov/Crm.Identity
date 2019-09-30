@@ -7,11 +7,11 @@ namespace Ajupov.Identity.OAuth.Options
     {
         public const string Issuer = "Identity";
         public const string Audience = "Identity";
-        private const string Key = "SecretKey";
+        private const string Key = "VeryLargestSecretKey";
 
         public static SymmetricSecurityKey GetKey()
         {
-            return new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Key));
+            return new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Key));
         }
     }
 }

@@ -36,14 +36,14 @@ namespace Ajupov.Identity.Identities.Services
                 .ToArrayAsync(ct);
         }
 
-        public Task<Models.Identity> GetByKeyAndTypesAsync(
+        public Task<Models.Identity> GetVerifiedByKeyAndTypesAsync(
             string key,
             IEnumerable<IdentityType> types,
             CancellationToken ct)
         {
             return _storage.Identities
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Key == key && types.Contains(x.Type), ct);
+                .FirstOrDefaultAsync(x => x.Key == key  && x.IsVerified && types.Contains(x.Type), ct);
         }
 
         public Task<bool> IsExistByKeyAndTypeAsync(string key, IdentityType type, CancellationToken ct)
@@ -62,7 +62,6 @@ namespace Ajupov.Identity.Identities.Services
                 .Where(x =>
                     (request.ProfileId == x.ProfileId) &&
                     (request.Types == null || !request.Types.Any() || request.Types.Contains(x.Type)) &&
-                    (!request.IsPrimary.HasValue || x.IsPrimary == request.IsPrimary) &&
                     (!request.IsVerified.HasValue || x.IsVerified == request.IsVerified) &&
                     (!request.MinCreateDateTime.HasValue || x.CreateDateTime >= request.MinCreateDateTime) &&
                     (!request.MaxCreateDateTime.HasValue || x.CreateDateTime <= request.MaxCreateDateTime) &&
@@ -83,7 +82,6 @@ namespace Ajupov.Identity.Identities.Services
                 Type = identity.Type,
                 Key = identity.Key,
                 PasswordHash = identity.PasswordHash,
-                IsPrimary = identity.IsPrimary,
                 IsVerified = identity.IsVerified,
                 CreateDateTime = DateTime.UtcNow
             };
@@ -98,7 +96,6 @@ namespace Ajupov.Identity.Identities.Services
         {
             oldIdentity.IsVerified = oldIdentity.Key != identity.Key;
             oldIdentity.Key = identity.Key;
-            oldIdentity.IsPrimary = identity.IsPrimary;
             oldIdentity.ModifyDateTime = DateTime.UtcNow;
 
             _storage.Update(oldIdentity);
@@ -136,32 +133,6 @@ namespace Ajupov.Identity.Identities.Services
                 .ForEachAsync(x =>
                 {
                     x.IsVerified = false;
-                    x.ModifyDateTime = DateTime.UtcNow;
-                }, ct);
-
-            await _storage.SaveChangesAsync(ct);
-        }
-
-        public async Task SetAsPrimaryAsync(IEnumerable<Guid> ids, CancellationToken ct)
-        {
-            await _storage.Identities
-                .Where(x => ids.Contains(x.Id))
-                .ForEachAsync(x =>
-                {
-                    x.IsPrimary = true;
-                    x.ModifyDateTime = DateTime.UtcNow;
-                }, ct);
-
-            await _storage.SaveChangesAsync(ct);
-        }
-
-        public async Task ResetAsPrimaryAsync(IEnumerable<Guid> ids, CancellationToken ct)
-        {
-            await _storage.Identities
-                .Where(x => ids.Contains(x.Id))
-                .ForEachAsync(x =>
-                {
-                    x.IsPrimary = false;
                     x.ModifyDateTime = DateTime.UtcNow;
                 }, ct);
 

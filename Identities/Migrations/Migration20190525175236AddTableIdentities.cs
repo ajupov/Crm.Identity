@@ -13,7 +13,6 @@ namespace Ajupov.Identity.Identities.Migrations
                 .WithColumn("Type").AsByte().NotNullable()
                 .WithColumn("Key").AsString(128).NotNullable()
                 .WithColumn("PasswordHash").AsString(512).Nullable()
-                .WithColumn("IsPrimary").AsBoolean().NotNullable()
                 .WithColumn("IsVerified").AsBoolean().NotNullable()
                 .WithColumn("CreateDateTime").AsDateTime2().NotNullable()
                 .WithColumn("ModifyDateTime").AsDateTime2().Nullable();

@@ -49,13 +49,8 @@ namespace Ajupov.Identity.OAuth.Controllers
                 return BadRequest("Invalid redirect uri");
             }
 
-            if (_oauthService.IsAuthorized(HttpContext.User))
-            {
-                return Redirect(request.redirect_uri);
-            }
-
             var model = new AuthorizeViewModel(request.client_id, request.response_type, request.scope,
-                request.redirect_uri, request.state);
+                request.redirect_uri, request.state, request.IsInvalidCredentials);
 
             return View("~/OAuth/Views/Authorize.cshtml", model);
         }
@@ -76,13 +71,9 @@ namespace Ajupov.Identity.OAuth.Controllers
                 return BadRequest("Invalid redirect uri");
             }
 
-            if (_oauthService.IsAuthorized(HttpContext.User))
-            {
-                return Redirect(request.redirect_uri);
-            }
-
             var model = new RegisterViewModel(request.client_id, request.response_type, request.scope,
-                request.redirect_uri, request.state);
+                request.redirect_uri, request.state, request.IsLoginExists, request.IsEmailExists,
+                request.IsPhoneExists);
 
             return View("~/OAuth/Views/Register.cshtml", model);
         }
@@ -104,19 +95,21 @@ namespace Ajupov.Identity.OAuth.Controllers
                 return BadRequest("Invalid redirect uri");
             }
 
-            if (_oauthService.IsAuthorized(HttpContext.User))
-            {
-                return Redirect(request.redirect_uri);
-            }
-
             var response = await _oauthService.AuthorizeAsync(request.Login, request.Password, request.IsRemember,
-                request.response_type, request.redirect_uri, UserAgent, IpAddress, ct);
+                request.response_type, request.redirect_uri, request.state, UserAgent, IpAddress, ct);
             if (response.IsInvalidCredentials)
             {
-                var model = new AuthorizeViewModel(request.client_id, request.response_type, request.scope,
-                    request.redirect_uri, request.state, true);
+                var newRequest = new GetAuthorizeRequest
+                {
+                    client_id = request.client_id,
+                    response_type = request.response_type,
+                    scope = request.scope,
+                    state = request.state,
+                    redirect_uri = request.redirect_uri,
+                    IsInvalidCredentials = true
+                };
 
-                return View("~/OAuth/Views/Authorize.cshtml", model);
+                return RedirectToAction("Authorize", newRequest);
             }
 
             return Redirect(response.RedirectUri);
@@ -139,34 +132,45 @@ namespace Ajupov.Identity.OAuth.Controllers
                 return BadRequest("Invalid redirect uri");
             }
 
-            if (_oauthService.IsAuthorized(HttpContext.User))
-            {
-                return Redirect(request.redirect_uri);
-            }
-
             var isLoginExists = await _registrationService.IsLoginExistsAsync(request.Login, ct);
             var isEmailExists = await _registrationService.IsEmailExistsAsync(request.Email, ct);
             var isPhoneExists = await _registrationService.IsPhoneExistsAsync(request.Phone, ct);
 
             if (isLoginExists || isEmailExists || isPhoneExists)
             {
-                var model = new RegisterViewModel(request.client_id, request.response_type, request.scope,
-                    request.redirect_uri, request.state, isLoginExists, isEmailExists, isPhoneExists);
+                var newRequest = new GetRegisterRequest
+                {
+                    client_id = request.client_id,
+                    response_type = request.response_type,
+                    scope = request.scope,
+                    state = request.state,
+                    redirect_uri = request.redirect_uri,
+                    IsLoginExists = isLoginExists,
+                    IsEmailExists = isEmailExists,
+                    IsPhoneExists = isPhoneExists
+                };
 
-                return View("~/OAuth/Views/Register.cshtml", model);
+                return RedirectToAction("Register", newRequest);
             }
 
             await _registrationService.RegisterAsync(request.Surname, request.Name, request.Gender, request.BirthDate,
                 request.Login, request.Email, request.Phone, request.Password, IpAddress, UserAgent, ct);
 
             var response = await _oauthService.AuthorizeAsync(request.Login, request.Password, false,
-                request.response_type, request.redirect_uri, UserAgent, IpAddress, ct);
+                request.response_type, request.redirect_uri, request.state, UserAgent, IpAddress, ct);
             if (response.IsInvalidCredentials)
             {
-                var model = new AuthorizeViewModel(request.client_id, request.response_type, request.scope,
-                    request.redirect_uri, request.state, true);
+                var newRequest = new GetAuthorizeRequest
+                {
+                    client_id = request.client_id,
+                    response_type = request.response_type,
+                    scope = request.scope,
+                    state = request.state,
+                    redirect_uri = request.redirect_uri,
+                    IsInvalidCredentials = true
+                };
 
-                return View("~/OAuth/Views/Authorize.cshtml", model);
+                return RedirectToAction("Authorize", newRequest);
             }
 
             return Redirect(response.RedirectUri);
@@ -196,11 +200,6 @@ namespace Ajupov.Identity.OAuth.Controllers
             if (!Regex.IsMatch(request.redirect_uri, client.RedirectUriPattern))
             {
                 return BadRequest(request.redirect_uri);
-            }
-
-            if (_oauthService.IsAuthorized(HttpContext.User))
-            {
-                return Redirect(request.redirect_uri);
             }
 
             var response = await _oauthService.GetTokenAsync(request.grant_type, request.code, request.redirect_uri,

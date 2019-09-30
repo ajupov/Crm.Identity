@@ -22,5 +22,11 @@ namespace Ajupov.Identity.OAuth.Models.Register
 
         [RedirectUriValidation]
         public string redirect_uri { get; set; }
+
+        public bool IsLoginExists { get; set; }
+        
+        public bool IsEmailExists { get; set; }
+        
+        public bool IsPhoneExists { get; set; }
     }
 }

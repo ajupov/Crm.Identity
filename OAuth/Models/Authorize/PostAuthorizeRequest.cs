@@ -36,7 +36,7 @@ namespace Ajupov.Identity.OAuth.Models.Authorize
         [StateValidation]
         public string state { get; set; }
 
-        [RedirectUriWithStateValidation]
+        [RedirectUriValidation]
         public string redirect_uri { get; set; }
     }
 }

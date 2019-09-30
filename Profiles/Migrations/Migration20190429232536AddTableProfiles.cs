@@ -11,7 +11,7 @@ namespace Ajupov.Identity.Profiles.Migrations
                 .WithColumn("Id").AsGuid().NotNullable()
                 .WithColumn("Surname").AsString(256).NotNullable()
                 .WithColumn("Name").AsString(256).NotNullable()
-                .WithColumn("BirthDate").AsDateTime2().Nullable()
+                .WithColumn("BirthDate").AsDate().Nullable()
                 .WithColumn("Gender").AsByte().Nullable()
                 .WithColumn("IsLocked").AsBoolean().NotNullable()
                 .WithColumn("IsDeleted").AsBoolean().NotNullable()

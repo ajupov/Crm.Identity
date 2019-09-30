@@ -14,8 +14,8 @@ namespace Ajupov.Identity.Clients.Migrations
                 .WithColumn("RedirectUriPattern").AsString(2048).NotNullable()
                 .WithColumn("IsLocked").AsBoolean().NotNullable()
                 .WithColumn("IsDeleted").AsBoolean().NotNullable()
-                .WithColumn("CreateDateTime").AsDateTime().NotNullable()
-                .WithColumn("ModifyDateTime").AsDateTime().Nullable();
+                .WithColumn("CreateDateTime").AsDateTime2().NotNullable()
+                .WithColumn("ModifyDateTime").AsDateTime2().Nullable();
 
             Create.PrimaryKey("PK_Clients_Id").OnTable("Clients")
                 .Columns("Id");

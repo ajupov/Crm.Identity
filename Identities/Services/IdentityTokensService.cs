@@ -38,11 +38,12 @@ namespace Ajupov.Identity.Identities.Services
                 IdentityId = token.IdentityId,
                 Type = token.Type,
                 Value = token.Value,
+                CreateDateTime = DateTime.UtcNow,
                 ExpirationDateTime = token.ExpirationDateTime,
                 UserAgent = token.UserAgent,
                 IpAddress = token.IpAddress
             };
-            
+
             var entry = await _storage.AddAsync(newToken, ct);
             await _storage.SaveChangesAsync(ct);
 

@@ -12,7 +12,7 @@ namespace Ajupov.Identity.OAuth.Attributes.Validation
                 grandType == GrandType.Password ||
                 grandType == GrandType.RefreshToken)
             {
-                return new ValidationResult($"Invalid grand type");
+                return new ValidationResult("Invalid grand type");
             }
 
             return ValidationResult.Success;
