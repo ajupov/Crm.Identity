@@ -16,11 +16,6 @@ namespace Ajupov.Identity.OAuth.Models.Authorize
         public string Password { get; set; }
 
         [Required]
-        public bool IsRemember => RememberState == "on";
-
-        public string RememberState { get; set; }
-
-        [Required]
         [ClientIdValidation]
         public string client_id { get; set; }
 

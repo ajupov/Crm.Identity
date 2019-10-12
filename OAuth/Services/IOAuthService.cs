@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Ajupov.Identity.OAuth.Models.Authorize;
@@ -10,12 +11,12 @@ namespace Ajupov.Identity.OAuth.Services
         Task<PostAuthorizeResponse> AuthorizeAsync(
             string login,
             string password,
-            bool isRemember,
             string responseType,
             string redirectUri,
             string state,
             string userAgent,
             string ipAddress,
+            List<string> scopes,
             CancellationToken ct);
 
         Task<TokenResponse> GetTokenAsync(
@@ -24,9 +25,10 @@ namespace Ajupov.Identity.OAuth.Services
             string redirectUri,
             string userName,
             string password,
-            string refreshToken,
+            string oldRefreshTokenValue,
             string userAgent,
             string ipAddress,
+            List<string> oAuthClientScopes,
             CancellationToken ct);
     }
 }

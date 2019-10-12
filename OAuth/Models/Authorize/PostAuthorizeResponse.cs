@@ -2,13 +2,13 @@
 {
     public class PostAuthorizeResponse
     {
-        public PostAuthorizeResponse(string redirectUri, bool isInvalidCredentials = false)
+        public PostAuthorizeResponse(string callbackUri, bool isInvalidCredentials = false)
         {
-            RedirectUri = redirectUri;
+            CallbackUri = callbackUri;
             IsInvalidCredentials = isInvalidCredentials;
         }
 
-        public string RedirectUri { get; }
+        public string CallbackUri { get; }
         
         public bool IsInvalidCredentials { get; }
     }

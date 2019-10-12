@@ -1,11 +1,12 @@
 ﻿using System.Linq;
+using Ajupov.Identity.OAuthClients.Models;
 
-namespace Ajupov.Identity.Identities.Helpers
+namespace Ajupov.Identity.OAuthClients.Helpers
 {
-    public static class IdentitiesSortingHelper
+    public static class OAuthClientsSortingHelper
     {
-        public static IOrderedQueryable<Models.Identity> Sort(
-            this IQueryable<Models.Identity> queryable,
+        public static IOrderedQueryable<OAuthClient> Sort(
+            this IQueryable<OAuthClient> queryable,
             string sortBy,
             string orderBy)
         {
@@ -13,13 +14,10 @@ namespace Ajupov.Identity.Identities.Helpers
 
             return sortBy switch
             {
-                nameof(Models.Identity.Type) => (isDesc
-                    ? queryable.OrderByDescending(x => x.Type)
-                    : queryable.OrderBy(x => x.Type)),
-                nameof(Models.Identity.CreateDateTime) => (isDesc
+                nameof(OAuthClient.CreateDateTime) => (isDesc
                     ? queryable.OrderByDescending(x => x.CreateDateTime)
                     : queryable.OrderBy(x => x.CreateDateTime)),
-                nameof(Models.Identity.ModifyDateTime) => (isDesc
+                nameof(OAuthClient.ModifyDateTime) => (isDesc
                     ? queryable.OrderByDescending(x => x.ModifyDateTime)
                     : queryable.OrderBy(x => x.ModifyDateTime)),
                 _ => queryable.OrderByDescending(x => x.CreateDateTime)

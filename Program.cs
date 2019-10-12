@@ -1,11 +1,11 @@
 ﻿using System.Threading.Tasks;
-using Ajupov.Identity.Clients.Services;
-using Ajupov.Identity.Clients.Storages;
 using Ajupov.Identity.Identities.Services;
 using Ajupov.Identity.Identities.Storages;
 using Ajupov.Identity.OAuth.Filters;
 using Ajupov.Identity.OAuth.Options;
 using Ajupov.Identity.OAuth.Services;
+using Ajupov.Identity.OAuthClients.Services;
+using Ajupov.Identity.OAuthClients.Storages;
 using Ajupov.Identity.Profiles.Services;
 using Ajupov.Identity.Profiles.Storages;
 using Ajupov.Identity.Registration.Services;
@@ -46,12 +46,12 @@ namespace Ajupov.Identity
                         .ConfigureMigrator(builder.Configuration)
                         .ConfigureMailSending(builder.Configuration)
                         .ConfigureSmsSending(builder.Configuration)
-                        .ConfigureOrm<ClientsStorage>(builder.Configuration)
+                        .ConfigureOrm<OAuthClientsStorage>(builder.Configuration)
                         .ConfigureOrm<IdentitiesStorage>(builder.Configuration)
                         .ConfigureOrm<ProfilesStorage>(builder.Configuration)
                         .ConfigureHotStorage(builder.Configuration)
                         .Configure<VerifyEmailSettings>(builder.Configuration.GetSection("VerifyEmailSettings"))
-                        .AddTransient<IClientsService, ClientsService>()
+                        .AddTransient<IOAuthClientsService, OAuthClientsService>()
                         .AddTransient<IIdentitiesService, IdentitiesService>()
                         .AddTransient<IIdentityTokensService, IdentityTokensService>()
                         .AddTransient<IProfilesService, ProfilesService>()

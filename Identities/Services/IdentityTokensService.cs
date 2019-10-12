@@ -35,6 +35,7 @@ namespace Ajupov.Identity.Identities.Services
         {
             var newToken = new IdentityToken
             {
+                Id = Guid.NewGuid(),
                 IdentityId = token.IdentityId,
                 Type = token.Type,
                 Value = token.Value,

@@ -1,16 +1,17 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Ajupov.Identity.Clients.Services;
 using Ajupov.Identity.OAuth.Attributes.Security;
+using Ajupov.Identity.OAuth.Extensions;
 using Ajupov.Identity.OAuth.Models.Authorize;
 using Ajupov.Identity.OAuth.Models.Register;
 using Ajupov.Identity.OAuth.Models.Tokens;
 using Ajupov.Identity.OAuth.Services;
 using Ajupov.Identity.OAuth.ViewModels;
+using Ajupov.Identity.OAuthClients.Services;
+using Ajupov.Identity.OAuthClients.Validators;
 using Ajupov.Identity.Registration.Services;
 using Ajupov.Infrastructure.All.Mvc;
-using Ajupov.Utils.All.String;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ajupov.Identity.OAuth.Controllers
@@ -20,116 +21,148 @@ namespace Ajupov.Identity.OAuth.Controllers
     public class OAuthController : DefaultMvcController
     {
         private readonly IOAuthService _oauthService;
-        private readonly IClientsService _clientsService;
+        private readonly IOAuthClientsService _ioAuthClientsService;
         private readonly IRegistrationService _registrationService;
 
         public OAuthController(
             IOAuthService oauthService,
-            IClientsService clientsService,
+            IOAuthClientsService ioAuthClientsService,
             IRegistrationService registrationService)
         {
             _oauthService = oauthService;
-            _clientsService = clientsService;
+            _ioAuthClientsService = ioAuthClientsService;
             _registrationService = registrationService;
         }
 
-        // Show authorize form
         [HttpGet("Authorize")]
         public async Task<ActionResult> Authorize(GetAuthorizeRequest request, CancellationToken ct)
         {
-            var client = await _clientsService.GetByClientIdAsync(request.client_id, ct);
-            if (client == null || client.IsLocked || client.IsDeleted || client.ClientSecret.IsEmpty() ||
-                client.RedirectUriPattern.IsEmpty())
+            var client = await _ioAuthClientsService.GetByClientIdAsync(request.client_id, ct);
+            if (!client.IsValid())
             {
                 return BadRequest("Client not found");
             }
 
-            if (!Regex.IsMatch(request.redirect_uri, client.RedirectUriPattern))
+            if (!client.IsMatchRedirectUri(request.redirect_uri))
             {
                 return BadRequest("Invalid redirect uri");
             }
 
-            var model = new AuthorizeViewModel(request.client_id, request.response_type, request.scope,
-                request.redirect_uri, request.state, request.IsInvalidCredentials);
+            if (!client.IsScopesInclude(request.scope))
+            {
+                return BadRequest("Invalid scopes");
+            }
+
+            var model = new AuthorizeViewModel(
+                request.client_id,
+                request.response_type,
+                request.scope,
+                request.redirect_uri,
+                request.state,
+                request.IsInvalidCredentials);
 
             return View("~/OAuth/Views/Authorize.cshtml", model);
         }
 
-        // Show registration form
         [HttpGet("Register")]
         public async Task<ActionResult> Register(GetRegisterRequest request, CancellationToken ct)
         {
-            var client = await _clientsService.GetByClientIdAsync(request.client_id, ct);
-            if (client == null || client.IsLocked || client.IsDeleted || client.ClientSecret.IsEmpty() ||
-                client.RedirectUriPattern.IsEmpty())
+            var client = await _ioAuthClientsService.GetByClientIdAsync(request.client_id, ct);
+            if (!client.IsValid())
             {
                 return BadRequest("Client not found");
             }
 
-            if (!Regex.IsMatch(request.redirect_uri, client.RedirectUriPattern))
+            if (!client.IsMatchRedirectUri(request.redirect_uri))
             {
                 return BadRequest("Invalid redirect uri");
             }
 
-            var model = new RegisterViewModel(request.client_id, request.response_type, request.scope,
-                request.redirect_uri, request.state, request.IsLoginExists, request.IsEmailExists,
+            if (!client.IsScopesInclude(request.scope))
+            {
+                return BadRequest("Invalid scopes");
+            }
+
+            var model = new RegisterViewModel(
+                request.client_id,
+                request.response_type,
+                request.scope,
+                request.redirect_uri,
+                request.state,
+                request.IsLoginExists,
+                request.IsEmailExists,
                 request.IsPhoneExists);
 
             return View("~/OAuth/Views/Register.cshtml", model);
         }
 
-        // Redirect with code or tokens
         [HttpPost("Authorize")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Authorize([FromForm] PostAuthorizeRequest request, CancellationToken ct)
         {
-            var client = await _clientsService.GetByClientIdAsync(request.client_id, ct);
-            if (client == null || client.IsLocked || client.IsDeleted || client.ClientSecret.IsEmpty() ||
-                client.RedirectUriPattern.IsEmpty())
+            var client = await _ioAuthClientsService.GetByClientIdAsync(request.client_id, ct);
+            if (!client.IsValid())
             {
                 return BadRequest("Client not found");
             }
 
-            if (!Regex.IsMatch(request.redirect_uri, client.RedirectUriPattern))
+            if (!client.IsMatchRedirectUri(request.redirect_uri))
             {
                 return BadRequest("Invalid redirect uri");
             }
 
-            var response = await _oauthService.AuthorizeAsync(request.Login, request.Password, request.IsRemember,
-                request.response_type, request.redirect_uri, request.state, UserAgent, IpAddress, ct);
-            if (response.IsInvalidCredentials)
+            if (!client.IsScopesInclude(request.scope))
             {
-                var newRequest = new GetAuthorizeRequest
-                {
-                    client_id = request.client_id,
-                    response_type = request.response_type,
-                    scope = request.scope,
-                    state = request.state,
-                    redirect_uri = request.redirect_uri,
-                    IsInvalidCredentials = true
-                };
-
-                return RedirectToAction("Authorize", newRequest);
+                return BadRequest("Invalid scopes");
             }
 
-            return Redirect(response.RedirectUri);
+            var response = await _oauthService.AuthorizeAsync(
+                request.Login,
+                request.Password,
+                request.response_type,
+                request.redirect_uri,
+                request.state,
+                UserAgent,
+                IpAddress,
+                request.scope.ToList(),
+                ct);
+
+            if (!response.IsInvalidCredentials)
+            {
+                return Redirect(response.CallbackUri);
+            }
+
+            var newRequest = new GetAuthorizeRequest
+            {
+                client_id = request.client_id,
+                response_type = request.response_type,
+                scope = request.scope,
+                state = request.state,
+                redirect_uri = request.redirect_uri,
+                IsInvalidCredentials = true
+            };
+
+            return RedirectToAction("Authorize", newRequest);
         }
 
-        // Redirect with code or tokens
         [HttpPost("Register")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register([FromForm] PostRegisterRequest request, CancellationToken ct)
         {
-            var client = await _clientsService.GetByClientIdAsync(request.client_id, ct);
-            if (client == null || client.IsLocked || client.IsDeleted || client.ClientSecret.IsEmpty() ||
-                client.RedirectUriPattern.IsEmpty())
+            var client = await _ioAuthClientsService.GetByClientIdAsync(request.client_id, ct);
+            if (!client.IsValid())
             {
                 return BadRequest("Client not found");
             }
 
-            if (!Regex.IsMatch(request.redirect_uri, client.RedirectUriPattern))
+            if (!client.IsMatchRedirectUri(request.redirect_uri))
             {
                 return BadRequest("Invalid redirect uri");
+            }
+
+            if (!client.IsScopesInclude(request.scope))
+            {
+                return BadRequest("Invalid scopes");
             }
 
             var isLoginExists = await _registrationService.IsLoginExistsAsync(request.Login, ct);
@@ -138,7 +171,7 @@ namespace Ajupov.Identity.OAuth.Controllers
 
             if (isLoginExists || isEmailExists || isPhoneExists)
             {
-                var newRequest = new GetRegisterRequest
+                var newRegisterRequest = new GetRegisterRequest
                 {
                     client_id = request.client_id,
                     response_type = request.response_type,
@@ -150,60 +183,82 @@ namespace Ajupov.Identity.OAuth.Controllers
                     IsPhoneExists = isPhoneExists
                 };
 
-                return RedirectToAction("Register", newRequest);
+                return RedirectToAction("Register", newRegisterRequest);
             }
 
-            await _registrationService.RegisterAsync(request.Surname, request.Name, request.Gender, request.BirthDate,
-                request.Login, request.Email, request.Phone, request.Password, IpAddress, UserAgent, ct);
+            await _registrationService.RegisterAsync(
+                request.Surname,
+                request.Name,
+                request.Gender,
+                request.BirthDate,
+                request.Login,
+                request.Email,
+                request.Phone,
+                request.Password,
+                IpAddress,
+                UserAgent,
+                ct);
 
-            var response = await _oauthService.AuthorizeAsync(request.Login, request.Password, false,
-                request.response_type, request.redirect_uri, request.state, UserAgent, IpAddress, ct);
-            if (response.IsInvalidCredentials)
+            var response = await _oauthService.AuthorizeAsync(
+                request.Login,
+                request.Password,
+                request.response_type,
+                request.redirect_uri,
+                request.state,
+                UserAgent,
+                IpAddress,
+                request.scope.ToList(),
+                ct);
+
+            if (!response.IsInvalidCredentials)
             {
-                var newRequest = new GetAuthorizeRequest
-                {
-                    client_id = request.client_id,
-                    response_type = request.response_type,
-                    scope = request.scope,
-                    state = request.state,
-                    redirect_uri = request.redirect_uri,
-                    IsInvalidCredentials = true
-                };
-
-                return RedirectToAction("Authorize", newRequest);
+                return Redirect(response.CallbackUri);
             }
 
-            return Redirect(response.RedirectUri);
+            var newAuthorizeRequest = new GetAuthorizeRequest
+            {
+                client_id = request.client_id,
+                response_type = request.response_type,
+                scope = request.scope,
+                state = request.state,
+                redirect_uri = request.redirect_uri,
+                IsInvalidCredentials = true
+            };
+
+            return RedirectToAction("Authorize", newAuthorizeRequest);
         }
 
-        // Return new tokens
         [HttpPost("Token")]
         public async Task<ActionResult<TokenResponse>> Token(TokenRequest request, CancellationToken ct)
         {
-            var client = await _clientsService.GetByClientIdAsync(request.client_id, ct);
-            if (client == null)
+            var client = await _ioAuthClientsService.GetByClientIdAsync(request.client_id, ct);
+            if (!client.IsValid())
             {
-                return BadRequest(request.client_id);
+                return BadRequest("Client not found");
             }
 
-            if (client.IsLocked || client.IsDeleted || client.ClientSecret.IsEmpty() ||
-                client.RedirectUriPattern.IsEmpty())
+            if (!client.IsMatchRedirectUri(request.redirect_uri))
             {
-                return Forbid();
+                return BadRequest("Invalid redirect uri");
             }
 
-            if (request.client_secret != client.ClientSecret)
+            if (!client.IsCorrectSecret(request.client_secret))
             {
-                return BadRequest(request.client_secret);
+                return BadRequest("Invalid client secret");
             }
 
-            if (!Regex.IsMatch(request.redirect_uri, client.RedirectUriPattern))
-            {
-                return BadRequest(request.redirect_uri);
-            }
+            var response = await _oauthService.GetTokenAsync(
+                request.grant_type,
+                request.code,
+                request.redirect_uri,
+                request.username,
+                request.password,
+                request.refresh_token,
+                UserAgent,
+                IpAddress,
+                client.Scopes.Select(x => x.Value).ToList(),
+                ct);
 
-            var response = await _oauthService.GetTokenAsync(request.grant_type, request.code, request.redirect_uri,
-                request.username, request.password, request.refresh_token, UserAgent, IpAddress, ct);
             if (response.HasError)
             {
                 return BadRequest(response.Error);

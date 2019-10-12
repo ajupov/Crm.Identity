@@ -36,6 +36,7 @@ namespace Ajupov.Identity.Identities.Migrations
         {
             Delete.Index("IX_IdentityTokens_IdentityId_Type_Value").OnTable("IdentityTokens");
             Delete.ForeignKey("FK_IdentityTokens_IdentityId").OnTable("IdentityTokens");
+            Delete.PrimaryKey("PK_IdentityTokens_Id").FromTable("IdentityTokens");
             Delete.Table("IdentityTokens");
         }
     }
