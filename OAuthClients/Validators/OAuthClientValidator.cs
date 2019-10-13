@@ -11,10 +11,9 @@ namespace Ajupov.Identity.OAuthClients.Validators
     {
         public static bool IsValid(this OAuthClient oAuthClient)
         {
-            return oAuthClient?.Scopes != null &&
+            return oAuthClient?.Scopes?.Any() == true &&
                    !oAuthClient.IsLocked &&
                    !oAuthClient.IsDeleted &&
-                   !oAuthClient.Scopes.Any() &&
                    !oAuthClient.ClientSecret.IsEmpty() &&
                    !oAuthClient.RedirectUriPattern.IsEmpty();
         }

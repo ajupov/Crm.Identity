@@ -47,7 +47,7 @@ namespace Ajupov.Identity.RefreshTokens.Services
                 Claims = claims.Select(x => new RefreshTokenClaim
                 {
                     Id = Guid.NewGuid(),
-                    TokenId = id,
+                    RefreshTokenId = id,
                     Type = x.Type,
                     Value = x.Value
                 }).ToList(),

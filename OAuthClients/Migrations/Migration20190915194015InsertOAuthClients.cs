@@ -23,11 +23,11 @@ namespace Ajupov.Identity.OAuthClients.Migrations
                     CreateDateTime = DateTime.UtcNow
                 });
 
-            Insert.IntoTable("ClientScopes").Row(
+            Insert.IntoTable("OAuthClientScopes").Row(
                 new
                 {
                     Id = Guid.NewGuid(),
-                    ClientId = clientId,
+                    OAuthClientId = clientId,
                     Value = "all"
                 });
         }

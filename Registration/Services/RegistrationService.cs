@@ -97,7 +97,7 @@ namespace Ajupov.Identity.Registration.Services
             var now = DateTime.UtcNow;
             var code = Generator.GenerateAlphaNumericString(256);
             var identityTypes = new[] {IdentityType.EmailAndPassword};
-            var identity = await _identitiesService.GetVerifiedByKeyAndTypesAsync(email, identityTypes, ct);
+            var identity = await _identitiesService.GetByKeyAndTypesAsync(email, identityTypes, ct);
 
             var token = new IdentityToken
             {
@@ -123,7 +123,7 @@ namespace Ajupov.Identity.Registration.Services
             var now = DateTime.UtcNow;
             var code = new Random().Next(0, 9999).ToString("0000");
             var identityTypes = new[] {IdentityType.PhoneAndPassword};
-            var identity = await _identitiesService.GetVerifiedByKeyAndTypesAsync(phone, identityTypes, ct);
+            var identity = await _identitiesService.GetByKeyAndTypesAsync(phone, identityTypes, ct);
 
             var token = new IdentityToken
             {

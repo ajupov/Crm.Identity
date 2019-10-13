@@ -8,7 +8,5 @@
         <PackageReference Include="Ajupov.Infrastructure.All" Version="1.0.8" />
         <PackageReference Include="Ajupov.Utils.All" Version="1.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="3.0.0" />
     </ItemGroup>
 </Project>

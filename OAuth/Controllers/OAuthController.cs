@@ -229,7 +229,8 @@ namespace Ajupov.Identity.OAuth.Controllers
         }
 
         [HttpPost("Token")]
-        public async Task<ActionResult<TokenResponse>> Token(TokenRequest request, CancellationToken ct)
+        [IgnoreAntiforgeryToken]
+        public async Task<ActionResult<TokenResponse>> Token([FromForm] TokenRequest request, CancellationToken ct)
         {
             var client = await _ioAuthClientsService.GetByClientIdAsync(request.client_id, ct);
             if (!client.IsValid())

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Ajupov.Identity.Resources.Services
 {
-    public interface IScopePermissionsService
+    public interface IScopeRolesService
     {
         Task<Dictionary<string, string[]>> GetAsync();
     }

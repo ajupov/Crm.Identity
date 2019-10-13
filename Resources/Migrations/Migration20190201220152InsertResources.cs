@@ -13,7 +13,7 @@ namespace Ajupov.Identity.Resources.Migrations
                 new
                 {
                     Id = Guid.NewGuid(),
-                    Type = ResourceType.Profile,
+                    Type = (byte) ResourceType.Profile,
                     Name = "All",
                     Scope = "all",
                     Description = "All API",

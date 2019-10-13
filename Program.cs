@@ -4,12 +4,20 @@ using Ajupov.Identity.Identities.Storages;
 using Ajupov.Identity.OAuth.Filters;
 using Ajupov.Identity.OAuth.Options;
 using Ajupov.Identity.OAuth.Services;
+using Ajupov.Identity.OAuth.Services.AccessTokens;
+using Ajupov.Identity.OAuth.Services.Claims;
+using Ajupov.Identity.OAuth.Services.Codes;
+using Ajupov.Identity.OAuth.Services.RedirectUri;
 using Ajupov.Identity.OAuthClients.Services;
 using Ajupov.Identity.OAuthClients.Storages;
 using Ajupov.Identity.Profiles.Services;
 using Ajupov.Identity.Profiles.Storages;
+using Ajupov.Identity.RefreshTokens.Services;
+using Ajupov.Identity.RefreshTokens.Storages;
 using Ajupov.Identity.Registration.Services;
 using Ajupov.Identity.Registration.Settings;
+using Ajupov.Identity.Resources.Services;
+using Ajupov.Identity.Resources.Storages;
 using Ajupov.Infrastructure.All.ApiDocumentation;
 using Ajupov.Infrastructure.All.Configuration;
 using Ajupov.Infrastructure.All.Hosting;
@@ -49,6 +57,8 @@ namespace Ajupov.Identity
                         .ConfigureOrm<OAuthClientsStorage>(builder.Configuration)
                         .ConfigureOrm<IdentitiesStorage>(builder.Configuration)
                         .ConfigureOrm<ProfilesStorage>(builder.Configuration)
+                        .ConfigureOrm<ResourcesStorage>(builder.Configuration)
+                        .ConfigureOrm<RefreshTokensStorage>(builder.Configuration)
                         .ConfigureHotStorage(builder.Configuration)
                         .Configure<VerifyEmailSettings>(builder.Configuration.GetSection("VerifyEmailSettings"))
                         .AddTransient<IOAuthClientsService, OAuthClientsService>()
@@ -57,6 +67,13 @@ namespace Ajupov.Identity
                         .AddTransient<IProfilesService, ProfilesService>()
                         .AddTransient<IOAuthService, OAuthService>()
                         .AddTransient<IRegistrationService, RegistrationService>()
+                        .AddTransient<IClaimsService, ClaimsService>()
+                        .AddTransient<IResourcesService, ResourcesService>()
+                        .AddTransient<IScopeRolesService, ScopeRolesService>()
+                        .AddTransient<ICodesService, CodesService>()
+                        .AddTransient<IAccessTokensService, AccessTokensService>()
+                        .AddTransient<IRefreshTokensService, RefreshTokensService>()
+                        .AddTransient<ICallbackUriService, CallbackUriService>()
                         .AddAuthentication(x =>
                         {
                             x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;

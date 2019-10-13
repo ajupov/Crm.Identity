@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 
 namespace Ajupov.Identity.Resources.Services
 {
-    public class ScopePermissionsService : IScopePermissionsService
+    public class ScopeRolesService : IScopeRolesService
     {
         private bool _isLoaded;
-        private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(0, 1);
+        private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1);
         private Dictionary<string, string[]> _data = new Dictionary<string, string[]>();
 
         public async Task<Dictionary<string, string[]>> GetAsync()

@@ -13,6 +13,11 @@ namespace Ajupov.Identity.Identities.Services
 
         Task<Models.Identity[]> GetListAsync(IEnumerable<Guid> ids, CancellationToken ct);
 
+        Task<Models.Identity> GetByKeyAndTypesAsync(
+            string key,
+            IEnumerable<IdentityType> types,
+            CancellationToken ct);
+
         Task<Models.Identity> GetVerifiedByKeyAndTypesAsync(
             string key,
             IEnumerable<IdentityType> types,

@@ -36,6 +36,16 @@ namespace Ajupov.Identity.Identities.Services
                 .ToArrayAsync(ct);
         }
 
+        public Task<Models.Identity> GetByKeyAndTypesAsync(
+            string key,
+            IEnumerable<IdentityType> types,
+            CancellationToken ct)
+        {
+            return _storage.Identities
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Key == key && types.Contains(x.Type), ct);
+        }
+
         public Task<Models.Identity> GetVerifiedByKeyAndTypesAsync(
             string key,
             IEnumerable<IdentityType> types,
@@ -43,7 +53,7 @@ namespace Ajupov.Identity.Identities.Services
         {
             return _storage.Identities
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Key == key  && x.IsVerified && types.Contains(x.Type), ct);
+                .FirstOrDefaultAsync(x => x.Key == key && x.IsVerified && types.Contains(x.Type), ct);
         }
 
         public Task<bool> IsExistByKeyAndTypeAsync(string key, IdentityType type, CancellationToken ct)
