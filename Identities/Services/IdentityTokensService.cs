@@ -17,18 +17,11 @@ namespace Ajupov.Identity.Identities.Services
             _storage = storage;
         }
 
-        public Task<IdentityToken> GetAsync(Guid identityId, string value, CancellationToken ct)
+        public Task<IdentityToken> GetAsync(Guid id, CancellationToken ct)
         {
             return _storage.IdentityTokens
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.IdentityId == identityId && x.Value == value, ct);
-        }
-
-        public Task<IdentityToken> GetByValueAsync(IdentityTokenType type, string value, CancellationToken ct)
-        {
-            return _storage.IdentityTokens
-                .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Type == type && x.Value == value, ct);
+                .FirstOrDefaultAsync(x => x.Id == id, ct);
         }
 
         public async Task<Guid> CreateAsync(IdentityToken token, CancellationToken ct)

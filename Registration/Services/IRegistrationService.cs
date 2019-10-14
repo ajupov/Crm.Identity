@@ -13,7 +13,7 @@ namespace Ajupov.Identity.Registration.Services
 
         Task<bool> IsPhoneExistsAsync(string phone, CancellationToken ct);
 
-        Task RegisterAsync(
+        Task<Guid> RegisterAsync(
             string surname,
             string name,
             ProfileGender gender,
@@ -29,5 +29,9 @@ namespace Ajupov.Identity.Registration.Services
         Task SendEmailConfirmationEmailAsync(string email, string ipAddress, string userAgent, CancellationToken ct);
 
         Task SendPhoneConfirmationSmsAsync(string phone, string ipAddress, string userAgent, CancellationToken ct);
+        
+        Task<bool> VerifyEmailAsync(Guid tokenId, string code, CancellationToken ct);
+        
+        Task<bool> VerifyPhoneAsync(Guid tokenId, string code, CancellationToken ct);
     }
 }

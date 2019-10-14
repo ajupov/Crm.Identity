@@ -6,6 +6,8 @@ using Ajupov.Identity.OAuth.Extensions;
 using Ajupov.Identity.OAuth.Models.Authorize;
 using Ajupov.Identity.OAuth.Models.Register;
 using Ajupov.Identity.OAuth.Models.Tokens;
+using Ajupov.Identity.OAuth.Models.VerifyEmail;
+using Ajupov.Identity.OAuth.Models.VerifyPhone;
 using Ajupov.Identity.OAuth.Services;
 using Ajupov.Identity.OAuth.Validators;
 using Ajupov.Identity.OAuth.ViewModels;
@@ -187,7 +189,7 @@ namespace Ajupov.Identity.OAuth.Controllers
                 return RedirectToAction("Register", newRegisterRequest);
             }
 
-            await _registrationService.RegisterAsync(
+            var phoneIdentityTokenId = await _registrationService.RegisterAsync(
                 request.Surname,
                 request.Name,
                 request.Gender,
@@ -211,22 +213,24 @@ namespace Ajupov.Identity.OAuth.Controllers
                 request.scope.ToList(),
                 ct);
 
-            if (!response.IsInvalidCredentials)
+            if (response.IsInvalidCredentials)
             {
-                return Redirect(response.CallbackUri);
+                var newAuthorizeRequest = new GetAuthorizeRequest
+                {
+                    client_id = request.client_id,
+                    response_type = request.response_type,
+                    scope = request.scope,
+                    state = request.state,
+                    redirect_uri = request.redirect_uri,
+                    IsInvalidCredentials = true
+                };
+
+                return RedirectToAction("Authorize", newAuthorizeRequest);
             }
 
-            var newAuthorizeRequest = new GetAuthorizeRequest
-            {
-                client_id = request.client_id,
-                response_type = request.response_type,
-                scope = request.scope,
-                state = request.state,
-                redirect_uri = request.redirect_uri,
-                IsInvalidCredentials = true
-            };
+            var getVerifyPhoneRequest = new GetVerifyPhoneRequest(phoneIdentityTokenId, response.CallbackUri);
 
-            return RedirectToAction("Authorize", newAuthorizeRequest);
+            return RedirectToAction("VerifyPhone", getVerifyPhoneRequest);
         }
 
         [HttpPost("Token")]
@@ -267,6 +271,46 @@ namespace Ajupov.Identity.OAuth.Controllers
             }
 
             return response;
+        }
+
+        [HttpGet("VerifyEmail")]
+        public async Task<ActionResult> VerifyEmail(VerifyEmailRequest request, CancellationToken ct)
+        {
+            var isVerified = await _registrationService.VerifyEmailAsync(request.TokenId, request.Code, ct);
+            if (isVerified)
+            {
+                return BadRequest("Invalid code");
+            }
+
+            return View("~/OAuth/Views/EmailVerified.cshtml");
+        }
+
+        [HttpGet("VerifyPhone")]
+        public ActionResult VerifyPhone(GetVerifyPhoneRequest request, CancellationToken ct)
+        {
+            var model = new VerifyPhoneViewModel(request.TokenId, request.CallbackUri, request.IsInvalidCode);
+
+            return View("~/OAuth/Views/VerifyPhone.cshtml", model);
+        }
+
+        [HttpPost("VerifyPhone")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> VerifyPhone(PostVerifyPhoneRequest request, CancellationToken ct)
+        {
+            var isVerified = await _registrationService.VerifyPhoneAsync(request.TokenId, request.Code, ct);
+            if (isVerified)
+            {
+                var getVerifyPhoneRequest = new GetVerifyPhoneRequest(request.TokenId, request.CallbackUri, true);
+
+                return RedirectToAction("VerifyPhone", getVerifyPhoneRequest);
+            }
+
+            if (request.CallbackUri.IsEmpty())
+            {
+                return View("~/OAuth/Views/PhoneVerified.cshtml");
+            }
+
+            return Redirect(request.CallbackUri);
         }
     }
 }

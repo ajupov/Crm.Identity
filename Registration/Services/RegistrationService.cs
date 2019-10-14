@@ -58,7 +58,7 @@ namespace Ajupov.Identity.Registration.Services
             return _identitiesService.IsExistByKeyAndTypeAsync(phone, IdentityType.PhoneAndPassword, ct);
         }
 
-        public async Task RegisterAsync(
+        public async Task<Guid> RegisterAsync(
             string surname,
             string name,
             ProfileGender gender,
@@ -85,7 +85,7 @@ namespace Ajupov.Identity.Registration.Services
 
             await CreateLoginIdentityAsync(profile.Id, login, passwordHash, ct);
             await CreateEmailIdentityAsync(profile.Id, email, passwordHash, ipAddress, userAgent, ct);
-            await CreatePhoneIdentityAsync(profile.Id, phone, passwordHash, ipAddress, userAgent, ct);
+            return await CreatePhoneIdentityAsync(profile.Id, phone, passwordHash, ipAddress, userAgent, ct);
         }
 
         public async Task SendEmailConfirmationEmailAsync(
@@ -110,8 +110,8 @@ namespace Ajupov.Identity.Registration.Services
                 UserAgent = userAgent
             };
 
-            await _identityTokensService.CreateAsync(token, ct);
-            await SendEmailConfirmationCodeAsync(email, code);
+            var id = await _identityTokensService.CreateAsync(token, ct);
+            await SendEmailConfirmationCodeAsync(email, id, code);
         }
 
         public async Task SendPhoneConfirmationSmsAsync(
@@ -138,6 +138,16 @@ namespace Ajupov.Identity.Registration.Services
 
             await _identityTokensService.CreateAsync(token, ct);
             await SendPhoneConfirmationCodeAsync(phone, code);
+        }
+
+        public async Task<bool> VerifyEmailAsync(Guid tokenId, string code, CancellationToken ct)
+        {
+            return await VerifyIdentityAsync(tokenId, code, IdentityTokenType.EmailValidation, ct);
+        }
+
+        public async Task<bool> VerifyPhoneAsync(Guid tokenId, string code, CancellationToken ct)
+        {
+            return await VerifyIdentityAsync(tokenId, code, IdentityTokenType.PhoneValidation, ct);
         }
 
         private async Task CreateLoginIdentityAsync(
@@ -179,7 +189,7 @@ namespace Ajupov.Identity.Registration.Services
             await SendEmailConfirmationEmailAsync(email, ipAddress, userAgent, ct);
         }
 
-        private async Task CreatePhoneIdentityAsync(
+        private async Task<Guid> CreatePhoneIdentityAsync(
             Guid profileId,
             string phone,
             string passwordHash,
@@ -196,14 +206,16 @@ namespace Ajupov.Identity.Registration.Services
                 IsVerified = false
             };
 
-            await _identitiesService.CreateAsync(phoneIdentity, ct);
+            var id = await _identitiesService.CreateAsync(phoneIdentity, ct);
             await SendPhoneConfirmationSmsAsync(phone, ipAddress, userAgent, ct);
+
+            return id;
         }
 
-        private Task SendEmailConfirmationCodeAsync(string email, string code)
+        private Task SendEmailConfirmationCodeAsync(string email, Guid tokenId, string code)
         {
             const string subject = "Email verification";
-            var uri = string.Format(_settings.VerifyUriPattern, code);
+            var uri = string.Format(_settings.VerifyUriPattern, tokenId, code);
             var message = $"Click <a href='{uri}'>here</a> for verify email.";
 
             try
@@ -231,6 +243,28 @@ namespace Ajupov.Identity.Registration.Services
                 _logger.LogError(ex, ex.Message);
                 return Task.CompletedTask;
             }
+        }
+
+        private async Task<bool> VerifyIdentityAsync(
+            Guid tokenId,
+            string code,
+            IdentityTokenType tokenType,
+            CancellationToken ct)
+        {
+            var token = await _identityTokensService.GetAsync(tokenId, ct);
+            if (token == null ||
+                token.UseDateTime.HasValue ||
+                token.ExpirationDateTime < DateTime.UtcNow ||
+                token.Type != tokenType ||
+                token.Value != code)
+            {
+                return false;
+            }
+
+            await _identityTokensService.SetIsUsedAsync(tokenId, ct);
+            await _identitiesService.VerifyAsync(new[] {token.IdentityId}, ct);
+
+            return true;
         }
     }
 }

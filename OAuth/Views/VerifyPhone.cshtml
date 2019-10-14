@@ -1,0 +1,28 @@
+@model Ajupov.Identity.OAuth.ViewModels.VerifyPhoneViewModel
+
+<html>
+<head>
+    <title>Identity</title>
+    <meta charset="utf-8"/>
+</head>
+<body>
+
+<form method="post" action="/oauth/verifyphone">
+    @Html.AntiForgeryToken()
+
+    @if (Model.IsInvalidCode)
+    {
+        <p>Не правильный код</p>
+    }
+
+    <label>Код:</label><br/>
+    <input type="text" name="Code" required="required"/><br/><br/>
+
+    <input type="submit" value="Войти"/>
+
+    <input type="hidden" name="TokenId" value="@Model.TokenId"/>
+    <input type="hidden" name="CallbackUri" value="@Model.CallbackUri"/>
+</form>
+
+</body>
+</html>
