@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+using Ajupov.Identity.OAuth.Services.Claims.Models;
 using Ajupov.Identity.Profiles.Models;
 using Ajupov.Identity.RefreshTokens.Models;
 using Ajupov.Identity.RefreshTokens.Storages;

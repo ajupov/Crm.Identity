@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Ajupov.Identity.OAuth.Options;
+using Ajupov.Identity.OAuth.Services.Claims.Models;
 using Microsoft.IdentityModel.Tokens;
+using SystemClaim = System.Security.Claims.Claim;
 
 namespace Ajupov.Identity.OAuth.Services.AccessTokens
 {
@@ -19,7 +21,7 @@ namespace Ajupov.Identity.OAuth.Services.AccessTokens
             var jwt = new JwtSecurityToken(
                 "Identity",
                 notBefore: now,
-                claims: claims,
+                claims: claims.Select(x => new SystemClaim(x.Type, x.Value)),
                 expires: now.AddMinutes(30),
                 signingCredentials: credentials);
 

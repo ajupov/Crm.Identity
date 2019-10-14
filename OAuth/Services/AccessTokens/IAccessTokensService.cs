@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+using Ajupov.Identity.OAuth.Services.Claims.Models;
 
 namespace Ajupov.Identity.OAuth.Services.AccessTokens
 {

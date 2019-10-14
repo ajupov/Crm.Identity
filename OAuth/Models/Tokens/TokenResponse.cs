@@ -1,38 +1,30 @@
-using Ajupov.Utils.All.String;
-using Newtonsoft.Json;
+using System;
 
 namespace Ajupov.Identity.OAuth.Models.Tokens
 {
     public class TokenResponse
     {
-        public TokenResponse(string accessToken, string refreshToken, string tokenType, int expiresIn)
+        public TokenResponse(string accessToken, string refreshToken)
         {
-            AccessToken = accessToken;
-            RefreshToken = refreshToken;
-            TokenType = tokenType;
-            ExpiresIn = expiresIn;
+            access_token = accessToken;
+            refresh_token = refreshToken;
+            token_type = "bearer";
+            expires_in = (int) TimeSpan.FromDays(1).TotalSeconds;
         }
 
         public TokenResponse(string error)
         {
-            Error = error;
+            this.error = error;
         }
 
-        [JsonProperty("access_token")]
-        public string AccessToken { get; set; }
+        public string access_token { get; set; }
 
-        [JsonProperty("refresh_token")]
-        public string RefreshToken { get; set; }
+        public string refresh_token { get; set; }
 
-        [JsonProperty("token_type")]
-        public string TokenType { get; set; }
+        public string token_type { get; set; }
 
-        [JsonProperty("expires_in")]
-        public int ExpiresIn { get; set; }
+        public int expires_in { get; set; }
 
-        [JsonProperty("error")]
-        public string Error { get; set; }
-
-        public bool HasError => !Error.IsEmpty();
+        public string error { get; set; }
     }
 }

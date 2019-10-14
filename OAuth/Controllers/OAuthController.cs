@@ -12,6 +12,7 @@ using Ajupov.Identity.OAuthClients.Services;
 using Ajupov.Identity.OAuthClients.Validators;
 using Ajupov.Identity.Registration.Services;
 using Ajupov.Infrastructure.All.Mvc;
+using Ajupov.Utils.All.String;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ajupov.Identity.OAuth.Controllers
@@ -260,9 +261,9 @@ namespace Ajupov.Identity.OAuth.Controllers
                 client.Scopes.Select(x => x.Value).ToList(),
                 ct);
 
-            if (response.HasError)
+            if (!response.error.IsEmpty())
             {
-                return BadRequest(response.Error);
+                return BadRequest(response.error);
             }
 
             return response;

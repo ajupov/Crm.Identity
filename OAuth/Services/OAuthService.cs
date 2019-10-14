@@ -80,7 +80,7 @@ namespace Ajupov.Identity.OAuth.Services
             {
                 case ResponseType.Code:
                 {
-                    var code = _codesService.Create(identity, claims);
+                    var code = _codesService.Create(profile, claims);
                     var callbackUri = _callbackUriService.GetByCode(redirectUri, state, code);
 
                     return new PostAuthorizeResponse(callbackUri);
@@ -115,29 +115,17 @@ namespace Ajupov.Identity.OAuth.Services
             {
                 case GrandType.AuthorizationCode:
                 {
-                    var codeWithClaims = _codesService.Get(code);
-                    if (!codeWithClaims.HasValue)
+                    var profileWithClaims = _codesService.Get(code);
+                    if (profileWithClaims == null)
                     {
                         return new TokenResponse("Invalid code");
                     }
 
-                    var identity = await _identitiesService.GetAsync(codeWithClaims.Value.identityId, ct);
-                    if (identity == null)
-                    {
-                        return new TokenResponse("Invalid code");
-                    }
+                    var accessToken = await _accessTokensService.CreateAsync(profileWithClaims.Claims, ct);
+                    var refreshToken = await _refreshTokensService.CreateAsync(profileWithClaims.Claims,
+                        profileWithClaims.Profile, userAgent, ipAddress, ct);
 
-                    var profile = await _profilesService.GetAsync(identity.ProfileId, ct);
-                    if (profile == null)
-                    {
-                        return new TokenResponse("Invalid code");
-                    }
-
-                    var accessToken = await _accessTokensService.CreateAsync(codeWithClaims.Value.claims, ct);
-                    var refreshToken = await _refreshTokensService.CreateAsync(codeWithClaims.Value.claims, profile,
-                        userAgent, ipAddress, ct);
-
-                    return new TokenResponse(accessToken, refreshToken, "bearer", TimeSpan.FromMinutes(30).Seconds);
+                    return new TokenResponse(accessToken, refreshToken);
                 }
                 case GrandType.Password:
                 {
@@ -165,7 +153,7 @@ namespace Ajupov.Identity.OAuth.Services
                     var refreshToken =
                         await _refreshTokensService.CreateAsync(claims, profile, userAgent, ipAddress, ct);
 
-                    return new TokenResponse(accessToken, refreshToken, "bearer", TimeSpan.FromMinutes(30).Seconds);
+                    return new TokenResponse(accessToken, refreshToken);
                 }
                 case GrandType.RefreshToken:
                 {
@@ -188,7 +176,7 @@ namespace Ajupov.Identity.OAuth.Services
                     var refreshToken =
                         await _refreshTokensService.CreateAsync(claims, profile, userAgent, ipAddress, ct);
 
-                    return new TokenResponse(accessToken, refreshToken, "bearer", TimeSpan.FromMinutes(30).Seconds);
+                    return new TokenResponse(accessToken, refreshToken);
                 }
                 default:
                     return new TokenResponse("Invalid grand type");

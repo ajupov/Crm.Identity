@@ -9,6 +9,7 @@ using Ajupov.Identity.Identities.Services;
 using Ajupov.Identity.Profiles.Models;
 using Ajupov.Identity.RefreshTokens.Models;
 using Ajupov.Identity.Resources.Services;
+using Claim = Ajupov.Identity.OAuth.Services.Claims.Models.Claim;
 
 namespace Ajupov.Identity.OAuth.Services.Claims
 {
@@ -23,7 +24,10 @@ namespace Ajupov.Identity.OAuth.Services.Claims
             _resourcesService = resourcesService;
         }
 
-        public async Task<List<Claim>> GetByScopesAsync(List<string> scopes, Profile profile, CancellationToken ct)
+        public async Task<List<Claim>> GetByScopesAsync(
+            IEnumerable<string> scopes,
+            Profile profile,
+            CancellationToken ct)
         {
             var profileClaims = await GetProfileClaimsAsync(profile, ct);
             var apiClaims = await GetApiClaimsAsync(scopes, ct);
@@ -39,7 +43,7 @@ namespace Ajupov.Identity.OAuth.Services.Claims
             CancellationToken ct)
         {
             var profileClaims = await GetProfileClaimsAsync(profile, ct);
-            var apiClaims = refreshToken.Claims.Select(x => new Claim(x.Type, x.Value));
+            var apiClaims = refreshToken.Claims.Select(x => new Claim {Type = x.Type, Value = x.Value});
 
             return profileClaims
                 .Concat(apiClaims)
@@ -67,13 +71,13 @@ namespace Ajupov.Identity.OAuth.Services.Claims
 
             return new[]
             {
-                new Claim(ClaimTypes.NameIdentifier, profile.Id.ToString()),
-                new Claim(ClaimTypes.Surname, profile.Surname),
-                new Claim(ClaimTypes.Name, profile.Name),
-                new Claim(ClaimTypes.DateOfBirth, profile.BirthDate?.ToString("dd.MM.yyyy")),
-                new Claim(ClaimTypes.Gender, profile.Gender.ToString().ToLower()),
-                new Claim(ClaimTypes.Email, email),
-                new Claim(ClaimTypes.HomePhone, phone),
+                new Claim {Type = ClaimTypes.NameIdentifier, Value = profile.Id.ToString()},
+                new Claim {Type = ClaimTypes.Surname, Value = profile.Surname},
+                new Claim {Type = ClaimTypes.Name, Value = profile.Name},
+                new Claim {Type = ClaimTypes.DateOfBirth, Value = profile.BirthDate?.ToString("dd.MM.yyyy")},
+                new Claim {Type = ClaimTypes.Gender, Value = profile.Gender.ToString().ToLower()},
+                new Claim {Type = ClaimTypes.Email, Value = email},
+                new Claim {Type = ClaimTypes.HomePhone, Value = phone},
             };
         }
 
@@ -82,7 +86,7 @@ namespace Ajupov.Identity.OAuth.Services.Claims
             var roles = await _resourcesService.GetRolesByScopesAsync(scopes, ct);
 
             return roles
-                .Select(x => new Claim(ClaimTypes.Role, x))
+                .Select(x => new Claim {Type = ClaimTypes.Role, Value = x})
                 .ToList();
         }
     }

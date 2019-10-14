@@ -4,10 +4,10 @@ using Ajupov.Identity.Profiles.Models;
 
 namespace Ajupov.Identity.OAuth.Services.Codes
 {
-    public interface ICodesService
+    public class ProfileWithClaims
     {
-        string Create(Profile profile, IEnumerable<Claim> claims);
+        public Profile Profile { get; set; }
 
-        ProfileWithClaims? Get(string code);
+        public List<Claim> Claims { get; set; }
     }
 }

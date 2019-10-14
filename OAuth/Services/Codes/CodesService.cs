@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.Claims;
+using System.Linq;
+using Ajupov.Identity.Profiles.Models;
 using Ajupov.Infrastructure.All.HotStorage.HotStorage;
 using Infrastructure.All.Generator;
+using Claim = Ajupov.Identity.OAuth.Services.Claims.Models.Claim;
 
 namespace Ajupov.Identity.OAuth.Services.Codes
 {
@@ -15,18 +17,30 @@ namespace Ajupov.Identity.OAuth.Services.Codes
             _hotStorage = hotStorage;
         }
 
-        public string Create(Identities.Models.Identity identity, List<Claim> claims)
+        public string Create(Profile profile, IEnumerable<Claim> claims)
         {
             var code = Generator.GenerateAlphaNumericString(8);
 
-            _hotStorage.SetValue(code, (identity.Id, claims), TimeSpan.FromMinutes(10));
+            var profileWithClaims = new ProfileWithClaims
+            {
+                Profile = profile,
+                Claims = claims
+                    .Select(x => new Claim
+                    {
+                        Type = x.Type,
+                        Value = x.Value
+                    })
+                    .ToList()
+            };
+
+            _hotStorage.SetValue(code, profileWithClaims, TimeSpan.FromMinutes(10));
 
             return code;
         }
 
-        public (Guid identityId, List<Claim> claims)? Get(string code)
+        public ProfileWithClaims? Get(string code)
         {
-            return _hotStorage.GetValue<(Guid identityId, List<Claim> claims)?>(code);
+            return _hotStorage.GetValue<ProfileWithClaims?>(code);
         }
     }
 }
