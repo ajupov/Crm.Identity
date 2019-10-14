@@ -2,16 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Ajupov.Identity.AccessTokens.Services;
+using Ajupov.Identity.Claims.Services;
+using Ajupov.Identity.Codes.Services;
 using Ajupov.Identity.Identities.Extensions;
 using Ajupov.Identity.Identities.Services;
 using Ajupov.Identity.OAuth.Models.Authorize;
 using Ajupov.Identity.OAuth.Models.Tokens;
 using Ajupov.Identity.OAuth.Models.Types;
-using Ajupov.Identity.OAuth.Services.AccessTokens;
-using Ajupov.Identity.OAuth.Services.Claims;
-using Ajupov.Identity.OAuth.Services.Codes;
-using Ajupov.Identity.OAuth.Services.RedirectUri;
 using Ajupov.Identity.Profiles.Services;
+using Ajupov.Identity.RedirectUri.Services;
 using Ajupov.Identity.RefreshTokens.Services;
 
 namespace Ajupov.Identity.OAuth.Services

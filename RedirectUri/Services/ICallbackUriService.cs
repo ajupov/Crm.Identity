@@ -1,4 +1,4 @@
-﻿namespace Ajupov.Identity.OAuth.Services.RedirectUri
+﻿namespace Ajupov.Identity.RedirectUri.Services
 {
     public interface ICallbackUriService
     {

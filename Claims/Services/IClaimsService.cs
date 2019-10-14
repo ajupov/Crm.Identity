@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Ajupov.Identity.OAuth.Services.Claims.Models;
+using Ajupov.Identity.Claims.Models;
 using Ajupov.Identity.Profiles.Models;
 using Ajupov.Identity.RefreshTokens.Models;
 
-namespace Ajupov.Identity.OAuth.Services.Claims
+namespace Ajupov.Identity.Claims.Services
 {
     public interface IClaimsService
     {

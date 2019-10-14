@@ -1,4 +1,4 @@
-﻿namespace Ajupov.Identity.OAuth.Services.Claims.Models
+﻿namespace Ajupov.Identity.Claims.Models
 {
     public class Claim
     {

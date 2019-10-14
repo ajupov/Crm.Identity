@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Ajupov.Identity.OAuth.Services.Claims.Models;
+using Ajupov.Identity.Claims.Models;
 
-namespace Ajupov.Identity.OAuth.Services.AccessTokens
+namespace Ajupov.Identity.AccessTokens.Services
 {
     public interface IAccessTokensService
     {

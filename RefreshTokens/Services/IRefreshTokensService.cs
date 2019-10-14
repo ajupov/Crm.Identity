@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Ajupov.Identity.OAuth.Services.Claims.Models;
+using Ajupov.Identity.Claims.Models;
 using Ajupov.Identity.Profiles.Models;
 using Ajupov.Identity.RefreshTokens.Models;
 

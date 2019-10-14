@@ -1,17 +1,17 @@
 ﻿using System.Threading.Tasks;
+using Ajupov.Identity.AccessTokens.Services;
+using Ajupov.Identity.Claims.Services;
+using Ajupov.Identity.Codes.Services;
 using Ajupov.Identity.Identities.Services;
 using Ajupov.Identity.Identities.Storages;
 using Ajupov.Identity.OAuth.Filters;
 using Ajupov.Identity.OAuth.Options;
 using Ajupov.Identity.OAuth.Services;
-using Ajupov.Identity.OAuth.Services.AccessTokens;
-using Ajupov.Identity.OAuth.Services.Claims;
-using Ajupov.Identity.OAuth.Services.Codes;
-using Ajupov.Identity.OAuth.Services.RedirectUri;
 using Ajupov.Identity.OAuthClients.Services;
 using Ajupov.Identity.OAuthClients.Storages;
 using Ajupov.Identity.Profiles.Services;
 using Ajupov.Identity.Profiles.Storages;
+using Ajupov.Identity.RedirectUri.Services;
 using Ajupov.Identity.RefreshTokens.Services;
 using Ajupov.Identity.RefreshTokens.Storages;
 using Ajupov.Identity.Registration.Services;
@@ -61,18 +61,18 @@ namespace Ajupov.Identity
                         .ConfigureOrm<RefreshTokensStorage>(builder.Configuration)
                         .ConfigureHotStorage(builder.Configuration)
                         .Configure<VerifyEmailSettings>(builder.Configuration.GetSection("VerifyEmailSettings"))
+                        .AddTransient<IOAuthService, OAuthService>()
+                        .AddTransient<IRegistrationService, RegistrationService>()
                         .AddTransient<IOAuthClientsService, OAuthClientsService>()
                         .AddTransient<IIdentitiesService, IdentitiesService>()
                         .AddTransient<IIdentityTokensService, IdentityTokensService>()
                         .AddTransient<IProfilesService, ProfilesService>()
-                        .AddTransient<IOAuthService, OAuthService>()
-                        .AddTransient<IRegistrationService, RegistrationService>()
-                        .AddTransient<IClaimsService, ClaimsService>()
-                        .AddTransient<IResourcesService, ResourcesService>()
-                        .AddTransient<IScopeRolesService, ScopeRolesService>()
                         .AddTransient<ICodesService, CodesService>()
                         .AddTransient<IAccessTokensService, AccessTokensService>()
                         .AddTransient<IRefreshTokensService, RefreshTokensService>()
+                        .AddTransient<IResourcesService, ResourcesService>()
+                        .AddTransient<IScopeRolesService, ScopeRolesService>()
+                        .AddTransient<IClaimsService, ClaimsService>()
                         .AddTransient<ICallbackUriService, CallbackUriService>()
                         .AddAuthentication(x =>
                         {

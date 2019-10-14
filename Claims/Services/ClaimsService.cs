@@ -9,9 +9,9 @@ using Ajupov.Identity.Identities.Services;
 using Ajupov.Identity.Profiles.Models;
 using Ajupov.Identity.RefreshTokens.Models;
 using Ajupov.Identity.Resources.Services;
-using Claim = Ajupov.Identity.OAuth.Services.Claims.Models.Claim;
+using Claim = Ajupov.Identity.Claims.Models.Claim;
 
-namespace Ajupov.Identity.OAuth.Services.Claims
+namespace Ajupov.Identity.Claims.Services
 {
     public class ClaimsService : IClaimsService
     {

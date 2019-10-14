@@ -1,7 +1,7 @@
 ﻿using System;
 using Infrastructure.All.Http;
 
-namespace Ajupov.Identity.OAuth.Services.RedirectUri
+namespace Ajupov.Identity.RedirectUri.Services
 {
     public class CallbackUriService : ICallbackUriService
     {

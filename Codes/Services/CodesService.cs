@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Ajupov.Identity.Codes.Models;
 using Ajupov.Identity.Profiles.Models;
 using Ajupov.Infrastructure.All.HotStorage.HotStorage;
 using Infrastructure.All.Generator;
-using Claim = Ajupov.Identity.OAuth.Services.Claims.Models.Claim;
+using Claim = Ajupov.Identity.Claims.Models.Claim;
 
-namespace Ajupov.Identity.OAuth.Services.Codes
+namespace Ajupov.Identity.Codes.Services
 {
     public class CodesService : ICodesService
     {
@@ -38,9 +39,9 @@ namespace Ajupov.Identity.OAuth.Services.Codes
             return code;
         }
 
-        public ProfileWithClaims? Get(string code)
+        public ProfileWithClaims Get(string code)
         {
-            return _hotStorage.GetValue<ProfileWithClaims?>(code);
+            return _hotStorage.GetValue<ProfileWithClaims>(code);
         }
     }
 }
