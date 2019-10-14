@@ -15,19 +15,15 @@ namespace Ajupov.Identity.OAuth.Models.Authorize
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        [Required]
         [ClientIdValidation]
         public string client_id { get; set; }
 
-        [Required]
         [ResponseTypeValidation]
         public string response_type { get; set; }
 
-        [Required]
         [ScopeValidation]
         public string scope { get; set; }
 
-        [Required]
         [StateValidation]
         public string state { get; set; }
 

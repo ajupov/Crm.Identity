@@ -7,9 +7,9 @@ using Ajupov.Identity.OAuth.Models.Authorize;
 using Ajupov.Identity.OAuth.Models.Register;
 using Ajupov.Identity.OAuth.Models.Tokens;
 using Ajupov.Identity.OAuth.Services;
+using Ajupov.Identity.OAuth.Validators;
 using Ajupov.Identity.OAuth.ViewModels;
 using Ajupov.Identity.OAuthClients.Services;
-using Ajupov.Identity.OAuthClients.Validators;
 using Ajupov.Identity.Registration.Services;
 using Ajupov.Infrastructure.All.Mvc;
 using Ajupov.Utils.All.String;
@@ -44,7 +44,7 @@ namespace Ajupov.Identity.OAuth.Controllers
                 return BadRequest("Client not found");
             }
 
-            if (!client.IsMatchRedirectUri(request.redirect_uri))
+            if (!client.IsMatchRedirectUri(request))
             {
                 return BadRequest("Invalid redirect uri");
             }
@@ -74,7 +74,7 @@ namespace Ajupov.Identity.OAuth.Controllers
                 return BadRequest("Client not found");
             }
 
-            if (!client.IsMatchRedirectUri(request.redirect_uri))
+            if (!client.IsMatchRedirectUri(request))
             {
                 return BadRequest("Invalid redirect uri");
             }
@@ -107,7 +107,7 @@ namespace Ajupov.Identity.OAuth.Controllers
                 return BadRequest("Client not found");
             }
 
-            if (!client.IsMatchRedirectUri(request.redirect_uri))
+            if (!client.IsMatchRedirectUri(request))
             {
                 return BadRequest("Invalid redirect uri");
             }
@@ -156,7 +156,7 @@ namespace Ajupov.Identity.OAuth.Controllers
                 return BadRequest("Client not found");
             }
 
-            if (!client.IsMatchRedirectUri(request.redirect_uri))
+            if (!client.IsMatchRedirectUri(request))
             {
                 return BadRequest("Invalid redirect uri");
             }
@@ -239,12 +239,12 @@ namespace Ajupov.Identity.OAuth.Controllers
                 return BadRequest("Client not found");
             }
 
-            if (!client.IsMatchRedirectUri(request.redirect_uri))
+            if (!client.IsMatchRedirectUri(request))
             {
                 return BadRequest("Invalid redirect uri");
             }
 
-            if (!client.IsCorrectSecret(request.client_secret))
+            if (!client.IsCorrectSecret(request))
             {
                 return BadRequest("Invalid client secret");
             }

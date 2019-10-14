@@ -16,10 +16,13 @@ namespace Ajupov.Identity.OAuth.Models.Tokens
         [CodeValidation]
         public string code { get; set; }
 
+        [UsernameValidation]
         public string username { get; set; }
 
+        [PasswordValidation]
         public string password { get; set; }
 
+        [RefreshTokenValidation]
         public string refresh_token { get; set; }
 
         [RedirectUriValidation]

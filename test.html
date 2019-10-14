@@ -40,7 +40,21 @@
     <input type="hidden" name="redirect_uri" value="http://localhost:3000"/>
 
     <input type="text" name="code" required="required" placeholder="Authorization code"/>
+    <br/>
+    <input type="submit" value="Go"/>
+</form>
+</body>
 
+<br/>
+<p>Token - Grand type: Password</p>
+<form method="post" action="http://localhost:3000/oauth/token" enctype="application/x-www-form-urlencoded">
+    <input type="hidden" name="grant_type" value="password"/>
+    <input type="hidden" name="client_id" value="site"/>
+
+    <input type="text" name="username" required="required" placeholder="Login"/>
+    <br/>
+    <input type="password" name="password" required="required" placeholder="Password"/>
+    <br/>
     <input type="submit" value="Go"/>
 </form>
 </body>

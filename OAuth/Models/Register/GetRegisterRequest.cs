@@ -5,15 +5,12 @@ namespace Ajupov.Identity.OAuth.Models.Register
 {
     public class GetRegisterRequest
     {
-        [Required]
         [ClientIdValidation]
         public string client_id { get; set; }
 
-        [Required]
         [ResponseTypeValidation]
         public string response_type { get; set; }
 
-        [Required]
         [ScopeValidation]
         public string scope { get; set; }
 
