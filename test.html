@@ -57,5 +57,16 @@
     <br/>
     <input type="submit" value="Go"/>
 </form>
+
+<br/>
+<p>Token - Grand type: Refresh token</p>
+<form method="post" action="http://localhost:3000/oauth/token" enctype="application/x-www-form-urlencoded">
+    <input type="hidden" name="grant_type" value="refresh_token"/>
+    <input type="hidden" name="client_id" value="site"/>
+
+    <input type="text" name="refresh_token" required="required" placeholder="Refresh token"/>
+    <br/>
+    <input type="submit" value="Go"/>
+</form>
 </body>
 </html>

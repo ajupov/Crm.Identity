@@ -14,7 +14,7 @@ namespace Ajupov.Identity.OAuth.Attributes.Validation
                 return new ValidationResult("Invalid client secret");
             }
 
-            if (request.grant_type == GrandType.Password)
+            if (request.grant_type != GrandType.AuthorizationCode)
             {
                 return ValidationResult.Success;
             }
