@@ -1,69 +1,52 @@
 @model Ajupov.Identity.OAuth.ViewModels.RegisterViewModel
 
-<html>
-<head>
-    <title>Identity</title>
-    <meta charset="utf-8"/>
-</head>
-<body>
+@{
+    Layout = "~/OAuth/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Регистрация";
+}
 
 <form method="post" action="/oauth/register">
-    @Html.AntiForgeryToken()
+    <h2>Регистрация</h2>
 
     @if (Model.IsLoginExists)
     {
-        <p>Логин занят</p>
+        <p class="error">Логин занят</p>
     }
 
     @if (Model.IsEmailExists)
     {
-        <p>Email занят</p>
+        <p class="error">Email занят</p>
     }
-    
+
     @if (Model.IsPhoneExists)
     {
-        <p>Телефон занят</p>
+        <p class="error">Телефон занят</p>
     }
 
-    <label>Фамилия:</label><br/>
-    <input type="text" name="Surname"/><br/><br/>
-
-    <label>Имя (обязательно):</label><br/>
-    <input type="text" name="Name" required="required"/><br/><br/>
-
-    <label>Пол:</label><br/>
-    <select name="Gender">
-        <option selected="selected">Не выбрано</option>
-        <option value="1">Мужской</option>
-        <option value="2">Женский</option>
-    </select><br/><br/>
-
-    <label>Дата рождения:</label><br/>
-    <input type="date" name="BirthDate"/><br/><br/>
-
-    <label>Логин (обязательно):</label><br/>
-    <input type="text" name="Login" required="required"/><br/><br/>
-
-    <label>Email (обязательно):</label><br/>
-    <input type="email" name="Email" required="required"/><br/><br/>
-
-    <label>Телефон (обязательно):</label><br/>
-    <input type="tel" name="Phone" required="required"/><br/><br/>
-
-    <label>Пароль (обязательно):</label><br/>
-    <input type="password" name="Password" required="required"/><br/><br/>
-
-    <label>Пароль (повторно):</label><br/>
-    <input type="password" name="PasswordConfirmation" required="required"/><br/><br/>
-
-    <input type="submit" value="Зарегистрироваться"/>
+    @Html.AntiForgeryToken()
 
     <input type="hidden" name="client_id" value="@Model.ClientId"/>
     <input type="hidden" name="scope" value="@Model.Scope"/>
     <input type="hidden" name="state" value="@Model.State"/>
     <input type="hidden" name="response_type" value="@Model.ResponseType"/>
     <input type="hidden" name="redirect_uri" value="@Model.RedirectUri"/>
-</form>
 
-</body>
-</html>
+    <input type="text" name="Surname" required="required" placeholder="Фамилия" autofocus="autofocus"/>
+    <input type="text" name="Name" required="required" placeholder="Имя"/>
+
+    <label>Пол:</label><br/>
+    <select name="Gender">
+        <option selected="selected">Не выбрано</option>
+        <option value="1">Мужской</option>
+        <option value="2">Женский</option>
+    </select>
+
+    <input type="date" name="BirthDate" placeholder="Дата рождения"/>
+    <input type="text" name="Login" required="required" placeholder="Логин"/>
+    <input type="email" name="Email" required="required" placeholder="Email"/>
+    <input type="tel" name="Phone" required="required" placeholder="Телефон" pattern="+7([0-9]{3}) [0-9]{7}"/>
+    <input type="password" name="Password" required="required" placeholder="Пароль" autocomplete="none"/>
+    <input type="password" name="PasswordConfirmation" required="required" placeholder="Повтор пароля" autocomplete="none"/>
+    <input type="submit" value="Зарегистрироваться"/>
+    <a href="/oauth/authorize?client_id=@Model.ClientId&response_type=@Model.ResponseType&scope=@Model.Scope&state=@Model.State&redirect_uri=@Model.RedirectUri">Войти</a>
+</form>
