@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.IO;
+using System.Threading.Tasks;
 using Ajupov.Identity.AccessTokens.Services;
 using Ajupov.Identity.Claims.Services;
 using Ajupov.Identity.Codes.Services;
@@ -46,6 +47,7 @@ namespace Ajupov.Identity
                 ConfigurationExtensions.GetConfiguration()
                     .ConfigureHost()
                     .ConfigureLogging()
+                    .UseWebRoot(Directory.GetCurrentDirectory())
                     .ConfigureServices((builder, services) => services
                         .ConfigureMvc(typeof(ValidationFilter))
                         .ConfigureTracing()
@@ -96,6 +98,7 @@ namespace Ajupov.Identity
                             };
                         }))
                     .Configure(builder => builder
+                        .UseStaticFiles()
                         .UseDeveloperExceptionPage()
                         .UseApiDocumentationsMiddleware()
                         .UseMigrationsMiddleware()

@@ -1,36 +1,26 @@
 @model Ajupov.Identity.OAuth.ViewModels.AuthorizeViewModel
 
-<html>
-<head>
-    <title>Identity</title>
-    <meta charset="utf-8"/>
-</head>
-<body>
+@{
+    Layout = "~/OAuth/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Авторизация";
+}
 
 <form method="post" action="/oauth/authorize">
-    @Html.AntiForgeryToken()
-
+    <h2>Авторизация</h2>
     @if (Model.IsInvalidCredentials)
     {
-        <p>Не правильный логин или пароль</p>
+        <p class="error">Не правильный логин или пароль</p>
     }
 
-    <label>Логин:</label><br/>
-    <input type="text" name="Login" required="required"/><br/><br/>
-
-    <label>Пароль:</label><br/>
-    <input type="password" name="Password" required="required"/><br/><br/>
-
-    <input type="submit" value="Войти"/>
-
+    @Html.AntiForgeryToken()
     <input type="hidden" name="client_id" value="@Model.ClientId"/>
     <input type="hidden" name="scope" value="@Model.Scope"/>
     <input type="hidden" name="state" value="@Model.State"/>
     <input type="hidden" name="response_type" value="@Model.ResponseType"/>
     <input type="hidden" name="redirect_uri" value="@Model.RedirectUri"/>
+
+    <input type="text" name="Login" required="required" placeholder="Логин" autofocus="autofocus"/>
+    <input type="password" name="Password" required="required"placeholder="Пароль" autocomplete="none"/>
+    <input type="submit" value="Войти"/>
+    <a href="/oauth/register?client_id=@Model.ClientId&response_type=@Model.ResponseType&scope=@Model.Scope&state=@Model.State&redirect_uri=@Model.RedirectUri">Зарегистрироваться</a>
 </form>
-
-<a href="/oauth/register?client_id=@Model.ClientId&response_type=@Model.ResponseType&scope=@Model.Scope&state=@Model.State&redirect_uri=@Model.RedirectUri">Зарегистрироваться</a>
-
-</body>
-</html>
