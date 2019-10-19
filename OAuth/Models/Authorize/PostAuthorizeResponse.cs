@@ -9,7 +9,7 @@
         }
 
         public string CallbackUri { get; }
-        
+
         public bool IsInvalidCredentials { get; }
     }
 }

@@ -9,6 +9,7 @@ using Ajupov.Identity.Identities.Services;
 using Ajupov.Identity.Profiles.Models;
 using Ajupov.Identity.RefreshTokens.Models;
 using Ajupov.Identity.Resources.Services;
+using Ajupov.Utils.All.String;
 using Claim = Ajupov.Identity.Claims.Models.Claim;
 
 namespace Ajupov.Identity.Claims.Services
@@ -69,16 +70,36 @@ namespace Ajupov.Identity.Claims.Services
             var email = allIdentities.FirstOrDefault(x => x.Type == IdentityType.EmailAndPassword)?.Key;
             var phone = allIdentities.FirstOrDefault(x => x.Type == IdentityType.PhoneAndPassword)?.Key;
 
-            return new[]
+            var claims = new List<Claim>
             {
                 new Claim {Type = ClaimTypes.NameIdentifier, Value = profile.Id.ToString()},
-                new Claim {Type = ClaimTypes.Surname, Value = profile.Surname},
-                new Claim {Type = ClaimTypes.Name, Value = profile.Name},
-                new Claim {Type = ClaimTypes.DateOfBirth, Value = profile.BirthDate?.ToString("dd.MM.yyyy")},
-                new Claim {Type = ClaimTypes.Gender, Value = profile.Gender.ToString().ToLower()},
                 new Claim {Type = ClaimTypes.Email, Value = email},
                 new Claim {Type = ClaimTypes.HomePhone, Value = phone},
             };
+
+            if (!profile.Surname.IsEmpty())
+            {
+                claims.Add(new Claim {Type = ClaimTypes.Surname, Value = profile.Surname});
+            }
+
+            if (!profile.Name.IsEmpty())
+            {
+                claims.Add(new Claim {Type = ClaimTypes.Name, Value = profile.Name});
+            }
+
+            if (profile.BirthDate.HasValue)
+            {
+                var birthDateString = profile.BirthDate?.ToString("dd.MM.yyyy");
+                claims.Add(new Claim {Type = ClaimTypes.DateOfBirth, Value = birthDateString});
+            }
+
+            if (profile.Gender.HasValue)
+            {
+                var genderString = profile.Gender.ToString().ToLower();
+                claims.Add(new Claim {Type = ClaimTypes.Gender, Value = genderString});
+            }
+
+            return claims.ToArray();
         }
 
         private async Task<List<Claim>> GetApiClaimsAsync(IEnumerable<string> scopes, CancellationToken ct)

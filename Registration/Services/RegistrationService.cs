@@ -61,8 +61,6 @@ namespace Ajupov.Identity.Registration.Services
         public async Task<Guid> RegisterAsync(
             string surname,
             string name,
-            ProfileGender gender,
-            DateTime birthDate,
             string login,
             string email,
             string phone,
@@ -74,9 +72,7 @@ namespace Ajupov.Identity.Registration.Services
             var profile = new Profile
             {
                 Surname = surname,
-                Name = name,
-                BirthDate = birthDate,
-                Gender = gender
+                Name = name
             };
 
             profile.Id = await _profilesService.CreateAsync(profile, ct);
@@ -114,7 +110,7 @@ namespace Ajupov.Identity.Registration.Services
             await SendEmailConfirmationCodeAsync(email, id, code);
         }
 
-        public async Task SendPhoneConfirmationSmsAsync(
+        public async Task<Guid> SendPhoneConfirmationSmsAsync(
             string phone,
             string ipAddress,
             string userAgent,
@@ -136,8 +132,10 @@ namespace Ajupov.Identity.Registration.Services
                 UserAgent = userAgent
             };
 
-            await _identityTokensService.CreateAsync(token, ct);
+            var id = await _identityTokensService.CreateAsync(token, ct);
             await SendPhoneConfirmationCodeAsync(phone, code);
+
+            return id;
         }
 
         public async Task<bool> VerifyEmailAsync(Guid tokenId, string code, CancellationToken ct)
@@ -206,8 +204,8 @@ namespace Ajupov.Identity.Registration.Services
                 IsVerified = false
             };
 
-            var id = await _identitiesService.CreateAsync(phoneIdentity, ct);
-            await SendPhoneConfirmationSmsAsync(phone, ipAddress, userAgent, ct);
+            await _identitiesService.CreateAsync(phoneIdentity, ct);
+            var id = await SendPhoneConfirmationSmsAsync(phone, ipAddress, userAgent, ct);
 
             return id;
         }

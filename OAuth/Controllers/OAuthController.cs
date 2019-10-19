@@ -92,6 +92,11 @@ namespace Ajupov.Identity.OAuth.Controllers
                 request.scope,
                 request.redirect_uri,
                 request.state,
+                request.Surname,
+                request.Name,
+                request.Login,
+                request.Email,
+                request.Phone,
                 request.IsLoginExists,
                 request.IsEmailExists,
                 request.IsPhoneExists);
@@ -181,6 +186,11 @@ namespace Ajupov.Identity.OAuth.Controllers
                     scope = request.scope,
                     state = request.state,
                     redirect_uri = request.redirect_uri,
+                    Surname = request.Surname,
+                    Name = request.Name,
+                    Login = request.Login,
+                    Email = request.Email,
+                    Phone = request.Phone,
                     IsLoginExists = isLoginExists,
                     IsEmailExists = isEmailExists,
                     IsPhoneExists = isPhoneExists
@@ -192,8 +202,6 @@ namespace Ajupov.Identity.OAuth.Controllers
             var phoneIdentityTokenId = await _registrationService.RegisterAsync(
                 request.Surname,
                 request.Name,
-                request.Gender,
-                request.BirthDate,
                 request.Login,
                 request.Email,
                 request.Phone,
@@ -202,7 +210,7 @@ namespace Ajupov.Identity.OAuth.Controllers
                 UserAgent,
                 ct);
 
-            var response = await _oauthService.AuthorizeAsync(
+            var authorizeResponse = await _oauthService.AuthorizeAsync(
                 request.Login,
                 request.Password,
                 request.response_type,
@@ -213,7 +221,7 @@ namespace Ajupov.Identity.OAuth.Controllers
                 request.scope.ToList(),
                 ct);
 
-            if (response.IsInvalidCredentials)
+            if (authorizeResponse.IsInvalidCredentials)
             {
                 var newAuthorizeRequest = new GetAuthorizeRequest
                 {
@@ -228,7 +236,12 @@ namespace Ajupov.Identity.OAuth.Controllers
                 return RedirectToAction("Authorize", newAuthorizeRequest);
             }
 
-            var getVerifyPhoneRequest = new GetVerifyPhoneRequest(phoneIdentityTokenId, response.CallbackUri);
+            var getVerifyPhoneRequest = new GetVerifyPhoneRequest
+            {
+                TokenId = phoneIdentityTokenId,
+                CallbackUri = authorizeResponse.CallbackUri,
+                IsInvalidCode = false
+            };
 
             return RedirectToAction("VerifyPhone", getVerifyPhoneRequest);
         }
@@ -277,7 +290,7 @@ namespace Ajupov.Identity.OAuth.Controllers
         public async Task<ActionResult> VerifyEmail(VerifyEmailRequest request, CancellationToken ct)
         {
             var isVerified = await _registrationService.VerifyEmailAsync(request.TokenId, request.Code, ct);
-            if (isVerified)
+            if (!isVerified)
             {
                 return BadRequest("Invalid code");
             }
@@ -288,19 +301,27 @@ namespace Ajupov.Identity.OAuth.Controllers
         [HttpGet("VerifyPhone")]
         public ActionResult VerifyPhone(GetVerifyPhoneRequest request, CancellationToken ct)
         {
-            var model = new VerifyPhoneViewModel(request.TokenId, request.CallbackUri, request.IsInvalidCode);
+            var model = new VerifyPhoneViewModel(
+                request.TokenId,
+                request.CallbackUri,
+                request.IsInvalidCode);
 
             return View("~/OAuth/Views/VerifyPhone.cshtml", model);
         }
 
         [HttpPost("VerifyPhone")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> VerifyPhone(PostVerifyPhoneRequest request, CancellationToken ct)
+        public async Task<ActionResult> VerifyPhone([FromForm] PostVerifyPhoneRequest request, CancellationToken ct)
         {
             var isVerified = await _registrationService.VerifyPhoneAsync(request.TokenId, request.Code, ct);
-            if (isVerified)
+            if (!isVerified)
             {
-                var getVerifyPhoneRequest = new GetVerifyPhoneRequest(request.TokenId, request.CallbackUri, true);
+                var getVerifyPhoneRequest = new GetVerifyPhoneRequest
+                {
+                    TokenId = request.TokenId,
+                    CallbackUri = request.CallbackUri,
+                    IsInvalidCode = true
+                };
 
                 return RedirectToAction("VerifyPhone", getVerifyPhoneRequest);
             }

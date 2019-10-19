@@ -5,8 +5,7 @@ namespace Ajupov.Identity.OAuth.Attributes.Validation
 {
     public class ClientIdValidationAttribute : ValidationAttribute
     {
-
-        protected override ValidationResult IsValid(object value,ValidationContext validationContext)
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var clientIdString = value?.ToString();
             if (clientIdString.IsEmpty())

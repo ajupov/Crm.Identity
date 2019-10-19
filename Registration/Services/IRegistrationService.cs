@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Ajupov.Identity.Profiles.Models;
 
 namespace Ajupov.Identity.Registration.Services
 {
@@ -16,8 +15,6 @@ namespace Ajupov.Identity.Registration.Services
         Task<Guid> RegisterAsync(
             string surname,
             string name,
-            ProfileGender gender,
-            DateTime birthDate,
             string login,
             string email,
             string phone,
@@ -28,10 +25,10 @@ namespace Ajupov.Identity.Registration.Services
 
         Task SendEmailConfirmationEmailAsync(string email, string ipAddress, string userAgent, CancellationToken ct);
 
-        Task SendPhoneConfirmationSmsAsync(string phone, string ipAddress, string userAgent, CancellationToken ct);
-        
+        Task<Guid> SendPhoneConfirmationSmsAsync(string phone, string ipAddress, string userAgent, CancellationToken ct);
+
         Task<bool> VerifyEmailAsync(Guid tokenId, string code, CancellationToken ct);
-        
+
         Task<bool> VerifyPhoneAsync(Guid tokenId, string code, CancellationToken ct);
     }
 }

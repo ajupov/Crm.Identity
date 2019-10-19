@@ -7,14 +7,14 @@
 
 <form method="post" action="/oauth/authorize">
     <h2>Авторизация</h2>
-    
+
     @if (Model.IsInvalidCredentials)
     {
         <p class="error">Не правильный логин или пароль</p>
     }
 
     @Html.AntiForgeryToken()
-    
+
     <input type="hidden" name="client_id" value="@Model.ClientId"/>
     <input type="hidden" name="scope" value="@Model.Scope"/>
     <input type="hidden" name="state" value="@Model.State"/>

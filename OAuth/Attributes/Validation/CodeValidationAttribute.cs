@@ -18,7 +18,7 @@ namespace Ajupov.Identity.OAuth.Attributes.Validation
             {
                 return ValidationResult.Success;
             }
-            
+
             if ((value?.ToString()).IsEmpty())
             {
                 return new ValidationResult("Invalid access code");

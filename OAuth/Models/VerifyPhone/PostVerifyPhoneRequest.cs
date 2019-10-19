@@ -6,11 +6,11 @@ namespace Ajupov.Identity.OAuth.Models.VerifyPhone
     public class PostVerifyPhoneRequest
     {
         [Required]
-        public Guid TokenId { get; }
-        
-        [Required]
-        public string Code { get; }
+        public Guid TokenId { get; set; }
 
-        public string CallbackUri { get; }
+        [Required]
+        public string Code { get; set; }
+
+        public string CallbackUri { get; set; }
     }
 }

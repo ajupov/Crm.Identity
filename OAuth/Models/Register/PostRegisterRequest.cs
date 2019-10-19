@@ -1,7 +1,5 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using Ajupov.Identity.OAuth.Attributes.Validation;
-using Ajupov.Identity.Profiles.Models;
 
 namespace Ajupov.Identity.OAuth.Models.Register
 {
@@ -16,13 +14,6 @@ namespace Ajupov.Identity.OAuth.Models.Register
         [DataType(DataType.Text)]
         [StringLength(256)]
         public string Name { get; set; }
-
-        [Required]
-        public ProfileGender Gender { get; set; }
-
-        [Required]
-        [DataType(DataType.Date)]
-        public DateTime BirthDate { get; set; }
 
         [Required]
         [StringLength(256)]

@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using Ajupov.Identity.OAuth.Attributes.Validation;
 
 namespace Ajupov.Identity.OAuth.Models.Register
@@ -20,10 +19,20 @@ namespace Ajupov.Identity.OAuth.Models.Register
         [RedirectUriValidation]
         public string redirect_uri { get; set; }
 
+        public string Surname { get; set; }
+
+        public string Name { get; set; }
+
+        public string Login { get; set; }
+
+        public string Email { get; set; }
+
+        public string Phone { get; set; }
+
         public bool IsLoginExists { get; set; }
-        
+
         public bool IsEmailExists { get; set; }
-        
+
         public bool IsPhoneExists { get; set; }
     }
 }

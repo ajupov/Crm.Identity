@@ -51,7 +51,7 @@ namespace Ajupov.Identity.OAuth.Validators
         public static bool IsCorrectSecret(this OAuthClient oAuthClient, TokenRequest request)
         {
             return request.grant_type != GrandType.AuthorizationCode ||
-                Password.IsVerifiedPassword(request.client_secret, oAuthClient.ClientSecret);
+                   Password.IsVerifiedPassword(request.client_secret, oAuthClient.ClientSecret);
         }
 
         public static bool IsScopesInclude(this OAuthClient oAuthClient, string value)

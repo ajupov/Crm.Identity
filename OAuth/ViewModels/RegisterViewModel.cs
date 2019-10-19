@@ -8,18 +8,28 @@ namespace Ajupov.Identity.OAuth.ViewModels
             string scope,
             string redirectUri,
             string state,
-            bool isLoginExists = false,
-            bool isEmailExists = false,
-            bool isPhoneExists = false)
+            string surname,
+            string name,
+            string login,
+            string email,
+            string phone,
+            bool isLoginExists,
+            bool isEmailExists,
+            bool isPhoneExists)
         {
             ClientId = clientId;
             ResponseType = responseType;
             Scope = scope;
             State = state;
+            RedirectUri = redirectUri;
+            Surname = surname;
+            Name = name;
+            Login = login;
+            Email = email;
+            Phone = phone;
             IsLoginExists = isLoginExists;
             IsEmailExists = isEmailExists;
             IsPhoneExists = isPhoneExists;
-            RedirectUri = redirectUri;
         }
 
         public string ClientId { get; }
@@ -31,6 +41,16 @@ namespace Ajupov.Identity.OAuth.ViewModels
         public string State { get; }
 
         public string RedirectUri { get; }
+
+        public string Surname { get; }
+
+        public string Name { get; }
+
+        public string Login { get; }
+
+        public string Email { get; }
+
+        public string Phone { get; }
 
         public bool IsLoginExists { get; }
 

@@ -26,7 +26,12 @@ form {
     box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
 }
 
-form h2 {
+form h1,
+form h2,
+form h3,
+form h4,
+form h5,
+form h6 {
     color: white;
     font-weight: 500;
     margin-top: 0;

@@ -5,7 +5,7 @@
         <RootNamespace>Ajupov.Identity</RootNamespace>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Ajupov.Infrastructure.All" Version="1.0.8" />
+        <PackageReference Include="Ajupov.Infrastructure.All" Version="1.0.9" />
         <PackageReference Include="Ajupov.Utils.All" Version="1.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.0.0" />
     </ItemGroup>

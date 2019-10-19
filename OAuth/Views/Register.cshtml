@@ -30,23 +30,13 @@
     <input type="hidden" name="state" value="@Model.State"/>
     <input type="hidden" name="response_type" value="@Model.ResponseType"/>
     <input type="hidden" name="redirect_uri" value="@Model.RedirectUri"/>
-
-    <input type="text" name="Surname" required="required" placeholder="Фамилия" autofocus="autofocus"/>
-    <input type="text" name="Name" required="required" placeholder="Имя"/>
-
-    <label>Пол:</label><br/>
-    <select name="Gender">
-        <option selected="selected">Не выбрано</option>
-        <option value="1">Мужской</option>
-        <option value="2">Женский</option>
-    </select>
-
-    <input type="date" name="BirthDate" placeholder="Дата рождения"/>
-    <input type="text" name="Login" required="required" placeholder="Логин"/>
-    <input type="email" name="Email" required="required" placeholder="Email"/>
-    <input type="tel" name="Phone" required="required" placeholder="Телефон" pattern="+7([0-9]{3}) [0-9]{7}"/>
-    <input type="password" name="Password" required="required" placeholder="Пароль" autocomplete="none"/>
-    <input type="password" name="PasswordConfirmation" required="required" placeholder="Повтор пароля" autocomplete="none"/>
+    <input type="text" name="Surname" value="@Model.Surname" required="required" placeholder="Фамилия" autofocus="autofocus"/>
+    <input type="text" name="Name" value="@Model.Name" required="required" placeholder="Имя"/>
+    <input type="text" name="Login" value="@Model.Login" required="required" placeholder="Логин" autocomplete="none"/>
+    <input type="email" name="Email" value="@Model.Email" required="required" placeholder="Email"/>
+    <input type="tel" name="Phone" value="@Model.Phone" required="required" placeholder="Телефон (в формате 9999999999)" pattern="[0-9]{10}"/>
+    <input type="password" name="Password" required="required" placeholder="Пароль" autocomplete="none" minlength="6"/>
+    <input type="password" name="PasswordConfirmation" required="required" placeholder="Повтор пароля" autocomplete="none" minlength="6"/>
     <input type="submit" value="Зарегистрироваться"/>
     <a href="/oauth/authorize?client_id=@Model.ClientId&response_type=@Model.ResponseType&scope=@Model.Scope&state=@Model.State&redirect_uri=@Model.RedirectUri">Войти</a>
 </form>
