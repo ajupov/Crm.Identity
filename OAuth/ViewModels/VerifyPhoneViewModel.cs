@@ -4,7 +4,7 @@ namespace Ajupov.Identity.OAuth.ViewModels
 {
     public class VerifyPhoneViewModel
     {
-        public VerifyPhoneViewModel(Guid tokenId, string callbackUri, bool isInvalidCode = false)
+        public VerifyPhoneViewModel(Guid tokenId, string callbackUri, bool isInvalidCode)
         {
             TokenId = tokenId;
             CallbackUri = callbackUri;

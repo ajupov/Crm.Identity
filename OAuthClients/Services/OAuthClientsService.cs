@@ -7,8 +7,8 @@ using Ajupov.Identity.OAuthClients.Helpers;
 using Ajupov.Identity.OAuthClients.Models;
 using Ajupov.Identity.OAuthClients.Requests;
 using Ajupov.Identity.OAuthClients.Storages;
-using Ajupov.Utils.All.Password;
 using Microsoft.EntityFrameworkCore;
+using PasswordUtils = Ajupov.Utils.All.Password.Password;
 
 namespace Ajupov.Identity.OAuthClients.Services
 {
@@ -70,7 +70,7 @@ namespace Ajupov.Identity.OAuthClients.Services
             {
                 Id = clientId,
                 ClientId = oAuthClient.ClientId,
-                ClientSecret = Password.ToPasswordHash(oAuthClient.ClientSecret),
+                ClientSecret = PasswordUtils.ToPasswordHash(oAuthClient.ClientSecret),
                 RedirectUriPattern = oAuthClient.RedirectUriPattern,
                 IsLocked = oAuthClient.IsLocked,
                 IsDeleted = oAuthClient.IsDeleted,
@@ -92,7 +92,7 @@ namespace Ajupov.Identity.OAuthClients.Services
         public Task UpdateAsync(OAuthClient oldOAuthClient, OAuthClient oAuthClient, CancellationToken ct)
         {
             oldOAuthClient.ClientId = oAuthClient.ClientId;
-            oldOAuthClient.ClientSecret = Password.ToPasswordHash(oAuthClient.ClientSecret);
+            oldOAuthClient.ClientSecret = PasswordUtils.ToPasswordHash(oAuthClient.ClientSecret);
             oldOAuthClient.RedirectUriPattern = oAuthClient.RedirectUriPattern;
             oldOAuthClient.IsLocked = oAuthClient.IsLocked;
             oldOAuthClient.IsDeleted = oAuthClient.IsDeleted;

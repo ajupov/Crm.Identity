@@ -52,7 +52,7 @@ namespace Ajupov.Identity.OAuth.Services
             string state,
             string userAgent,
             string ipAddress,
-            List<string> scopes,
+            IEnumerable<string> scopes,
             CancellationToken ct)
         {
             var identityTypes = IdentityTypeExtensions.TypesWithPassword;
@@ -83,7 +83,7 @@ namespace Ajupov.Identity.OAuth.Services
                     var code = _codesService.Create(profile, claims);
                     var callbackUri = _callbackUriService.GetByCode(redirectUri, state, code);
 
-                    return new PostAuthorizeResponse(callbackUri);
+                    return new PostAuthorizeResponse(callbackUri, false);
                 }
                 case ResponseType.Token:
                 {
@@ -92,7 +92,7 @@ namespace Ajupov.Identity.OAuth.Services
                         await _refreshTokensService.CreateAsync(claims, profile, userAgent, ipAddress, ct);
                     var callbackUri = _callbackUriService.GetByTokens(redirectUri, state, accessToken, refreshToken);
 
-                    return new PostAuthorizeResponse(callbackUri);
+                    return new PostAuthorizeResponse(callbackUri, false);
                 }
                 default:
                     throw new ArgumentOutOfRangeException(responseType);
@@ -102,13 +102,12 @@ namespace Ajupov.Identity.OAuth.Services
         public async Task<TokenResponse> GetTokenAsync(
             string grandType,
             string code,
-            string redirectUri,
             string userName,
             string password,
             string oldRefreshTokenValue,
             string userAgent,
             string ipAddress,
-            List<string> oAuthClientScopes,
+            IEnumerable<string> scopes,
             CancellationToken ct)
         {
             switch (grandType)
@@ -148,7 +147,7 @@ namespace Ajupov.Identity.OAuth.Services
                         return new TokenResponse("Invalid credentials");
                     }
 
-                    var claims = await _claimsService.GetByScopesAsync(oAuthClientScopes, profile, ct);
+                    var claims = await _claimsService.GetByScopesAsync(scopes, profile, ct);
                     var accessToken = await _accessTokensService.CreateAsync(claims, ct);
                     var refreshToken =
                         await _refreshTokensService.CreateAsync(claims, profile, userAgent, ipAddress, ct);

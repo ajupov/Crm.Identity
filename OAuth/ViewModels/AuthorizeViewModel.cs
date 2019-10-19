@@ -8,7 +8,7 @@ namespace Ajupov.Identity.OAuth.ViewModels
             string scope,
             string redirectUri,
             string state,
-            bool isInvalidCredentials = false)
+            bool isInvalidCredentials)
         {
             ClientId = clientId;
             ResponseType = responseType;

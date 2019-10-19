@@ -1,4 +1,4 @@
-﻿namespace Ajupov.Identity.Registration.Settings
+﻿namespace Ajupov.Identity.Email.Settings
 {
     public class VerifyEmailSettings
     {

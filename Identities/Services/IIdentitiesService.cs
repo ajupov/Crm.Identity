@@ -23,6 +23,11 @@ namespace Ajupov.Identity.Identities.Services
             IEnumerable<IdentityType> types,
             CancellationToken ct);
 
+        Task<Models.Identity> GetByProfileIdAndTypeAsync(
+            Guid profileId,
+            IdentityType type,
+            CancellationToken ct);
+
         Task<bool> IsExistByKeyAndTypeAsync(string key, IdentityType type, CancellationToken ct);
 
         Task<Models.Identity[]> GetPagedListAsync(
@@ -43,5 +48,7 @@ namespace Ajupov.Identity.Identities.Services
         Task UnverifyAsync(IEnumerable<Guid> ids, CancellationToken ct);
 
         bool IsPasswordCorrect(Models.Identity identity, string password);
+
+        Task ChangePasswordByProfileIdAsync(Guid profileId, string newPassword, CancellationToken ct);
     }
 }

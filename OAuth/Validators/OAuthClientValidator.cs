@@ -6,8 +6,8 @@ using Ajupov.Identity.OAuth.Models.Register;
 using Ajupov.Identity.OAuth.Models.Tokens;
 using Ajupov.Identity.OAuth.Models.Types;
 using Ajupov.Identity.OAuthClients.Models;
-using Ajupov.Utils.All.Password;
 using Ajupov.Utils.All.String;
+using PasswordUtils = Ajupov.Utils.All.Password.Password;
 
 namespace Ajupov.Identity.OAuth.Validators
 {
@@ -51,7 +51,7 @@ namespace Ajupov.Identity.OAuth.Validators
         public static bool IsCorrectSecret(this OAuthClient oAuthClient, TokenRequest request)
         {
             return request.grant_type != GrandType.AuthorizationCode ||
-                   Password.IsVerifiedPassword(request.client_secret, oAuthClient.ClientSecret);
+                   PasswordUtils.IsVerifiedPassword(request.client_secret, oAuthClient.ClientSecret);
         }
 
         public static bool IsScopesInclude(this OAuthClient oAuthClient, string value)

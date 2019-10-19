@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using Ajupov.Identity.AccessTokens.Services;
 using Ajupov.Identity.Claims.Services;
 using Ajupov.Identity.Codes.Services;
+using Ajupov.Identity.Email.Services;
+using Ajupov.Identity.Email.Settings;
 using Ajupov.Identity.Identities.Services;
 using Ajupov.Identity.Identities.Storages;
 using Ajupov.Identity.OAuth.Filters;
@@ -10,13 +12,16 @@ using Ajupov.Identity.OAuth.Options;
 using Ajupov.Identity.OAuth.Services;
 using Ajupov.Identity.OAuthClients.Services;
 using Ajupov.Identity.OAuthClients.Storages;
+using Ajupov.Identity.Password.Services;
+using Ajupov.Identity.Password.Settings;
+using Ajupov.Identity.Phone.Services;
 using Ajupov.Identity.Profiles.Services;
 using Ajupov.Identity.Profiles.Storages;
 using Ajupov.Identity.RedirectUri.Services;
 using Ajupov.Identity.RefreshTokens.Services;
 using Ajupov.Identity.RefreshTokens.Storages;
+using Ajupov.Identity.Registration;
 using Ajupov.Identity.Registration.Services;
-using Ajupov.Identity.Registration.Settings;
 using Ajupov.Identity.Resources.Services;
 using Ajupov.Identity.Resources.Storages;
 using Ajupov.Infrastructure.All.ApiDocumentation;
@@ -63,11 +68,23 @@ namespace Ajupov.Identity
                         .ConfigureOrm<RefreshTokensStorage>(builder.Configuration)
                         .ConfigureHotStorage(builder.Configuration)
                         .Configure<VerifyEmailSettings>(builder.Configuration.GetSection("VerifyEmailSettings"))
+                        .Configure<ResetPasswordSettings>(builder.Configuration.GetSection("ResetPasswordSettings"))
                         .AddTransient<IOAuthService, OAuthService>()
                         .AddTransient<IRegistrationService, RegistrationService>()
+                        .AddTransient<IRegistrationIdentityService, RegistrationIdentityService>()
+                        .AddTransient<IEmailChangeService, EmailChangeService>()
+                        .AddTransient<IEmailConfirmationService, EmailConfirmationService>()
+                        .AddTransient<IEmailVerificationService, EmailVerificationService>()
+                        .AddTransient<IPhoneChangeService, PhoneChangeService>()
+                        .AddTransient<IPhoneConfirmationService, PhoneConfirmationService>()
+                        .AddTransient<IPhoneVerificationService, PhoneVerificationService>()
+                        .AddTransient<IPasswordChangeService, PasswordChangeService>()
+                        .AddTransient<IPasswordResetService, PasswordResetService>()
+                        .AddTransient<IPasswordConfirmationService, PasswordConfirmationService>()
                         .AddTransient<IOAuthClientsService, OAuthClientsService>()
                         .AddTransient<IIdentitiesService, IdentitiesService>()
                         .AddTransient<IIdentityTokensService, IdentityTokensService>()
+                        .AddTransient<IIdentityStatusService, IdentityStatusService>()
                         .AddTransient<IProfilesService, ProfilesService>()
                         .AddTransient<ICodesService, CodesService>()
                         .AddTransient<IAccessTokensService, AccessTokensService>()

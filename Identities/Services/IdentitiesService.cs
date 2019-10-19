@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Ajupov.Identity.Identities.Extensions;
 using Ajupov.Identity.Identities.Helpers;
 using Ajupov.Identity.Identities.Models;
 using Ajupov.Identity.Identities.Requests;
 using Ajupov.Identity.Identities.Storages;
-using Ajupov.Utils.All.Password;
 using Microsoft.EntityFrameworkCore;
+using PasswordUtils = Ajupov.Utils.All.Password.Password;
 
 namespace Ajupov.Identity.Identities.Services
 {
@@ -41,9 +42,11 @@ namespace Ajupov.Identity.Identities.Services
             IEnumerable<IdentityType> types,
             CancellationToken ct)
         {
+            var correctedKey = key.Trim().ToLower();
+
             return _storage.Identities
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Key == key && types.Contains(x.Type), ct);
+                .FirstOrDefaultAsync(x => x.Key == correctedKey && types.Contains(x.Type), ct);
         }
 
         public Task<Models.Identity> GetVerifiedByKeyAndTypesAsync(
@@ -51,21 +54,30 @@ namespace Ajupov.Identity.Identities.Services
             IEnumerable<IdentityType> types,
             CancellationToken ct)
         {
+            var correctedKey = key.Trim().ToLower();
+
             return _storage.Identities
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Key == key && x.IsVerified && types.Contains(x.Type), ct);
+                .FirstOrDefaultAsync(x => x.Key == correctedKey && x.IsVerified && types.Contains(x.Type), ct);
+        }
+
+        public Task<Models.Identity> GetByProfileIdAndTypeAsync(Guid profileId, IdentityType type, CancellationToken ct)
+        {
+            return _storage.Identities
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.ProfileId == profileId && x.Type == type, ct);
         }
 
         public Task<bool> IsExistByKeyAndTypeAsync(string key, IdentityType type, CancellationToken ct)
         {
+            var correctedKey = key.Trim().ToLower();
+
             return _storage.Identities
                 .AsNoTracking()
-                .AnyAsync(x => x.Key == key && x.Type == type, ct);
+                .AnyAsync(x => x.Key == correctedKey && x.Type == type, ct);
         }
 
-        public Task<Models.Identity[]> GetPagedListAsync(
-            IdentitiesGetPagedListRequest request,
-            CancellationToken ct)
+        public Task<Models.Identity[]> GetPagedListAsync(IdentitiesGetPagedListRequest request, CancellationToken ct)
         {
             return _storage.Identities
                 .AsNoTracking()
@@ -90,7 +102,7 @@ namespace Ajupov.Identity.Identities.Services
                 Id = Guid.NewGuid(),
                 ProfileId = identity.ProfileId,
                 Type = identity.Type,
-                Key = identity.Key,
+                Key = identity.Key.Trim().ToLower(),
                 PasswordHash = identity.PasswordHash,
                 IsVerified = identity.IsVerified,
                 CreateDateTime = DateTime.UtcNow
@@ -104,8 +116,8 @@ namespace Ajupov.Identity.Identities.Services
 
         public Task UpdateAsync(Models.Identity oldIdentity, Models.Identity identity, CancellationToken ct)
         {
-            oldIdentity.IsVerified = oldIdentity.Key != identity.Key;
-            oldIdentity.Key = identity.Key;
+            oldIdentity.IsVerified = oldIdentity.Key != identity.Key.Trim().ToLower();
+            oldIdentity.Key = identity.Key.Trim().ToLower();
             oldIdentity.ModifyDateTime = DateTime.UtcNow;
 
             _storage.Update(oldIdentity);
@@ -115,7 +127,7 @@ namespace Ajupov.Identity.Identities.Services
 
         public Task SetPasswordAsync(Models.Identity identity, string password, CancellationToken ct)
         {
-            identity.PasswordHash = Password.ToPasswordHash(password);
+            identity.PasswordHash = PasswordUtils.ToPasswordHash(password);
             identity.ModifyDateTime = DateTime.UtcNow;
 
             _storage.Update(identity);
@@ -151,7 +163,20 @@ namespace Ajupov.Identity.Identities.Services
 
         public bool IsPasswordCorrect(Models.Identity identity, string password)
         {
-            return Password.IsVerifiedPassword(password, identity.PasswordHash);
+            return PasswordUtils.IsVerifiedPassword(password, identity.PasswordHash);
+        }
+
+        public Task ChangePasswordByProfileIdAsync(Guid profileId, string newPassword, CancellationToken ct)
+        {
+            var passwordHash = PasswordUtils.ToPasswordHash(newPassword);
+
+            return _storage.Identities
+                .Where(x => x.ProfileId == profileId && x.Type.IsTypeWithPassword())
+                .ForEachAsync(x =>
+                {
+                    x.PasswordHash = passwordHash;
+                    x.ModifyDateTime = DateTime.UtcNow;
+                }, ct);
         }
     }
 }

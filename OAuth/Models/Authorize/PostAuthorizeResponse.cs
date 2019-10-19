@@ -2,7 +2,7 @@
 {
     public class PostAuthorizeResponse
     {
-        public PostAuthorizeResponse(string callbackUri, bool isInvalidCredentials = false)
+        public PostAuthorizeResponse(string callbackUri, bool isInvalidCredentials)
         {
             CallbackUri = callbackUri;
             IsInvalidCredentials = isInvalidCredentials;

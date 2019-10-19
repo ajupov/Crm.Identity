@@ -16,19 +16,18 @@ namespace Ajupov.Identity.OAuth.Services
             string state,
             string userAgent,
             string ipAddress,
-            List<string> scopes,
+            IEnumerable<string> scopes,
             CancellationToken ct);
 
         Task<TokenResponse> GetTokenAsync(
             string grandType,
             string code,
-            string redirectUri,
             string userName,
             string password,
             string oldRefreshTokenValue,
             string userAgent,
             string ipAddress,
-            List<string> oAuthClientScopes,
+            IEnumerable<string> scopes,
             CancellationToken ct);
     }
 }

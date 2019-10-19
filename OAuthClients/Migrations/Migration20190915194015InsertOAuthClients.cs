@@ -1,6 +1,6 @@
 ﻿using System;
-using Ajupov.Utils.All.Password;
 using FluentMigrator;
+using PasswordUtils = Ajupov.Utils.All.Password.Password;
 
 namespace Ajupov.Identity.OAuthClients.Migrations
 {
@@ -16,7 +16,7 @@ namespace Ajupov.Identity.OAuthClients.Migrations
                 {
                     Id = clientId,
                     ClientId = "site",
-                    ClientSecret = Password.ToPasswordHash("site"),
+                    ClientSecret = PasswordUtils.ToPasswordHash("site"),
                     RedirectUriPattern = "http://localhost:3000",
                     IsLocked = false,
                     IsDeleted = false,
