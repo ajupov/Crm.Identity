@@ -9,7 +9,6 @@ namespace Ajupov.Identity.Resources.Migrations
         {
             Create.Table("Resources")
                 .WithColumn("Id").AsGuid().NotNullable()
-                .WithColumn("Type").AsByte().NotNullable()
                 .WithColumn("Name").AsString(256).NotNullable()
                 .WithColumn("Scope").AsString(64).NotNullable()
                 .WithColumn("Description").AsString(2048).Nullable()

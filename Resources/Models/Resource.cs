@@ -6,8 +6,6 @@ namespace Ajupov.Identity.Resources.Models
     {
         public Guid Id { get; set; }
 
-        public ResourceType Type { get; set; }
-
         public string Name { get; set; }
 
         public string Scope { get; set; }

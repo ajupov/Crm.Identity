@@ -17,7 +17,7 @@ namespace Ajupov.Identity.OAuthClients.Migrations
                     Id = clientId,
                     ClientId = "site",
                     ClientSecret = PasswordUtils.ToPasswordHash("site"),
-                    RedirectUriPattern = "http://localhost:3000",
+                    RedirectUriPattern = "http://localhost:9000",
                     IsLocked = false,
                     IsDeleted = false,
                     CreateDateTime = DateTime.UtcNow

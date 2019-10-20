@@ -1,5 +1,4 @@
 ﻿using System;
-using Ajupov.Identity.Resources.Models;
 using FluentMigrator;
 
 namespace Ajupov.Identity.Resources.Migrations
@@ -13,11 +12,10 @@ namespace Ajupov.Identity.Resources.Migrations
                 new
                 {
                     Id = Guid.NewGuid(),
-                    Type = (byte) ResourceType.Profile,
                     Name = "All",
                     Scope = "all",
                     Description = "All API",
-                    Uri = "http://localhost:9001",
+                    Uri = "http://localhost:9000",
                     IsLocked = false,
                     IsDeleted = false,
                     CreateDateTime = DateTime.UtcNow,
