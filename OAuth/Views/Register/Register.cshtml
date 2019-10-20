@@ -8,6 +8,11 @@
 <form method="post" action="/oauth/register">
     <h2>Регистрация</h2>
 
+    @if (Model.IsPasswordsNotEqual)
+    {
+        <p class="error">Пароли не совпадают</p>
+    }
+
     @if (Model.IsLoginExists)
     {
         <p class="error">Логин занят</p>

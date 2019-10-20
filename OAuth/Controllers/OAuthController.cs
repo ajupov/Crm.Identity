@@ -132,6 +132,7 @@ namespace Ajupov.Identity.OAuth.Controllers
                 request.Login,
                 request.Email,
                 request.Phone,
+                request.IsPasswordsNotEqual,
                 request.IsLoginExists,
                 request.IsEmailExists,
                 request.IsPhoneExists);
@@ -206,6 +207,26 @@ namespace Ajupov.Identity.OAuth.Controllers
             if (!client.IsScopesInclude(request.scope))
             {
                 return BadRequest("Invalid scopes");
+            }
+
+            if (request.Password != request.PasswordConfirmation)
+            {
+                var newRegisterRequest = new GetRegisterRequest
+                {
+                    client_id = request.client_id,
+                    response_type = request.response_type,
+                    scope = request.scope,
+                    state = request.state,
+                    redirect_uri = request.redirect_uri,
+                    Surname = request.Surname,
+                    Name = request.Name,
+                    Login = request.Login,
+                    Email = request.Email,
+                    Phone = request.Phone,
+                    IsPasswordsNotEqual = true
+                };
+
+                return RedirectToAction("Register", newRegisterRequest);
             }
 
             var isLoginExists = await _identityStatusService.IsLoginExistsAsync(request.Login, ct);
@@ -507,7 +528,10 @@ namespace Ajupov.Identity.OAuth.Controllers
         [HttpGet("ChangePassword")]
         public ActionResult ChangePassword(GetChangePasswordRequest request)
         {
-            var model = new ChangePasswordViewModel(request.Login, request.IsInvalidCredentials);
+            var model = new ChangePasswordViewModel(
+                request.Login,
+                request.IsPasswordsNotEqual,
+                request.IsInvalidCredentials);
 
             return View("~/OAuth/Views/ChangePassword/ChangePassword.cshtml", model);
         }
@@ -518,6 +542,17 @@ namespace Ajupov.Identity.OAuth.Controllers
             [FromForm] PostChangePasswordRequest request,
             CancellationToken ct)
         {
+            if (request.NewPassword != request.NewPasswordConfirmation)
+            {
+                var getChangePasswordRequest = new GetChangePasswordRequest
+                {
+                    Login = request.Login,
+                    IsPasswordsNotEqual = true
+                };
+
+                return RedirectToAction("ChangePassword", getChangePasswordRequest);
+            }
+
             var response = await _passwordChangeService.ChangeAsync(
                 request.Login,
                 request.OldPassword,
@@ -578,7 +613,10 @@ namespace Ajupov.Identity.OAuth.Controllers
                 return BadRequest("Invalid code");
             }
 
-            var model = new ResetPasswordConfirmationViewModel(request.TokenId, request.Code);
+            var model = new ResetPasswordConfirmationViewModel(
+                request.TokenId,
+                request.Code,
+                request.IsPasswordsNotEqual);
 
             return View("~/OAuth/Views/ResetPassword/SetNewPassword.cshtml", model);
         }
@@ -589,6 +627,18 @@ namespace Ajupov.Identity.OAuth.Controllers
             [FromForm] PostResetPasswordConfirmationRequest request,
             CancellationToken ct)
         {
+            if (request.NewPassword != request.NewPasswordConfirmation)
+            {
+                var resetPasswordConfirmationRequest = new ResetPasswordConfirmationRequest
+                {
+                    TokenId = request.TokenId,
+                    Code = request.Code,
+                    IsPasswordsNotEqual = true
+                };
+
+                return RedirectToAction("ResetPasswordConfirmation", resetPasswordConfirmationRequest);
+            }
+
             var response = await _passwordResetService.SetNewPasswordAsync(
                 request.TokenId,
                 request.Code,

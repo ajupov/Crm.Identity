@@ -39,7 +39,6 @@ namespace Ajupov.Identity.OAuth.Models.Register
 
         [Required]
         [StringLength(256)]
-        [Compare("Password")]
         [DataType(DataType.Password)]
         public string PasswordConfirmation { get; set; }
 

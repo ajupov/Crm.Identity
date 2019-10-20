@@ -18,7 +18,6 @@ namespace Ajupov.Identity.OAuth.Models.ResetPassword
 
         [Required]
         [StringLength(256)]
-        [Compare("NewPassword")]
         [DataType(DataType.Password)]
         public string NewPasswordConfirmation { get; set; }
     }

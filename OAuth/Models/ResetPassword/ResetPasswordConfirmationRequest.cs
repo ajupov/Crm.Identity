@@ -10,5 +10,7 @@ namespace Ajupov.Identity.OAuth.Models.ResetPassword
 
         [Required]
         public string Code { get; set; }
+
+        public bool IsPasswordsNotEqual { get; set; }
     }
 }

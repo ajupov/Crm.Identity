@@ -13,6 +13,7 @@ namespace Ajupov.Identity.OAuth.ViewModels.Register
             string login,
             string email,
             string phone,
+            bool isPasswordsNotEqual,
             bool isLoginExists,
             bool isEmailExists,
             bool isPhoneExists)
@@ -27,6 +28,7 @@ namespace Ajupov.Identity.OAuth.ViewModels.Register
             Login = login;
             Email = email;
             Phone = phone;
+            IsPasswordsNotEqual = isPasswordsNotEqual;
             IsLoginExists = isLoginExists;
             IsEmailExists = isEmailExists;
             IsPhoneExists = isPhoneExists;
@@ -52,6 +54,8 @@ namespace Ajupov.Identity.OAuth.ViewModels.Register
 
         public string Phone { get; }
 
+        public bool IsPasswordsNotEqual { get; }
+        
         public bool IsLoginExists { get; }
 
         public bool IsEmailExists { get; }
