@@ -1,17 +1,28 @@
-@model Ajupov.Identity.OAuth.ViewModels.ChangeEmailViewModel
+@model Ajupov.Identity.OAuth.ViewModels.ChangeEmail.ChangeEmailViewModel
 
 @{
     Layout = "~/OAuth/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Изменение Email";
 }
 
-<form method="post" action="/oauth/сhangeemail">
+<form method="post" action="/oauth/changeemail">
     <h2>Изменение Email</h2>
+
+    @if (Model.IsEmailNotChanged)
+    {
+        <p class="error">Старый и новый Email совпадают</p>
+    }
+
+    @if (Model.IsEmailExists)
+    {
+        <p class="error">Email уже занят</p>
+    }
 
     @if (Model.IsInvalidCredentials)
     {
         <p class="error">Неправильный старый Email или пароль</p>
     }
+
 
     @Html.AntiForgeryToken()
 

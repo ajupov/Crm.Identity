@@ -16,7 +16,13 @@ using Ajupov.Identity.OAuth.Models.VerifyEmail;
 using Ajupov.Identity.OAuth.Models.VerifyPhone;
 using Ajupov.Identity.OAuth.Services;
 using Ajupov.Identity.OAuth.Validators;
-using Ajupov.Identity.OAuth.ViewModels;
+using Ajupov.Identity.OAuth.ViewModels.Authorize;
+using Ajupov.Identity.OAuth.ViewModels.ChangeEmail;
+using Ajupov.Identity.OAuth.ViewModels.ChangePassword;
+using Ajupov.Identity.OAuth.ViewModels.ChangePhone;
+using Ajupov.Identity.OAuth.ViewModels.Register;
+using Ajupov.Identity.OAuth.ViewModels.ResetPassword;
+using Ajupov.Identity.OAuth.ViewModels.VerifyPhone;
 using Ajupov.Identity.OAuthClients.Services;
 using Ajupov.Identity.Password.Services;
 using Ajupov.Identity.Phone.Services;
@@ -93,7 +99,7 @@ namespace Ajupov.Identity.OAuth.Controllers
                 request.state,
                 request.IsInvalidCredentials);
 
-            return View("~/OAuth/Views/Authorize.cshtml", model);
+            return View("~/OAuth/Views/Authorize/Authorize.cshtml", model);
         }
 
         [HttpGet("Register")]
@@ -130,7 +136,7 @@ namespace Ajupov.Identity.OAuth.Controllers
                 request.IsEmailExists,
                 request.IsPhoneExists);
 
-            return View("~/OAuth/Views/Register.cshtml", model);
+            return View("~/OAuth/Views/Register/Register.cshtml", model);
         }
 
         [HttpPost("Authorize")]
@@ -320,15 +326,42 @@ namespace Ajupov.Identity.OAuth.Controllers
             var model = new ChangeEmailViewModel(
                 request.OldEmail,
                 request.NewEmail,
+                request.IsEmailNotChanged,
+                request.IsEmailExists,
                 request.IsInvalidCredentials);
 
-            return View("~/OAuth/Views/ChangeEmail.cshtml", model);
+            return View("~/OAuth/Views/ChangeEmail/ChangeEmail.cshtml", model);
         }
 
         [HttpPost("ChangeEmail")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ChangeEmail([FromForm] PostChangeEmailRequest request, CancellationToken ct)
         {
+            if (request.OldEmail.Trim().ToLower() == request.NewEmail.Trim().ToLower())
+            {
+                var getChangeEmailRequest = new GetChangeEmailRequest
+                {
+                    OldEmail = request.OldEmail,
+                    NewEmail = request.NewEmail,
+                    IsEmailNotChanged = true
+                };
+
+                return RedirectToAction("ChangeEmail", getChangeEmailRequest);
+            }
+
+            var isEmailExists = await _identityStatusService.IsEmailExistsAsync(request.NewEmail, ct);
+            if (isEmailExists)
+            {
+                var getChangeEmailRequest = new GetChangeEmailRequest
+                {
+                    OldEmail = request.OldEmail,
+                    NewEmail = request.NewEmail,
+                    IsEmailExists = true
+                };
+
+                return RedirectToAction("ChangeEmail", getChangeEmailRequest);
+            }
+
             var response = await _emailChangeService.ChangeAsync(
                 request.OldEmail,
                 request.NewEmail,
@@ -337,7 +370,7 @@ namespace Ajupov.Identity.OAuth.Controllers
                 IpAddress,
                 ct);
 
-            if (!response.IsInvalidCredentials)
+            if (response.IsInvalidCredentials)
             {
                 var getChangeEmailRequest = new GetChangeEmailRequest
                 {
@@ -349,7 +382,7 @@ namespace Ajupov.Identity.OAuth.Controllers
                 return RedirectToAction("ChangeEmail", getChangeEmailRequest);
             }
 
-            return View("~/OAuth/Views/EmailChangeConfirmation.cshtml");
+            return View("~/OAuth/Views/ChangeEmail/ChangeEmailConfirmation.cshtml");
         }
 
         [HttpGet("VerifyEmail")]
@@ -361,7 +394,7 @@ namespace Ajupov.Identity.OAuth.Controllers
                 return BadRequest("Invalid code");
             }
 
-            return View("~/OAuth/Views/EmailVerified.cshtml");
+            return View("~/OAuth/Views/VerifyEmail/EmailVerified.cshtml");
         }
 
         [HttpGet("ChangePhone")]
@@ -370,15 +403,42 @@ namespace Ajupov.Identity.OAuth.Controllers
             var model = new ChangePhoneViewModel(
                 request.OldPhone,
                 request.NewPhone,
+                request.IsPhoneNotChanged,
+                request.IsPhoneExists,
                 request.IsInvalidCredentials);
 
-            return View("~/OAuth/Views/ChangePhone.cshtml", model);
+            return View("~/OAuth/Views/ChangePhone/ChangePhone.cshtml", model);
         }
 
         [HttpPost("ChangePhone")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ChangePhone([FromForm] PostChangePhoneRequest request, CancellationToken ct)
         {
+            if (request.OldPhone.Trim().ToLower() == request.NewPhone.Trim().ToLower())
+            {
+                var getChangePhoneRequest = new GetChangePhoneRequest
+                {
+                    OldPhone = request.OldPhone,
+                    NewPhone = request.NewPhone,
+                    IsPhoneNotChanged = true
+                };
+
+                return RedirectToAction("ChangePhone", getChangePhoneRequest);
+            }
+
+            var isPhoneExists = await _identityStatusService.IsPhoneExistsAsync(request.NewPhone, ct);
+            if (isPhoneExists)
+            {
+                var getChangePhoneRequest = new GetChangePhoneRequest
+                {
+                    OldPhone = request.OldPhone,
+                    NewPhone = request.NewPhone,
+                    IsPhoneExists = true
+                };
+
+                return RedirectToAction("ChangePhone", getChangePhoneRequest);
+            }
+
             var response = await _phoneChangeService.ChangeAsync(
                 request.OldPhone,
                 request.NewPhone,
@@ -387,7 +447,7 @@ namespace Ajupov.Identity.OAuth.Controllers
                 IpAddress,
                 ct);
 
-            if (!response.IsInvalidCredentials)
+            if (response.IsInvalidCredentials)
             {
                 var getChangeEmailRequest = new GetChangePhoneRequest
                 {
@@ -416,7 +476,7 @@ namespace Ajupov.Identity.OAuth.Controllers
                 request.CallbackUri,
                 request.IsInvalidCode);
 
-            return View("~/OAuth/Views/VerifyPhone.cshtml", model);
+            return View("~/OAuth/Views/VerifyPhone/VerifyPhone.cshtml", model);
         }
 
         [HttpPost("VerifyPhone")]
@@ -438,7 +498,7 @@ namespace Ajupov.Identity.OAuth.Controllers
 
             if (request.CallbackUri.IsEmpty())
             {
-                return View("~/OAuth/Views/PhoneVerified.cshtml");
+                return View("~/OAuth/Views/VerifyPhone/PhoneVerified.cshtml");
             }
 
             return Redirect(request.CallbackUri);
@@ -449,7 +509,7 @@ namespace Ajupov.Identity.OAuth.Controllers
         {
             var model = new ChangePasswordViewModel(request.Login, request.IsInvalidCredentials);
 
-            return View("~/OAuth/Views/ChangePassword.cshtml", model);
+            return View("~/OAuth/Views/ChangePassword/ChangePassword.cshtml", model);
         }
 
         [HttpPost("ChangePassword")]
@@ -464,7 +524,7 @@ namespace Ajupov.Identity.OAuth.Controllers
                 request.NewPassword,
                 ct);
 
-            if (!response.IsInvalidCredentials)
+            if (response.IsInvalidCredentials)
             {
                 var getChangePasswordRequest = new GetChangePasswordRequest
                 {
@@ -475,7 +535,7 @@ namespace Ajupov.Identity.OAuth.Controllers
                 return RedirectToAction("ChangePassword", getChangePasswordRequest);
             }
 
-            return View("~/OAuth/Views/PasswordChanged.cshtml");
+            return View("~/OAuth/Views/ChangePassword/PasswordChanged.cshtml");
         }
 
         [HttpGet("ResetPassword")]
@@ -483,7 +543,7 @@ namespace Ajupov.Identity.OAuth.Controllers
         {
             var model = new ResetPasswordViewModel(request.Login, request.IsInvalidLogin);
 
-            return View("~/OAuth/Views/ResetPassword.cshtml", model);
+            return View("~/OAuth/Views/ResetPassword/ResetPassword.cshtml", model);
         }
 
         [HttpPost("ResetPassword")]
@@ -493,7 +553,7 @@ namespace Ajupov.Identity.OAuth.Controllers
             CancellationToken ct)
         {
             var response = await _passwordResetService.SendResetMessageAsync(request.Login, UserAgent, IpAddress, ct);
-            if (!response.IsInvalidLogin)
+            if (response.IsInvalidLogin)
             {
                 var getResetPasswordRequest = new GetResetPasswordRequest
                 {
@@ -504,7 +564,7 @@ namespace Ajupov.Identity.OAuth.Controllers
                 return RedirectToAction("ResetPassword", getResetPasswordRequest);
             }
 
-            return View("~/OAuth/Views/PasswordResetConfirmation.cshtml");
+            return View("~/OAuth/Views/ResetPassword/ResetPasswordConfirmation.cshtml");
         }
 
         [HttpGet("ResetPasswordConfirmation")]
@@ -520,7 +580,7 @@ namespace Ajupov.Identity.OAuth.Controllers
 
             var model = new ResetPasswordConfirmationViewModel(request.TokenId, request.Code);
 
-            return View("~/OAuth/Views/ResetPasswordConfirmation.cshtml", model);
+            return View("~/OAuth/Views/ResetPassword/SetNewPassword.cshtml", model);
         }
 
         [HttpPost("ResetPasswordConfirmation")]
@@ -540,7 +600,7 @@ namespace Ajupov.Identity.OAuth.Controllers
                 return BadRequest("Invalid code");
             }
 
-            return View("~/OAuth/Views/PasswordResetConfirmed.cshtml");
+            return View("~/OAuth/Views/ResetPassword/NewPasswordSet.cshtml");
         }
     }
 }

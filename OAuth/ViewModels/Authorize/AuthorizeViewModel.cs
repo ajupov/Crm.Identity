@@ -1,4 +1,4 @@
-namespace Ajupov.Identity.OAuth.ViewModels
+namespace Ajupov.Identity.OAuth.ViewModels.Authorize
 {
     public class AuthorizeViewModel
     {

@@ -47,7 +47,7 @@ namespace Ajupov.Identity.Password.Services
                 return new PostResetPasswordResponse(true);
             }
 
-            await _passwordConfirmationService.SendMessageAsync(login, userAgent, ipAddress, ct);
+            await _passwordConfirmationService.SendMessageAsync(login, ipAddress, userAgent, ct);
 
             return new PostResetPasswordResponse(false);
         }

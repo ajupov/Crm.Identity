@@ -25,7 +25,7 @@ namespace Ajupov.Identity.Email.Services
             if (token == null ||
                 token.UseDateTime.HasValue ||
                 token.ExpirationDateTime < DateTime.UtcNow ||
-                token.Type != IdentityTokenType.PhoneValidation ||
+                token.Type != IdentityTokenType.EmailValidation ||
                 token.Value != code)
             {
                 return false;

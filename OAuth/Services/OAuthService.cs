@@ -157,6 +157,11 @@ namespace Ajupov.Identity.OAuth.Services
                 case GrandType.RefreshToken:
                 {
                     var oldRefreshToken = await _refreshTokensService.GetByValueAsync(oldRefreshTokenValue, ct);
+                    if (oldRefreshToken == null)
+                    {
+                        return new TokenResponse("Invalid refresh token");
+                    }
+
                     if (oldRefreshToken.ExpirationDateTime < DateTime.UtcNow)
                     {
                         return new TokenResponse("Refresh token is expired");

@@ -14,7 +14,7 @@ namespace Ajupov.Identity.Identities.Extensions
 
         public static bool IsTypeWithPassword(this IdentityType type)
         {
-            return TypesWithPassword.ToList().Contains(type);
+            return TypesWithPassword.Contains(type);
         }
     }
 }

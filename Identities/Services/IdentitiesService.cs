@@ -166,17 +166,19 @@ namespace Ajupov.Identity.Identities.Services
             return PasswordUtils.IsVerifiedPassword(password, identity.PasswordHash);
         }
 
-        public Task ChangePasswordByProfileIdAsync(Guid profileId, string newPassword, CancellationToken ct)
+        public async Task ChangePasswordByProfileIdAsync(Guid profileId, string newPassword, CancellationToken ct)
         {
             var passwordHash = PasswordUtils.ToPasswordHash(newPassword);
 
-            return _storage.Identities
-                .Where(x => x.ProfileId == profileId && x.Type.IsTypeWithPassword())
+            await _storage.Identities
+                .Where(x => x.ProfileId == profileId && IdentityTypeExtensions.TypesWithPassword.Contains(x.Type))
                 .ForEachAsync(x =>
                 {
                     x.PasswordHash = passwordHash;
                     x.ModifyDateTime = DateTime.UtcNow;
                 }, ct);
+                
+            await _storage.SaveChangesAsync(ct);
         }
     }
 }

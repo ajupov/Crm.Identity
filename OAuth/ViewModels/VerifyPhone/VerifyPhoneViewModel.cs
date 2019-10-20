@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Ajupov.Identity.OAuth.ViewModels
+namespace Ajupov.Identity.OAuth.ViewModels.VerifyPhone
 {
     public class VerifyPhoneViewModel
     {

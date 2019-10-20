@@ -56,7 +56,7 @@ namespace Ajupov.Identity.Password.Services
             };
 
             var id = await _identityTokensService.CreateAsync(token, ct);
-            await SendCodeAsync(login, id, code);
+            await SendCodeAsync(emailIdentity.Key, id, code);
 
             return id;
         }
