@@ -33,3 +33,6 @@ _ReSharper*/
 
 # Nuget.exe
 Nuget.exe
+
+# Logs
+*.log

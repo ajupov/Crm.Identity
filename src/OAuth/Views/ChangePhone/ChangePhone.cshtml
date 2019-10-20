@@ -1,0 +1,33 @@
+@model Ajupov.Identity.src.OAuth.ViewModels.ChangePhone.ChangePhoneViewModel
+
+@{
+    Layout = "~/src/OAuth/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Изменение телефона";
+}
+
+<form method="post" action="/oauth/changephone">
+    <h2>Изменение телефона</h2>
+
+    @if (Model.IsPhoneNotChanged)
+    {
+        <p class="error">Старый и новый телефоны совпадают</p>
+    }
+
+    @if (Model.IsPhoneExists)
+    {
+        <p class="error">Телефон уже занят</p>
+    }
+
+
+    @if (Model.IsInvalidCredentials)
+    {
+        <p class="error">Неправильный старый телефон или пароль</p>
+    }
+
+    @Html.AntiForgeryToken()
+
+    <input type="tel" name="OldPhone" value="@Model.OldPhone" required="required" placeholder="Старый телефон (в формате 9999999999)" pattern="[0-9]{10}" autofocus="autofocus"/>
+    <input type="tel" name="NewPhone" value="@Model.NewPhone" required="required" placeholder="Новый телефон (в формате 9999999999)" pattern="[0-9]{10}"/>
+    <input type="password" name="Password" required="required" placeholder="Пароль" autocomplete="none"/>
+    <input type="submit" value="Изменить"/>
+</form>
