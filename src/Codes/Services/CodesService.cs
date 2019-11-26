@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Ajupov.Identity.src.Codes.Models;
-using Ajupov.Identity.src.Profiles.Models;
 using Ajupov.Infrastructure.All.HotStorage.HotStorage;
+using Crm.Identity.Codes.Models;
+using Crm.Identity.Profiles.Models;
 using Infrastructure.All.Generator;
-using Claim = Ajupov.Identity.src.Claims.Models.Claim;
+using Claim = Crm.Identity.Claims.Models.Claim;
 
-namespace Ajupov.Identity.src.Codes.Services
+namespace Crm.Identity.Codes.Services
 {
     public class CodesService : ICodesService
     {

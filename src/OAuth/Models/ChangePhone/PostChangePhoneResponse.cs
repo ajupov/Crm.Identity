@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Ajupov.Identity.src.OAuth.Models.ChangePhone
+namespace Crm.Identity.OAuth.Models.ChangePhone
 {
     public class PostChangePhoneResponse
     {

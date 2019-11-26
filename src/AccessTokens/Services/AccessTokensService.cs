@@ -4,12 +4,12 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Ajupov.Identity.src.Claims.Models;
-using Ajupov.Identity.src.OAuth.Options;
+using Crm.Identity.Claims.Models;
+using Crm.Identity.OAuth.Options;
 using Microsoft.IdentityModel.Tokens;
 using SystemClaim = System.Security.Claims.Claim;
 
-namespace Ajupov.Identity.src.AccessTokens.Services
+namespace Crm.Identity.AccessTokens.Services
 {
     public class AccessTokensService : IAccessTokensService
     {

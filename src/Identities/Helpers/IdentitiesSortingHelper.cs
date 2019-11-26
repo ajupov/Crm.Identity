@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace Ajupov.Identity.src.Identities.Helpers
+namespace Crm.Identity.Identities.Helpers
 {
     public static class IdentitiesSortingHelper
     {

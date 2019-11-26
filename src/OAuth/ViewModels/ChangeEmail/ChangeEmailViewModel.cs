@@ -1,4 +1,4 @@
-namespace Ajupov.Identity.src.OAuth.ViewModels.ChangeEmail
+namespace Crm.Identity.OAuth.ViewModels.ChangeEmail
 {
     public class ChangeEmailViewModel
     {

@@ -1,10 +1,10 @@
-using Ajupov.Identity.src.Resources.Models;
 using Ajupov.Infrastructure.All.Orm;
 using Ajupov.Infrastructure.All.Orm.Settings;
+using Crm.Identity.Resources.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace Ajupov.Identity.src.Resources.Storages
+namespace Crm.Identity.Resources.Storages
 {
     public class ResourcesStorage : Storage
     {

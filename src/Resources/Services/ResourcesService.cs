@@ -2,10 +2,10 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Ajupov.Identity.src.Resources.Storages;
+using Crm.Identity.Resources.Storages;
 using Microsoft.EntityFrameworkCore;
 
-namespace Ajupov.Identity.src.Resources.Services
+namespace Crm.Identity.Resources.Services
 {
     public class ResourcesService : IResourcesService
     {

@@ -1,9 +1,9 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Ajupov.Identity.src.OAuth.Models.ResetPassword;
+using Crm.Identity.OAuth.Models.ResetPassword;
 
-namespace Ajupov.Identity.src.Password.Services
+namespace Crm.Identity.Password.Services
 {
     public interface IPasswordResetService
     {

@@ -1,8 +1,8 @@
 using System.Threading;
 using System.Threading.Tasks;
-using Ajupov.Identity.src.OAuth.Models.ChangeEmail;
+using Crm.Identity.OAuth.Models.ChangeEmail;
 
-namespace Ajupov.Identity.src.Email.Services
+namespace Crm.Identity.Email.Services
 {
     public interface IEmailChangeService
     {

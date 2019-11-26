@@ -1,6 +1,6 @@
 ﻿using FluentMigrator;
 
-namespace Ajupov.Identity.src.Profiles.Migrations
+namespace Crm.Identity.Profiles.Migrations
 {
     [Migration(20190429232536)]
     public class Migration20190429232536AddTableProfiles : Migration

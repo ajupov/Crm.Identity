@@ -2,7 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Ajupov.Identity.src.Email.Services
+namespace Crm.Identity.Email.Services
 {
     public interface IEmailConfirmationService
     {

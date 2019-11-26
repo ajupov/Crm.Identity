@@ -2,7 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Ajupov.Identity.src.Phone.Services
+namespace Crm.Identity.Phone.Services
 {
     public interface IPhoneVerificationService
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Ajupov.Identity.src.RefreshTokens.Models
+namespace Crm.Identity.RefreshTokens.Models
 {
     public class RefreshToken
     {

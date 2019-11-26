@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Ajupov.Identity.src.OAuth.Models.ChangePassword
+namespace Crm.Identity.OAuth.Models.ChangePassword
 {
     public class PostChangePasswordRequest
     {

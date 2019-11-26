@@ -2,19 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Ajupov.Identity.src.AccessTokens.Services;
-using Ajupov.Identity.src.Claims.Services;
-using Ajupov.Identity.src.Codes.Services;
-using Ajupov.Identity.src.Identities.Extensions;
-using Ajupov.Identity.src.Identities.Services;
-using Ajupov.Identity.src.OAuth.Models.Authorize;
-using Ajupov.Identity.src.OAuth.Models.Tokens;
-using Ajupov.Identity.src.OAuth.Models.Types;
-using Ajupov.Identity.src.Profiles.Services;
-using Ajupov.Identity.src.RedirectUri.Services;
-using Ajupov.Identity.src.RefreshTokens.Services;
+using Crm.Identity.AccessTokens.Services;
+using Crm.Identity.Claims.Services;
+using Crm.Identity.Codes.Services;
+using Crm.Identity.Identities.Extensions;
+using Crm.Identity.Identities.Services;
+using Crm.Identity.OAuth.Models.Authorize;
+using Crm.Identity.OAuth.Models.Tokens;
+using Crm.Identity.OAuth.Models.Types;
+using Crm.Identity.Profiles.Services;
+using Crm.Identity.RedirectUri.Services;
+using Crm.Identity.RefreshTokens.Services;
 
-namespace Ajupov.Identity.src.OAuth.Services
+namespace Crm.Identity.OAuth.Services
 {
     public class OAuthService : IOAuthService
     {

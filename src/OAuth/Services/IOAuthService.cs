@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Ajupov.Identity.src.OAuth.Models.Authorize;
-using Ajupov.Identity.src.OAuth.Models.Tokens;
+using Crm.Identity.OAuth.Models.Authorize;
+using Crm.Identity.OAuth.Models.Tokens;
 
-namespace Ajupov.Identity.src.OAuth.Services
+namespace Crm.Identity.OAuth.Services
 {
     public interface IOAuthService
     {

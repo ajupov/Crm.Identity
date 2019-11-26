@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace Ajupov.Identity.src.OAuth.Filters
+namespace Crm.Identity.OAuth.Filters
 {
     public class ValidationFilter : IAsyncActionFilter
     {

@@ -1,13 +1,13 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Ajupov.Identity.src.Email.Services;
-using Ajupov.Identity.src.Identities.Models;
-using Ajupov.Identity.src.Identities.Services;
 using Ajupov.Infrastructure.All.SmsSending.SmsSender;
+using Crm.Identity.Email.Services;
+using Crm.Identity.Identities.Models;
+using Crm.Identity.Identities.Services;
 using Microsoft.Extensions.Logging;
 
-namespace Ajupov.Identity.src.Phone.Services
+namespace Crm.Identity.Phone.Services
 {
     public class PhoneConfirmationService : IPhoneConfirmationService
     {

@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Ajupov.Identity.src.OAuthClients.Helpers;
-using Ajupov.Identity.src.OAuthClients.Models;
-using Ajupov.Identity.src.OAuthClients.Requests;
-using Ajupov.Identity.src.OAuthClients.Storages;
+using Crm.Identity.OAuthClients.Helpers;
+using Crm.Identity.OAuthClients.Models;
+using Crm.Identity.OAuthClients.Requests;
+using Crm.Identity.OAuthClients.Storages;
 using Microsoft.EntityFrameworkCore;
 using PasswordUtils = Ajupov.Utils.All.Password.Password;
 
-namespace Ajupov.Identity.src.OAuthClients.Services
+namespace Crm.Identity.OAuthClients.Services
 {
     public class OAuthClientsService : IOAuthClientsService
     {

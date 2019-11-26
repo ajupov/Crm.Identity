@@ -1,6 +1,6 @@
 ﻿using FluentMigrator;
 
-namespace Ajupov.Identity.src.OAuthClients.Migrations
+namespace Crm.Identity.OAuthClients.Migrations
 {
     [Migration(20190907193725)]
     public class Migration20190907193725AddTableOAuthClients : Migration

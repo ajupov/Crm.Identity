@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Ajupov.Identity.src.Identities.Extensions;
-using Ajupov.Identity.src.Identities.Helpers;
-using Ajupov.Identity.src.Identities.Models;
-using Ajupov.Identity.src.Identities.Requests;
-using Ajupov.Identity.src.Identities.Storages;
+using Crm.Identity.Identities.Extensions;
+using Crm.Identity.Identities.Helpers;
+using Crm.Identity.Identities.Models;
+using Crm.Identity.Identities.Requests;
+using Crm.Identity.Identities.Storages;
 using Microsoft.EntityFrameworkCore;
 using PasswordUtils = Ajupov.Utils.All.Password.Password;
 
-namespace Ajupov.Identity.src.Identities.Services
+namespace Crm.Identity.Identities.Services
 {
     public class IdentitiesService : IIdentitiesService
     {

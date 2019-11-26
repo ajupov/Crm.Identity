@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Ajupov.Identity.src.OAuth.Attributes.Validation;
+using Crm.Identity.OAuth.Attributes.Validation;
 
-namespace Ajupov.Identity.src.OAuth.Models.Register
+namespace Crm.Identity.OAuth.Models.Register
 {
     public class PostRegisterRequest
     {

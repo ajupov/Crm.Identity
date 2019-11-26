@@ -1,4 +1,4 @@
-namespace Ajupov.Identity.src.OAuth.ViewModels.ResetPassword
+namespace Crm.Identity.OAuth.ViewModels.ResetPassword
 {
     public class ResetPasswordViewModel
     {

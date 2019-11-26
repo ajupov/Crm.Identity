@@ -2,6 +2,7 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.0-alpine AS build
 WORKDIR /app
 
 COPY *.csproj ./
+COPY NuGet.config ./
 RUN dotnet restore
 
 COPY src ./
@@ -13,4 +14,4 @@ WORKDIR /app
 
 COPY --from=build /app/out .
 ENTRYPOINT ["dotnet", "Crm.Identity.dll"]
-EXPOSE 3000
+EXPOSE 3000 3001

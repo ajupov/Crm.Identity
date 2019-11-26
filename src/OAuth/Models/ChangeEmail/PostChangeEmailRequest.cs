@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Ajupov.Identity.src.OAuth.Models.ChangeEmail
+namespace Crm.Identity.OAuth.Models.ChangeEmail
 {
     public class PostChangeEmailRequest
     {

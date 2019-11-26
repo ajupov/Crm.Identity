@@ -1,6 +1,6 @@
-using Ajupov.Identity.src.OAuth.Attributes.Validation;
+using Crm.Identity.OAuth.Attributes.Validation;
 
-namespace Ajupov.Identity.src.OAuth.Models.Authorize
+namespace Crm.Identity.OAuth.Models.Authorize
 {
     public class GetAuthorizeRequest
     {

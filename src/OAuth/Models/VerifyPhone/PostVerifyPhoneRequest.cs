@@ -1,7 +1,7 @@
 ﻿using System;
 using ServiceStack.DataAnnotations;
 
-namespace Ajupov.Identity.src.OAuth.Models.VerifyPhone
+namespace Crm.Identity.OAuth.Models.VerifyPhone
 {
     public class PostVerifyPhoneRequest
     {

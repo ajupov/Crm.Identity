@@ -1,13 +1,13 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Ajupov.Identity.src.Identities.Extensions;
-using Ajupov.Identity.src.Identities.Models;
-using Ajupov.Identity.src.Identities.Services;
-using Ajupov.Identity.src.OAuth.Models.ResetPassword;
-using Ajupov.Identity.src.Profiles.Services;
+using Crm.Identity.Identities.Extensions;
+using Crm.Identity.Identities.Models;
+using Crm.Identity.Identities.Services;
+using Crm.Identity.OAuth.Models.ResetPassword;
+using Crm.Identity.Profiles.Services;
 
-namespace Ajupov.Identity.src.Password.Services
+namespace Crm.Identity.Password.Services
 {
     public class PasswordResetService : IPasswordResetService
     {

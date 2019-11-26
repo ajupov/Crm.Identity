@@ -1,6 +1,6 @@
 using System;
 
-namespace Ajupov.Identity.src.OAuthClients.Requests
+namespace Crm.Identity.OAuthClients.Requests
 {
     public class OAuthClientsGetPagedListRequest
     {

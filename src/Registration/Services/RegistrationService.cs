@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Ajupov.Identity.src.Email.Services;
-using Ajupov.Identity.src.Phone.Services;
-using Ajupov.Identity.src.Profiles.Models;
-using Ajupov.Identity.src.Profiles.Services;
+using Crm.Identity.Email.Services;
+using Crm.Identity.Phone.Services;
+using Crm.Identity.Profiles.Models;
+using Crm.Identity.Profiles.Services;
 using PasswordUtils = Ajupov.Utils.All.Password.Password;
 
-namespace Ajupov.Identity.src.Registration.Services
+namespace Crm.Identity.Registration.Services
 {
     public class RegistrationService : IRegistrationService
     {

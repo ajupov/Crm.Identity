@@ -1,7 +1,7 @@
 using System;
-using Ajupov.Identity.src.Profiles.Models;
+using Crm.Identity.Profiles.Models;
 
-namespace Ajupov.Identity.src.Profiles.Requests
+namespace Crm.Identity.Profiles.Requests
 {
     public class ProfilesGetPagedListRequest
     {

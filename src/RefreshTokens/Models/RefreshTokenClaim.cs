@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Ajupov.Identity.src.RefreshTokens.Models
+namespace Crm.Identity.RefreshTokens.Models
 {
     public class RefreshTokenClaim
     {

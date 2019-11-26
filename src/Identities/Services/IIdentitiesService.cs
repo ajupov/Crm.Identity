@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Ajupov.Identity.src.Identities.Models;
-using Ajupov.Identity.src.Identities.Requests;
+using Crm.Identity.Identities.Models;
+using Crm.Identity.Identities.Requests;
 
-namespace Ajupov.Identity.src.Identities.Services
+namespace Crm.Identity.Identities.Services
 {
     public interface IIdentitiesService
     {

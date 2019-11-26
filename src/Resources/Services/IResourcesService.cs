@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Ajupov.Identity.src.Resources.Services
+namespace Crm.Identity.Resources.Services
 {
     public interface IResourcesService
     {

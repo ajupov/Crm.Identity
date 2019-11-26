@@ -1,17 +1,17 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Ajupov.Identity.src.Email.Services;
-using Ajupov.Identity.src.Identities.Extensions;
-using Ajupov.Identity.src.Identities.Models;
-using Ajupov.Identity.src.Identities.Services;
-using Ajupov.Identity.src.Password.Settings;
 using Ajupov.Infrastructure.All.MailSending.MailSender;
+using Crm.Identity.Email.Services;
+using Crm.Identity.Identities.Extensions;
+using Crm.Identity.Identities.Models;
+using Crm.Identity.Identities.Services;
+using Crm.Identity.Password.Settings;
 using Infrastructure.All.Generator;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Ajupov.Identity.src.Password.Services
+namespace Crm.Identity.Password.Services
 {
     public class PasswordConfirmationService : IPasswordConfirmationService
     {
@@ -70,7 +70,7 @@ namespace Ajupov.Identity.src.Password.Services
 
             try
             {
-                return _mailSender.SendAsync(_settings.FromName, _settings.FromAddress, subject, emails, true, message);
+                return _mailSender.SendAsync("No reply", _settings.FromAddress, subject, emails, true, message);
             }
             catch (Exception ex)
             {

@@ -1,4 +1,4 @@
-﻿namespace Ajupov.Identity.src.Claims.Models
+﻿namespace Crm.Identity.Claims.Models
 {
     public class Claim
     {

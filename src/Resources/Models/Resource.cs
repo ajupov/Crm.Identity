@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Ajupov.Identity.src.Resources.Models
+namespace Crm.Identity.Resources.Models
 {
     public class Resource
     {

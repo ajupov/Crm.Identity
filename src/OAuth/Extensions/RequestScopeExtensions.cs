@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Ajupov.Identity.src.OAuth.Extensions
+namespace Crm.Identity.OAuth.Extensions
 {
     public static class RequestScopeExtensions
     {

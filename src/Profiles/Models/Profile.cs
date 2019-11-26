@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Ajupov.Identity.src.Profiles.Models
+namespace Crm.Identity.Profiles.Models
 {
     public class Profile
     {

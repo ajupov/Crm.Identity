@@ -2,7 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Ajupov.Identity.src.Registration.Services
+namespace Crm.Identity.Registration.Services
 {
     public interface IRegistrationIdentityService
     {

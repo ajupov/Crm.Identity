@@ -3,16 +3,16 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
-using Ajupov.Identity.src.Identities.Models;
-using Ajupov.Identity.src.Identities.Requests;
-using Ajupov.Identity.src.Identities.Services;
-using Ajupov.Identity.src.Profiles.Models;
-using Ajupov.Identity.src.RefreshTokens.Models;
-using Ajupov.Identity.src.Resources.Services;
 using Ajupov.Utils.All.String;
-using Claim = Ajupov.Identity.src.Claims.Models.Claim;
+using Crm.Identity.Identities.Models;
+using Crm.Identity.Identities.Requests;
+using Crm.Identity.Identities.Services;
+using Crm.Identity.Profiles.Models;
+using Crm.Identity.RefreshTokens.Models;
+using Crm.Identity.Resources.Services;
+using Claim = Crm.Identity.Claims.Models.Claim;
 
-namespace Ajupov.Identity.src.Claims.Services
+namespace Crm.Identity.Claims.Services
 {
     public class ClaimsService : IClaimsService
     {

@@ -1,15 +1,15 @@
 ﻿using System.Linq;
 using System.Text.RegularExpressions;
-using Ajupov.Identity.src.OAuth.Extensions;
-using Ajupov.Identity.src.OAuth.Models.Authorize;
-using Ajupov.Identity.src.OAuth.Models.Register;
-using Ajupov.Identity.src.OAuth.Models.Tokens;
-using Ajupov.Identity.src.OAuth.Models.Types;
-using Ajupov.Identity.src.OAuthClients.Models;
 using Ajupov.Utils.All.String;
+using Crm.Identity.OAuth.Extensions;
+using Crm.Identity.OAuth.Models.Authorize;
+using Crm.Identity.OAuth.Models.Register;
+using Crm.Identity.OAuth.Models.Tokens;
+using Crm.Identity.OAuth.Models.Types;
+using Crm.Identity.OAuthClients.Models;
 using PasswordUtils = Ajupov.Utils.All.Password.Password;
 
-namespace Ajupov.Identity.src.OAuth.Validators
+namespace Crm.Identity.OAuth.Validators
 {
     public static class OAuthClientValidator
     {

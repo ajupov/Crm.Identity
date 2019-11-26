@@ -1,11 +1,11 @@
 using System.Threading;
 using System.Threading.Tasks;
-using Ajupov.Identity.src.Identities.Models;
-using Ajupov.Identity.src.Identities.Services;
-using Ajupov.Identity.src.OAuth.Models.ChangePhone;
-using Ajupov.Identity.src.Profiles.Services;
+using Crm.Identity.Identities.Models;
+using Crm.Identity.Identities.Services;
+using Crm.Identity.OAuth.Models.ChangePhone;
+using Crm.Identity.Profiles.Services;
 
-namespace Ajupov.Identity.src.Phone.Services
+namespace Crm.Identity.Phone.Services
 {
     public class PhoneChangeService : IPhoneChangeService
     {

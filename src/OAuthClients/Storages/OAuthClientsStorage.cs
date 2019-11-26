@@ -1,10 +1,10 @@
-using Ajupov.Identity.src.OAuthClients.Models;
 using Ajupov.Infrastructure.All.Orm;
 using Ajupov.Infrastructure.All.Orm.Settings;
+using Crm.Identity.OAuthClients.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace Ajupov.Identity.src.OAuthClients.Storages
+namespace Crm.Identity.OAuthClients.Storages
 {
     public class OAuthClientsStorage : Storage
     {

@@ -1,8 +1,8 @@
 using System.Threading;
 using System.Threading.Tasks;
-using Ajupov.Identity.src.OAuth.Models.ChangePassword;
+using Crm.Identity.OAuth.Models.ChangePassword;
 
-namespace Ajupov.Identity.src.Password.Services
+namespace Crm.Identity.Password.Services
 {
     public interface IPasswordChangeService
     {

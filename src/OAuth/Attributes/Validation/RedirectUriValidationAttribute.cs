@@ -1,10 +1,10 @@
 using System.ComponentModel.DataAnnotations;
-using Ajupov.Identity.src.OAuth.Models.Authorize;
-using Ajupov.Identity.src.OAuth.Models.Tokens;
-using Ajupov.Identity.src.OAuth.Models.Types;
 using Ajupov.Utils.All.String;
+using Crm.Identity.OAuth.Models.Authorize;
+using Crm.Identity.OAuth.Models.Tokens;
+using Crm.Identity.OAuth.Models.Types;
 
-namespace Ajupov.Identity.src.OAuth.Attributes.Validation
+namespace Crm.Identity.OAuth.Attributes.Validation
 {
     public class RedirectUriValidationAttribute : ValidationAttribute
     {

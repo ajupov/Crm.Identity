@@ -1,4 +1,4 @@
-namespace Ajupov.Identity.src.OAuth.ViewModels.ChangePhone
+namespace Crm.Identity.OAuth.ViewModels.ChangePhone
 {
     public class ChangePhoneViewModel
     {

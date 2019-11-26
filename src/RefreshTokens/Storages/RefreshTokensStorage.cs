@@ -1,10 +1,10 @@
-﻿using Ajupov.Identity.src.RefreshTokens.Models;
-using Ajupov.Infrastructure.All.Orm;
+﻿using Ajupov.Infrastructure.All.Orm;
 using Ajupov.Infrastructure.All.Orm.Settings;
+using Crm.Identity.RefreshTokens.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace Ajupov.Identity.src.RefreshTokens.Storages
+namespace Crm.Identity.RefreshTokens.Storages
 {
     public class RefreshTokensStorage : Storage
     {

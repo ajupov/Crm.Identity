@@ -1,10 +1,10 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Ajupov.Identity.src.Identities.Models;
-using Ajupov.Identity.src.Identities.Services;
+using Crm.Identity.Identities.Models;
+using Crm.Identity.Identities.Services;
 
-namespace Ajupov.Identity.src.Email.Services
+namespace Crm.Identity.Email.Services
 {
     public class EmailVerificationService : IEmailVerificationService
     {

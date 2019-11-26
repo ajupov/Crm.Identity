@@ -1,4 +1,4 @@
-namespace Ajupov.Identity.src.OAuth.Models.ResetPassword
+namespace Crm.Identity.OAuth.Models.ResetPassword
 {
     public class PostResetPasswordRequest
     {

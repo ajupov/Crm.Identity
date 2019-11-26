@@ -1,4 +1,4 @@
-﻿namespace Ajupov.Identity.src.OAuth.Models.Authorize
+﻿namespace Crm.Identity.OAuth.Models.Authorize
 {
     public class PostAuthorizeResponse
     {

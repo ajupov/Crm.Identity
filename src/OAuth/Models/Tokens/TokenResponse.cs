@@ -1,6 +1,6 @@
 using System;
 
-namespace Ajupov.Identity.src.OAuth.Models.Tokens
+namespace Crm.Identity.OAuth.Models.Tokens
 {
     public class TokenResponse
     {

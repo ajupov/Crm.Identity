@@ -2,11 +2,11 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Ajupov.Identity.src.Identities.Models;
-using Ajupov.Identity.src.Identities.Storages;
+using Crm.Identity.Identities.Models;
+using Crm.Identity.Identities.Storages;
 using Microsoft.EntityFrameworkCore;
 
-namespace Ajupov.Identity.src.Identities.Services
+namespace Crm.Identity.Identities.Services
 {
     public class IdentityTokensService : IIdentityTokensService
     {

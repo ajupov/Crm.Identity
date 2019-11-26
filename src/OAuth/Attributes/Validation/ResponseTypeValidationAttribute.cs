@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
-using Ajupov.Identity.src.OAuth.Models.Types;
+using Crm.Identity.OAuth.Models.Types;
 
-namespace Ajupov.Identity.src.OAuth.Attributes.Validation
+namespace Crm.Identity.OAuth.Attributes.Validation
 {
     public class ResponseTypeValidationAttribute : ValidationAttribute
     {

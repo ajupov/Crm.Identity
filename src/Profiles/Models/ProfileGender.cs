@@ -1,4 +1,4 @@
-﻿namespace Ajupov.Identity.src.Profiles.Models
+﻿namespace Crm.Identity.Profiles.Models
 {
     public enum ProfileGender : byte
     {

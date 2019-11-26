@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Ajupov.Identity.src.Claims.Models;
+using Crm.Identity.Claims.Models;
 
-namespace Ajupov.Identity.src.AccessTokens.Services
+namespace Crm.Identity.AccessTokens.Services
 {
     public interface IAccessTokensService
     {

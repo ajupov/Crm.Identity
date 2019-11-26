@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Ajupov.Identity.src.OAuth.Models.VerifyEmail
+namespace Crm.Identity.OAuth.Models.VerifyEmail
 {
     public class VerifyEmailRequest
     {

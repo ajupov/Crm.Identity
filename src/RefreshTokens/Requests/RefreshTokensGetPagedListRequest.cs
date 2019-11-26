@@ -1,6 +1,6 @@
 using System;
 
-namespace Ajupov.Identity.src.RefreshTokens.Requests
+namespace Crm.Identity.RefreshTokens.Requests
 {
     public class RefreshTokensGetPagedListRequest
     {

@@ -1,4 +1,4 @@
-namespace Ajupov.Identity.src.OAuth.Models.Types
+namespace Crm.Identity.OAuth.Models.Types
 {
     public static class GrandType
     {

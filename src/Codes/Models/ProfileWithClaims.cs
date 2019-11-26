@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using Ajupov.Identity.src.Claims.Models;
-using Ajupov.Identity.src.Profiles.Models;
+using Crm.Identity.Claims.Models;
+using Crm.Identity.Profiles.Models;
 
-namespace Ajupov.Identity.src.Codes.Models
+namespace Crm.Identity.Codes.Models
 {
     public class ProfileWithClaims
     {

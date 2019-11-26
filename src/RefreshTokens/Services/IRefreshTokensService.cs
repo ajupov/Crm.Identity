@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Ajupov.Identity.src.Claims.Models;
-using Ajupov.Identity.src.Profiles.Models;
-using Ajupov.Identity.src.RefreshTokens.Models;
+using Crm.Identity.Claims.Models;
+using Crm.Identity.Profiles.Models;
+using Crm.Identity.RefreshTokens.Models;
 
-namespace Ajupov.Identity.src.RefreshTokens.Services
+namespace Crm.Identity.RefreshTokens.Services
 {
     public interface IRefreshTokensService
     {

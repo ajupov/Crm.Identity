@@ -1,15 +1,15 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Ajupov.Identity.src.Email.Settings;
-using Ajupov.Identity.src.Identities.Models;
-using Ajupov.Identity.src.Identities.Services;
 using Ajupov.Infrastructure.All.MailSending.MailSender;
+using Crm.Identity.Email.Settings;
+using Crm.Identity.Identities.Models;
+using Crm.Identity.Identities.Services;
 using Infrastructure.All.Generator;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Ajupov.Identity.src.Email.Services
+namespace Crm.Identity.Email.Services
 {
     public class EmailConfirmationService : IEmailConfirmationService
     {
@@ -66,7 +66,7 @@ namespace Ajupov.Identity.src.Email.Services
 
             try
             {
-                return _mailSender.SendAsync(_settings.FromName, _settings.FromAddress, subject, emails, true, message);
+                return _mailSender.SendAsync("No reply", _settings.FromAddress, subject, emails, true, message);
             }
             catch (Exception ex)
             {

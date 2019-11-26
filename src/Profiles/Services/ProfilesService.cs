@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Ajupov.Identity.src.Profiles.Helpers;
-using Ajupov.Identity.src.Profiles.Models;
-using Ajupov.Identity.src.Profiles.Requests;
-using Ajupov.Identity.src.Profiles.Storages;
 using Ajupov.Utils.All.String;
+using Crm.Identity.Profiles.Helpers;
+using Crm.Identity.Profiles.Models;
+using Crm.Identity.Profiles.Requests;
+using Crm.Identity.Profiles.Storages;
 using Microsoft.EntityFrameworkCore;
 
-namespace Ajupov.Identity.src.Profiles.Services
+namespace Crm.Identity.Profiles.Services
 {
     public class ProfilesService : IProfilesService
     {

@@ -1,7 +1,7 @@
 ﻿using System.Linq;
-using Ajupov.Identity.src.OAuthClients.Models;
+using Crm.Identity.OAuthClients.Models;
 
-namespace Ajupov.Identity.src.OAuthClients.Helpers
+namespace Crm.Identity.OAuthClients.Helpers
 {
     public static class OAuthClientsSortingHelper
     {

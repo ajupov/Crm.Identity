@@ -2,7 +2,7 @@
 using FluentMigrator;
 using PasswordUtils = Ajupov.Utils.All.Password.Password;
 
-namespace Ajupov.Identity.src.OAuthClients.Migrations
+namespace Crm.Identity.OAuthClients.Migrations
 {
     [Migration(20190915194015)]
     public class Migration20190915194015InsertOAuthClients : Migration

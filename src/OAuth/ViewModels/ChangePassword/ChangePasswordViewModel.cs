@@ -1,4 +1,4 @@
-namespace Ajupov.Identity.src.OAuth.ViewModels.ChangePassword
+namespace Crm.Identity.OAuth.ViewModels.ChangePassword
 {
     public class ChangePasswordViewModel
     {

@@ -1,4 +1,4 @@
-namespace Ajupov.Identity.src.OAuth.ViewModels.Register
+namespace Crm.Identity.OAuth.ViewModels.Register
 {
     public class RegisterViewModel
     {

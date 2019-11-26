@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Ajupov.Identity.src.OAuthClients.Models
+namespace Crm.Identity.OAuthClients.Models
 {
     public class OAuthClient
     {

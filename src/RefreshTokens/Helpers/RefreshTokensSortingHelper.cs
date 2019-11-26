@@ -1,7 +1,7 @@
 ﻿using System.Linq;
-using Ajupov.Identity.src.RefreshTokens.Models;
+using Crm.Identity.RefreshTokens.Models;
 
-namespace Ajupov.Identity.src.RefreshTokens.Helpers
+namespace Crm.Identity.RefreshTokens.Helpers
 {
     public static class RefreshTokensSortingHelper
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Ajupov.Identity.src.Identities.Models
+namespace Crm.Identity.Identities.Models
 {
     public class Identity
     {

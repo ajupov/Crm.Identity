@@ -1,8 +1,8 @@
 using System.Threading;
 using System.Threading.Tasks;
-using Ajupov.Identity.src.OAuth.Models.ChangePhone;
+using Crm.Identity.OAuth.Models.ChangePhone;
 
-namespace Ajupov.Identity.src.Phone.Services
+namespace Crm.Identity.Phone.Services
 {
     public interface IPhoneChangeService
     {
