@@ -15,6 +15,7 @@ x86/
 [Bb]in/
 [Oo]bj/
 [Ll]og/
+[Oo]ut/
 
 # ReSharper is a .NET coding add-in
 _ReSharper*/

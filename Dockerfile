@@ -1,12 +1,12 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:3.0-alpine AS build
 WORKDIR /app
 
-COPY *.csproj ./
+COPY src/*.csproj ./
 COPY NuGet.config ./
 RUN dotnet restore
 
 COPY src ./
-COPY appsettings.json ./
+COPY src/appsettings.json ./
 RUN dotnet publish -c Release -o out
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.0-alpine AS runtime
