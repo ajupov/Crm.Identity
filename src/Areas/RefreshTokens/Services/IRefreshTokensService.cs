@@ -15,8 +15,8 @@ namespace Crm.Identity.Areas.RefreshTokens.Services
         Task<string> CreateAsync(
             IEnumerable<Claim> claims,
             Profile profile,
-            string userAgent,
             string ipAddress,
+            string userAgent,
             CancellationToken ct);
 
         Task SetExpiredAsync(Guid id, CancellationToken ct);

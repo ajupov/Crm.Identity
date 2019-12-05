@@ -167,8 +167,8 @@ namespace Crm.Identity.Areas.OAuth.Controllers
                 request.response_type,
                 request.redirect_uri,
                 request.state,
-                UserAgent,
                 IpAddress,
+                UserAgent,
                 request.scope.ToList(),
                 ct);
 
@@ -273,8 +273,8 @@ namespace Crm.Identity.Areas.OAuth.Controllers
                 request.response_type,
                 request.redirect_uri,
                 request.state,
-                UserAgent,
                 IpAddress,
+                UserAgent,
                 request.scope.ToList(),
                 ct);
 
@@ -329,8 +329,8 @@ namespace Crm.Identity.Areas.OAuth.Controllers
                 request.username,
                 request.password,
                 request.refresh_token,
-                UserAgent,
                 IpAddress,
+                UserAgent,
                 client.Scopes.Select(x => x.Value).ToList(),
                 ct);
 
@@ -388,8 +388,8 @@ namespace Crm.Identity.Areas.OAuth.Controllers
                 request.OldEmail,
                 request.NewEmail,
                 request.Password,
-                UserAgent,
                 IpAddress,
+                UserAgent,
                 ct);
 
             if (response.IsInvalidCredentials)
@@ -465,8 +465,8 @@ namespace Crm.Identity.Areas.OAuth.Controllers
                 request.OldPhone,
                 request.NewPhone,
                 request.Password,
-                UserAgent,
                 IpAddress,
+                UserAgent,
                 ct);
 
             if (response.IsInvalidCredentials)
@@ -588,7 +588,12 @@ namespace Crm.Identity.Areas.OAuth.Controllers
             [FromForm] PostResetPasswordRequest request,
             CancellationToken ct)
         {
-            var response = await _passwordResetService.SendResetMessageAsync(request.Login, UserAgent, IpAddress, ct);
+            var response = await _passwordResetService.SendResetMessageAsync(
+                request.Login,
+                IpAddress,
+                UserAgent,
+                ct);
+            
             if (response.IsInvalidLogin)
             {
                 var getResetPasswordRequest = new GetResetPasswordRequest

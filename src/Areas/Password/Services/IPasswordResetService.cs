@@ -9,8 +9,8 @@ namespace Crm.Identity.Areas.Password.Services
     {
         Task<PostResetPasswordResponse> SendResetMessageAsync(
             string login,
-            string userAgent,
             string ipAddress,
+            string userAgent,
             CancellationToken ct);
 
         Task<bool> IsTokenValidAsync(Guid tokenId, string code, CancellationToken ct);

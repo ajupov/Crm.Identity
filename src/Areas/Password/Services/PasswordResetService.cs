@@ -30,8 +30,8 @@ namespace Crm.Identity.Areas.Password.Services
 
         public async Task<PostResetPasswordResponse> SendResetMessageAsync(
             string login,
-            string userAgent,
             string ipAddress,
+            string userAgent,
             CancellationToken ct)
         {
             var identityTypes = IdentityTypeExtensions.TypesWithPassword;

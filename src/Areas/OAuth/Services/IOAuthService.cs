@@ -14,8 +14,8 @@ namespace Crm.Identity.Areas.OAuth.Services
             string responseType,
             string redirectUri,
             string state,
-            string userAgent,
             string ipAddress,
+            string userAgent,
             IEnumerable<string> scopes,
             CancellationToken ct);
 
@@ -25,8 +25,8 @@ namespace Crm.Identity.Areas.OAuth.Services
             string userName,
             string password,
             string oldRefreshTokenValue,
-            string userAgent,
             string ipAddress,
+            string userAgent,
             IEnumerable<string> scopes,
             CancellationToken ct);
     }

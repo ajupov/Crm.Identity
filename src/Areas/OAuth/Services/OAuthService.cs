@@ -50,8 +50,8 @@ namespace Crm.Identity.Areas.OAuth.Services
             string responseType,
             string redirectUri,
             string state,
-            string userAgent,
             string ipAddress,
+            string userAgent,
             IEnumerable<string> scopes,
             CancellationToken ct)
         {
@@ -89,7 +89,7 @@ namespace Crm.Identity.Areas.OAuth.Services
                 {
                     var accessToken = await _accessTokensService.CreateAsync(claims, ct);
                     var refreshToken =
-                        await _refreshTokensService.CreateAsync(claims, profile, userAgent, ipAddress, ct);
+                        await _refreshTokensService.CreateAsync(claims, profile, ipAddress, userAgent, ct);
                     var callbackUri = _callbackUriService.GetByTokens(redirectUri, state, accessToken, refreshToken);
 
                     return new PostAuthorizeResponse(callbackUri, false);
@@ -105,8 +105,8 @@ namespace Crm.Identity.Areas.OAuth.Services
             string userName,
             string password,
             string oldRefreshTokenValue,
-            string userAgent,
             string ipAddress,
+            string userAgent,
             IEnumerable<string> scopes,
             CancellationToken ct)
         {
@@ -122,7 +122,7 @@ namespace Crm.Identity.Areas.OAuth.Services
 
                     var accessToken = await _accessTokensService.CreateAsync(profileWithClaims.Claims, ct);
                     var refreshToken = await _refreshTokensService.CreateAsync(profileWithClaims.Claims,
-                        profileWithClaims.Profile, userAgent, ipAddress, ct);
+                        profileWithClaims.Profile, ipAddress, userAgent, ct);
 
                     return new TokenResponse(accessToken, refreshToken);
                 }
@@ -150,7 +150,7 @@ namespace Crm.Identity.Areas.OAuth.Services
                     var claims = await _claimsService.GetByScopesAsync(scopes, profile, ct);
                     var accessToken = await _accessTokensService.CreateAsync(claims, ct);
                     var refreshToken =
-                        await _refreshTokensService.CreateAsync(claims, profile, userAgent, ipAddress, ct);
+                        await _refreshTokensService.CreateAsync(claims, profile, ipAddress, userAgent, ct);
 
                     return new TokenResponse(accessToken, refreshToken);
                 }
@@ -178,7 +178,7 @@ namespace Crm.Identity.Areas.OAuth.Services
                     var claims = await _claimsService.GetByRefreshTokenAsync(oldRefreshToken, profile, ct);
                     var accessToken = await _accessTokensService.CreateAsync(claims, ct);
                     var refreshToken =
-                        await _refreshTokensService.CreateAsync(claims, profile, userAgent, ipAddress, ct);
+                        await _refreshTokensService.CreateAsync(claims, profile, ipAddress, userAgent, ct);
 
                     return new TokenResponse(accessToken, refreshToken);
                 }

@@ -32,8 +32,8 @@ namespace Crm.Identity.Areas.RefreshTokens.Services
         public async Task<string> CreateAsync(
             IEnumerable<Claim> claims,
             Profile profile,
-            string userAgent,
             string ipAddress,
+            string userAgent,
             CancellationToken ct)
         {
             var now = DateTime.UtcNow;
@@ -53,8 +53,8 @@ namespace Crm.Identity.Areas.RefreshTokens.Services
                 }).ToList(),
                 CreateDateTime = now,
                 ExpirationDateTime = now.AddDays(60),
-                UserAgent = userAgent,
-                IpAddress = ipAddress
+                IpAddress = ipAddress,
+                UserAgent = userAgent
             };
 
             var entry = await _storage.AddAsync(refreshToken, ct);

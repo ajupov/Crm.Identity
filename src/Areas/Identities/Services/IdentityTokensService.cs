@@ -34,8 +34,8 @@ namespace Crm.Identity.Areas.Identities.Services
                 Value = token.Value,
                 CreateDateTime = DateTime.UtcNow,
                 ExpirationDateTime = token.ExpirationDateTime,
-                UserAgent = token.UserAgent,
-                IpAddress = token.IpAddress
+                IpAddress = token.IpAddress,
+                UserAgent = token.UserAgent
             };
 
             var entry = await _storage.AddAsync(newToken, ct);
