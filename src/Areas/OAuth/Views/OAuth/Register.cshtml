@@ -1,4 +1,6 @@
+@using Crm.Identity.Areas.Phone.Services
 @model Crm.Identity.Areas.OAuth.ViewModels.Register.RegisterViewModel
+@inject IPhonePrefixGetter PhonePrefixGetter
 
 @{
     Layout = "../Shared/_Layout";
@@ -39,7 +41,8 @@
     <input type="text" name="Name" value="@Model.Name" required="required" placeholder="Имя"/>
     <input type="text" name="Login" value="@Model.Login" required="required" placeholder="Логин" autocomplete="none"/>
     <input type="email" name="Email" value="@Model.Email" required="required" placeholder="Email"/>
-    <input type="tel" name="Phone" value="@Model.Phone" required="required" placeholder="Телефон (в формате 9999999999)" pattern="[0-9]{10}"/>
+    <span class="phone-prefix">@PhonePrefixGetter.GetFull()</span>
+    <input class="phone-value" type="tel" name="Phone" value="@Model.Phone" required="required" placeholder="Телефон (в формате 9999999999)" pattern="[0-9]{10}"/>
     <input type="password" name="Password" required="required" placeholder="Пароль" autocomplete="none" minlength="6"/>
     <input type="password" name="PasswordConfirmation" required="required" placeholder="Повтор пароля" autocomplete="none" minlength="6"/>
     <input type="submit" value="Зарегистрироваться"/>

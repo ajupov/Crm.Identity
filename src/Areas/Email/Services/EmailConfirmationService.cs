@@ -66,7 +66,7 @@ namespace Crm.Identity.Areas.Email.Services
 
             try
             {
-                return _mailSender.SendAsync("No reply", _settings.FromAddress, subject, emails, true, message);
+                return _mailSender.SendAsync(_settings.FromName, _settings.FromAddress, subject, emails, true, message);
             }
             catch (Exception ex)
             {

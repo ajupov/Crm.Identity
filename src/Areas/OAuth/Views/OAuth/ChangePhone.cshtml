@@ -1,4 +1,6 @@
+@using Crm.Identity.Areas.Phone.Services
 @model Crm.Identity.Areas.OAuth.ViewModels.ChangePhone.ChangePhoneViewModel
+@inject IPhonePrefixGetter PhonePrefixGetter
 
 @{
     Layout = "../Shared/_Layout";
@@ -18,7 +20,6 @@
         <p class="error">Телефон уже занят</p>
     }
 
-
     @if (Model.IsInvalidCredentials)
     {
         <p class="error">Неправильный старый телефон или пароль</p>
@@ -26,8 +27,10 @@
 
     @Html.AntiForgeryToken()
 
-    <input type="tel" name="OldPhone" value="@Model.OldPhone" required="required" placeholder="Старый телефон (в формате 9999999999)" pattern="[0-9]{10}" autofocus="autofocus"/>
-    <input type="tel" name="NewPhone" value="@Model.NewPhone" required="required" placeholder="Новый телефон (в формате 9999999999)" pattern="[0-9]{10}"/>
+    <span class="phone-prefix">@PhonePrefixGetter.GetFull()</span>
+    <input class="phone-value" type="tel" name="OldPhone" value="@Model.OldPhone" required="required" placeholder="Старый телефон (в формате 9999999999)" pattern="[0-9]{10}" autofocus="autofocus"/>
+    <span class="phone-prefix">@PhonePrefixGetter.GetFull()</span>
+    <input class="phone-value" type="tel" name="NewPhone" value="@Model.NewPhone" required="required" placeholder="Новый телефон (в формате 9999999999)" pattern="[0-9]{10}"/>
     <input type="password" name="Password" required="required" placeholder="Пароль" autocomplete="none"/>
     <input type="submit" value="Изменить"/>
 </form>

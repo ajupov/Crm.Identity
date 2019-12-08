@@ -2,30 +2,28 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Ajupov.Infrastructure.All.SmsSending.SmsSender;
-using Crm.Identity.Areas.Email.Services;
 using Crm.Identity.Areas.Identities.Models;
 using Crm.Identity.Areas.Identities.Services;
-using Microsoft.Extensions.Logging;
 
 namespace Crm.Identity.Areas.Phone.Services
 {
     public class PhoneConfirmationService : IPhoneConfirmationService
     {
-        private readonly ILogger<EmailConfirmationService> _logger;
         private readonly IIdentitiesService _identitiesService;
         private readonly IIdentityTokensService _identityTokensService;
         private readonly ISmsSender _smsSender;
+        private readonly IPhonePrefixGetter _phonePrefixGetter;
 
         public PhoneConfirmationService(
-            ILogger<EmailConfirmationService> logger,
             IIdentitiesService identitiesService,
             IIdentityTokensService identityTokensService,
-            ISmsSender smsSender)
+            ISmsSender smsSender,
+            IPhonePrefixGetter phonePrefixGetter)
         {
-            _logger = logger;
             _identitiesService = identitiesService;
             _identityTokensService = identityTokensService;
             _smsSender = smsSender;
+            _phonePrefixGetter = phonePrefixGetter;
         }
 
         public async Task<Guid> SendMessageAsync(string phone, string ipAddress, string userAgent, CancellationToken ct)
@@ -47,25 +45,19 @@ namespace Crm.Identity.Areas.Phone.Services
             };
 
             var id = await _identityTokensService.CreateAsync(token, ct);
-            await SendCodeAsync(phone, code);
+
+            var phoneWithPrefix = _phonePrefixGetter.GetShort() + phone;
+
+            await SendCodeAsync(phoneWithPrefix, code);
 
             return id;
         }
 
         private Task SendCodeAsync(string phone, string code)
         {
-            var message = $"Confirmation code - {code}.";
+            var message = $"Confirmation code: {code}";
 
-            try
-            {
-                return _smsSender.SendAsync(phone, message);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message);
-
-                return Task.CompletedTask;
-            }
+            return _smsSender.SendAsync(phone, message);
         }
     }
 }

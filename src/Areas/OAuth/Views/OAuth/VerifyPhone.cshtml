@@ -5,6 +5,8 @@
 }
 
 <form method="post" action="/oauth/verifyphone">
+    <h2>Подтверждение телефона</h2>
+
     @if (Model.IsInvalidCode)
     {
         <p class="error">Неправильный код</p>
