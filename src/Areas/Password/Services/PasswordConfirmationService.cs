@@ -35,12 +35,12 @@ namespace Crm.Identity.Areas.Password.Services
             _mailSender = mailSender;
         }
 
-        public async Task<Guid> SendMessageAsync(string login, string ipAddress, string userAgent, CancellationToken ct)
+        public async Task<Guid> SendMessageAsync(string key, string ipAddress, string userAgent, CancellationToken ct)
         {
             var now = DateTime.UtcNow;
             var code = Generator.GenerateAlphaNumericString(256);
             var identityTypes = IdentityTypeExtensions.TypesWithPassword;
-            var identity = await _identitiesService.GetByKeyAndTypesAsync(login, identityTypes, ct);
+            var identity = await _identitiesService.GetByKeyAndTypesAsync(key, identityTypes, ct);
             var emailIdentity = await _identitiesService.GetByProfileIdAndTypeAsync(identity.ProfileId,
                 IdentityType.EmailAndPassword, ct);
 

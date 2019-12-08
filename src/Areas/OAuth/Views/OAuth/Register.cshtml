@@ -1,6 +1,6 @@
 @using Crm.Identity.Areas.Phone.Services
+@using Crm.Identity.Utils.Phone
 @model Crm.Identity.Areas.OAuth.ViewModels.Register.RegisterViewModel
-@inject IPhonePrefixGetter PhonePrefixGetter
 
 @{
     Layout = "../Shared/_Layout";
@@ -32,6 +32,7 @@
 
     @Html.AntiForgeryToken()
 
+    <input type="hidden" name="Country" value="@Country.Russia"/>
     <input type="hidden" name="client_id" value="@Model.ClientId"/>
     <input type="hidden" name="scope" value="@Model.Scope"/>
     <input type="hidden" name="state" value="@Model.State"/>
@@ -39,9 +40,9 @@
     <input type="hidden" name="redirect_uri" value="@Model.RedirectUri"/>
     <input type="text" name="Surname" value="@Model.Surname" required="required" placeholder="Фамилия" autofocus="autofocus"/>
     <input type="text" name="Name" value="@Model.Name" required="required" placeholder="Имя"/>
-    <input type="text" name="Login" value="@Model.Login" required="required" placeholder="Логин" autocomplete="none"/>
+    <input type="text" name="Login" value="@Model.Login" required="required" placeholder="Логин (должен начинаться с буквы)" autocomplete="none" pattern="[a-zA-Z]{1,}[a-zA-Z0-9]{4,}" minlength="5"/>
     <input type="email" name="Email" value="@Model.Email" required="required" placeholder="Email"/>
-    <span class="phone-prefix">@PhonePrefixGetter.GetFull()</span>
+    <span class="phone-prefix">@PhoneUtils.GetFullInternationalPrefix(Country.Russia)</span>
     <input class="phone-value" type="tel" name="Phone" value="@Model.Phone" required="required" placeholder="Телефон (в формате 9999999999)" pattern="[0-9]{10}"/>
     <input type="password" name="Password" required="required" placeholder="Пароль" autocomplete="none" minlength="6"/>
     <input type="password" name="PasswordConfirmation" required="required" placeholder="Повтор пароля" autocomplete="none" minlength="6"/>

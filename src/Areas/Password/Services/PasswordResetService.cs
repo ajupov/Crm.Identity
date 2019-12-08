@@ -6,6 +6,7 @@ using Crm.Identity.Areas.Identities.Models;
 using Crm.Identity.Areas.Identities.Services;
 using Crm.Identity.Areas.OAuth.Models.ResetPassword;
 using Crm.Identity.Areas.Profiles.Services;
+using Crm.Identity.Utils.Phone;
 
 namespace Crm.Identity.Areas.Password.Services
 {
@@ -29,13 +30,18 @@ namespace Crm.Identity.Areas.Password.Services
         }
 
         public async Task<PostResetPasswordResponse> SendResetMessageAsync(
-            string login,
+            string country,
+            string key,
             string ipAddress,
             string userAgent,
             CancellationToken ct)
         {
             var identityTypes = IdentityTypeExtensions.TypesWithPassword;
-            var identity = await _identitiesService.GetVerifiedByKeyAndTypesAsync(login, identityTypes, ct);
+            var phoneIdentityType = new[] {IdentityType.PhoneAndPassword};
+
+            var identity = await _identitiesService.GetVerifiedByKeyAndTypesAsync(key, identityTypes, ct) ??
+                           await _identitiesService.GetVerifiedByKeyAndTypesAsync(key.GetPhoneWithoutPrefixes(country),
+                               phoneIdentityType, ct);
             if (identity == null)
             {
                 return new PostResetPasswordResponse(true);
@@ -47,7 +53,7 @@ namespace Crm.Identity.Areas.Password.Services
                 return new PostResetPasswordResponse(true);
             }
 
-            await _passwordConfirmationService.SendMessageAsync(login, ipAddress, userAgent, ct);
+            await _passwordConfirmationService.SendMessageAsync(identity.Key, ipAddress, userAgent, ct);
 
             return new PostResetPasswordResponse(false);
         }

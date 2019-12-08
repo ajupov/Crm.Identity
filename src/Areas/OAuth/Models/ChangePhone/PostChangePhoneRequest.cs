@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Crm.Identity.Areas.OAuth.Attributes.Validation;
 
 namespace Crm.Identity.Areas.OAuth.Models.ChangePhone
 {
@@ -20,5 +21,8 @@ namespace Crm.Identity.Areas.OAuth.Models.ChangePhone
         [StringLength(256)]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+
+        [CountryValidation]
+        public string Country { get; set; }
     }
 }

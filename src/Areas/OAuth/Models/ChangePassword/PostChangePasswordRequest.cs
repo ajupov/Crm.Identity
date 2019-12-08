@@ -1,9 +1,13 @@
 using System.ComponentModel.DataAnnotations;
+using Crm.Identity.Areas.OAuth.Attributes.Validation;
 
 namespace Crm.Identity.Areas.OAuth.Models.ChangePassword
 {
     public class PostChangePasswordRequest
     {
+        [CountryValidation]
+        public string Country { get; set; }
+        
         [Required]
         [StringLength(256)]
         [DataType(DataType.Text)]

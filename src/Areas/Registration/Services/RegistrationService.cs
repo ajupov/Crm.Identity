@@ -29,6 +29,7 @@ namespace Crm.Identity.Areas.Registration.Services
         }
 
         public async Task<Guid> RegisterAsync(
+            string country,
             string surname,
             string name,
             string login,
@@ -54,7 +55,7 @@ namespace Crm.Identity.Areas.Registration.Services
             await _registrationIdentityService.CreatePhoneIdentityAsync(profile.Id, phone, passwordHash, ct);
 
             await _emailConfirmationService.SendMessageAsync(email, ipAddress, userAgent, ct);
-            var tokenId = await _phoneConfirmationService.SendMessageAsync(phone, ipAddress, userAgent, ct);
+            var tokenId = await _phoneConfirmationService.SendMessageAsync(country, phone, ipAddress, userAgent, ct);
 
             return tokenId;
         }

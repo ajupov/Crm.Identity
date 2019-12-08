@@ -15,7 +15,7 @@ namespace Crm.Identity.Areas.Identities.Migrations
                 .WithColumn("CreateDateTime").AsDateTime2().NotNullable()
                 .WithColumn("ExpirationDateTime").AsDateTime2().NotNullable()
                 .WithColumn("UseDateTime").AsDateTime2().Nullable()
-                .WithColumn("IpAddress").AsString(15).Nullable()
+                .WithColumn("IpAddress").AsString(32).Nullable()
                 .WithColumn("UserAgent").AsString(256).Nullable();
 
             Create.PrimaryKey("PK_IdentityTokens_Id").OnTable("IdentityTokens")

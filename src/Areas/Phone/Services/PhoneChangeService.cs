@@ -24,6 +24,7 @@ namespace Crm.Identity.Areas.Phone.Services
         }
 
         public async Task<PostChangePhoneResponse> ChangeAsync(
+            string country,
             string oldPhone,
             string newPhone,
             string password,
@@ -56,7 +57,7 @@ namespace Crm.Identity.Areas.Phone.Services
             };
 
             await _identitiesService.UpdateAsync(identity, newIdentity, ct);
-            var tokenId = await _phoneConfirmationService.SendMessageAsync(newPhone, ipAddress, userAgent, ct);
+            var tokenId = await _phoneConfirmationService.SendMessageAsync(country, newPhone, ipAddress, userAgent, ct);
 
             return new PostChangePhoneResponse(tokenId);
         }

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Ajupov.Infrastructure.All.SmsSending.SmsSender;
 using Crm.Identity.Areas.Identities.Models;
 using Crm.Identity.Areas.Identities.Services;
+using Crm.Identity.Utils.Phone;
 
 namespace Crm.Identity.Areas.Phone.Services
 {
@@ -12,21 +13,23 @@ namespace Crm.Identity.Areas.Phone.Services
         private readonly IIdentitiesService _identitiesService;
         private readonly IIdentityTokensService _identityTokensService;
         private readonly ISmsSender _smsSender;
-        private readonly IPhonePrefixGetter _phonePrefixGetter;
 
         public PhoneConfirmationService(
             IIdentitiesService identitiesService,
             IIdentityTokensService identityTokensService,
-            ISmsSender smsSender,
-            IPhonePrefixGetter phonePrefixGetter)
+            ISmsSender smsSender)
         {
             _identitiesService = identitiesService;
             _identityTokensService = identityTokensService;
             _smsSender = smsSender;
-            _phonePrefixGetter = phonePrefixGetter;
         }
 
-        public async Task<Guid> SendMessageAsync(string phone, string ipAddress, string userAgent, CancellationToken ct)
+        public async Task<Guid> SendMessageAsync(
+            string country,
+            string phone,
+            string ipAddress,
+            string userAgent,
+            CancellationToken ct)
         {
             var now = DateTime.UtcNow;
             var code = new Random().Next(0, 9999).ToString("0000");
@@ -46,7 +49,7 @@ namespace Crm.Identity.Areas.Phone.Services
 
             var id = await _identityTokensService.CreateAsync(token, ct);
 
-            var phoneWithPrefix = _phonePrefixGetter.GetShort() + phone;
+            var phoneWithPrefix = PhoneUtils.GetInternationalPrefix(country) + phone;
 
             await SendCodeAsync(phoneWithPrefix, code);
 

@@ -13,7 +13,7 @@ namespace Crm.Identity.Areas.RefreshTokens.Migrations
                 .WithColumn("Value").AsString(128).NotNullable()
                 .WithColumn("CreateDateTime").AsDateTime2().NotNullable()
                 .WithColumn("ExpirationDateTime").AsDateTime2().NotNullable()
-                .WithColumn("IpAddress").AsString(15).Nullable()
+                .WithColumn("IpAddress").AsString(32).Nullable()
                 .WithColumn("UserAgent").AsString(256).Nullable();
 
             Create.PrimaryKey("PK_RefreshTokens_Id").OnTable("RefreshTokens")

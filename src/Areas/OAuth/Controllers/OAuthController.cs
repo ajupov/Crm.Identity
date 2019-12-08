@@ -162,6 +162,7 @@ namespace Crm.Identity.Areas.OAuth.Controllers
             }
 
             var response = await _oauthService.AuthorizeAsync(
+                request.Country,
                 request.Login,
                 request.Password,
                 request.response_type,
@@ -257,6 +258,7 @@ namespace Crm.Identity.Areas.OAuth.Controllers
             }
 
             var phoneIdentityTokenId = await _registrationService.RegisterAsync(
+                request.Country,
                 request.Surname,
                 request.Name,
                 request.Login,
@@ -268,6 +270,7 @@ namespace Crm.Identity.Areas.OAuth.Controllers
                 ct);
 
             var authorizeResponse = await _oauthService.AuthorizeAsync(
+                request.Country,
                 request.Login,
                 request.Password,
                 request.response_type,
@@ -404,7 +407,7 @@ namespace Crm.Identity.Areas.OAuth.Controllers
                 return RedirectToAction("ChangeEmail", getChangeEmailRequest);
             }
 
-            return View();
+            return View("ChangeEmailConfirmation");
         }
 
         [HttpGet("VerifyEmail")]
@@ -462,6 +465,7 @@ namespace Crm.Identity.Areas.OAuth.Controllers
             }
 
             var response = await _phoneChangeService.ChangeAsync(
+                request.Country,
                 request.OldPhone,
                 request.NewPhone,
                 request.Password,
@@ -520,7 +524,7 @@ namespace Crm.Identity.Areas.OAuth.Controllers
 
             if (request.CallbackUri.IsEmpty())
             {
-                return View();
+                return View("PhoneVerified");
             }
 
             return Redirect(request.CallbackUri);
@@ -539,8 +543,7 @@ namespace Crm.Identity.Areas.OAuth.Controllers
 
         [HttpPost("ChangePassword")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ChangePassword(
-            [FromForm] PostChangePasswordRequest request,
+        public async Task<ActionResult> ChangePassword([FromForm] PostChangePasswordRequest request,
             CancellationToken ct)
         {
             if (request.NewPassword != request.NewPasswordConfirmation)
@@ -555,6 +558,7 @@ namespace Crm.Identity.Areas.OAuth.Controllers
             }
 
             var response = await _passwordChangeService.ChangeAsync(
+                request.Country,
                 request.Login,
                 request.OldPassword,
                 request.NewPassword,
@@ -571,7 +575,7 @@ namespace Crm.Identity.Areas.OAuth.Controllers
                 return RedirectToAction("ChangePassword", getChangePasswordRequest);
             }
 
-            return View();
+            return View("PasswordChanged");
         }
 
         [HttpGet("ResetPassword")]
@@ -584,16 +588,15 @@ namespace Crm.Identity.Areas.OAuth.Controllers
 
         [HttpPost("ResetPassword")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ResetPassword(
-            [FromForm] PostResetPasswordRequest request,
-            CancellationToken ct)
+        public async Task<ActionResult> ResetPassword([FromForm] PostResetPasswordRequest request, CancellationToken ct)
         {
             var response = await _passwordResetService.SendResetMessageAsync(
+                request.Country,
                 request.Login,
                 IpAddress,
                 UserAgent,
                 ct);
-            
+
             if (response.IsInvalidLogin)
             {
                 var getResetPasswordRequest = new GetResetPasswordRequest
@@ -605,7 +608,7 @@ namespace Crm.Identity.Areas.OAuth.Controllers
                 return RedirectToAction("ResetPassword", getResetPasswordRequest);
             }
 
-            return View();
+            return View("ResetPasswordConfirmation");
         }
 
         [HttpGet("ResetPasswordConfirmation")]
@@ -624,7 +627,7 @@ namespace Crm.Identity.Areas.OAuth.Controllers
                 request.Code,
                 request.IsPasswordsNotEqual);
 
-            return View(model);
+            return View("SetNewPassword", model);
         }
 
         [HttpPost("ResetPasswordConfirmation")]
@@ -656,7 +659,7 @@ namespace Crm.Identity.Areas.OAuth.Controllers
                 return BadRequest("Invalid code");
             }
 
-            return View();
+            return View("NewPasswordSet");
         }
     }
 }

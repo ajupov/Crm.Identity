@@ -116,7 +116,7 @@ namespace Crm.Identity.Areas.Identities.Services
 
         public Task UpdateAsync(Models.Identity oldIdentity, Models.Identity identity, CancellationToken ct)
         {
-            oldIdentity.IsVerified = oldIdentity.Key != identity.Key.Trim().ToLower();
+            oldIdentity.IsVerified = oldIdentity.Key == identity.Key.Trim().ToLower();
             oldIdentity.Key = identity.Key.Trim().ToLower();
             oldIdentity.ModifyDateTime = DateTime.UtcNow;
 

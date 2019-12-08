@@ -6,6 +6,6 @@ namespace Crm.Identity.Areas.Password.Services
 {
     public interface IPasswordConfirmationService
     {
-        Task<Guid> SendMessageAsync(string login, string ipAddress, string userAgent, CancellationToken ct);
+        Task<Guid> SendMessageAsync(string key, string ipAddress, string userAgent, CancellationToken ct);
     }
 }

@@ -77,7 +77,6 @@ namespace Crm.Identity
                     .AddTransient<IPhoneChangeService, PhoneChangeService>()
                     .AddTransient<IPhoneConfirmationService, PhoneConfirmationService>()
                     .AddTransient<IPhoneVerificationService, PhoneVerificationService>()
-                    .AddTransient<IPhonePrefixGetter, PhonePrefixGetter>()
                     .AddTransient<IPasswordChangeService, PasswordChangeService>()
                     .AddTransient<IPasswordResetService, PasswordResetService>()
                     .AddTransient<IPasswordConfirmationService, PasswordConfirmationService>()

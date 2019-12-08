@@ -6,6 +6,7 @@ using Crm.Identity.Areas.AccessTokens.Services;
 using Crm.Identity.Areas.Claims.Services;
 using Crm.Identity.Areas.Codes.Services;
 using Crm.Identity.Areas.Identities.Extensions;
+using Crm.Identity.Areas.Identities.Models;
 using Crm.Identity.Areas.Identities.Services;
 using Crm.Identity.Areas.OAuth.Models.Authorize;
 using Crm.Identity.Areas.OAuth.Models.Tokens;
@@ -13,6 +14,7 @@ using Crm.Identity.Areas.OAuth.Models.Types;
 using Crm.Identity.Areas.Profiles.Services;
 using Crm.Identity.Areas.RedirectUri.Services;
 using Crm.Identity.Areas.RefreshTokens.Services;
+using Crm.Identity.Utils.Phone;
 
 namespace Crm.Identity.Areas.OAuth.Services
 {
@@ -45,7 +47,8 @@ namespace Crm.Identity.Areas.OAuth.Services
         }
 
         public async Task<PostAuthorizeResponse> AuthorizeAsync(
-            string login,
+            string country,
+            string key,
             string password,
             string responseType,
             string redirectUri,
@@ -56,7 +59,12 @@ namespace Crm.Identity.Areas.OAuth.Services
             CancellationToken ct)
         {
             var identityTypes = IdentityTypeExtensions.TypesWithPassword;
-            var identity = await _identitiesService.GetVerifiedByKeyAndTypesAsync(login, identityTypes, ct);
+            var phoneIdentityType = new[] {IdentityType.PhoneAndPassword};
+
+            var identity = await _identitiesService.GetVerifiedByKeyAndTypesAsync(key, identityTypes, ct) ??
+                           await _identitiesService.GetVerifiedByKeyAndTypesAsync(key.GetPhoneWithoutPrefixes(country),
+                               phoneIdentityType, ct);
+
             if (identity == null)
             {
                 return new PostAuthorizeResponse(redirectUri, true);
@@ -128,7 +136,7 @@ namespace Crm.Identity.Areas.OAuth.Services
                 }
                 case GrandType.Password:
                 {
-                    var identityTypes = IdentityTypeExtensions.TypesWithPassword;
+                    var identityTypes = new[] {IdentityType.LoginAndPassword};
                     var identity = await _identitiesService.GetVerifiedByKeyAndTypesAsync(userName, identityTypes, ct);
                     if (identity == null)
                     {

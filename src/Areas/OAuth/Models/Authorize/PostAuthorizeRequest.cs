@@ -5,6 +5,9 @@ namespace Crm.Identity.Areas.OAuth.Models.Authorize
 {
     public class PostAuthorizeRequest
     {
+        [CountryValidation]
+        public string Country { get; set; }
+        
         [Required]
         [StringLength(256)]
         [DataType(DataType.Text)]

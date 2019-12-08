@@ -56,5 +56,8 @@ namespace Crm.Identity.Areas.OAuth.Models.Register
 
         [RedirectUriValidation]
         public string redirect_uri { get; set; }
+
+        [CountryValidation]
+        public string Country { get; set; }
     }
 }

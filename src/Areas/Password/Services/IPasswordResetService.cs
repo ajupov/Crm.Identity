@@ -8,7 +8,8 @@ namespace Crm.Identity.Areas.Password.Services
     public interface IPasswordResetService
     {
         Task<PostResetPasswordResponse> SendResetMessageAsync(
-            string login,
+            string country,
+            string key,
             string ipAddress,
             string userAgent,
             CancellationToken ct);

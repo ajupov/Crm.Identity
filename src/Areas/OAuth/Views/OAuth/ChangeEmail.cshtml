@@ -23,7 +23,6 @@
         <p class="error">Неправильный старый Email или пароль</p>
     }
 
-
     @Html.AntiForgeryToken()
 
     <input type="email" name="OldEmail" value="@Model.OldEmail" required="required" placeholder="Старый Email" autofocus="autofocus"/>

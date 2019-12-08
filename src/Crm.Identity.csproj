@@ -9,4 +9,9 @@
         <PackageReference Include="Ajupov.Utils.All" Version="1.0.1" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.0.0" />
     </ItemGroup>
+    <ItemGroup>
+        <Content Include="Areas\OAuth\Styles\styles.min.css">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
 </Project>

@@ -6,8 +6,7 @@ namespace Crm.Identity.Areas.Registration.Services
 {
     public interface IRegistrationService
     {
-        Task<Guid> RegisterAsync(
-            string surname,
+        Task<Guid> RegisterAsync(string country, string surname,
             string name,
             string login,
             string email,

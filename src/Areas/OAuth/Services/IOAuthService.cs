@@ -9,7 +9,8 @@ namespace Crm.Identity.Areas.OAuth.Services
     public interface IOAuthService
     {
         Task<PostAuthorizeResponse> AuthorizeAsync(
-            string login,
+            string country,
+            string key,
             string password,
             string responseType,
             string redirectUri,

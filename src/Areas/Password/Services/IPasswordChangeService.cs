@@ -7,7 +7,8 @@ namespace Crm.Identity.Areas.Password.Services
     public interface IPasswordChangeService
     {
         Task<PostChangePasswordResponse> ChangeAsync(
-            string login,
+            string country,
+            string key,
             string oldPassword,
             string newPassword,
             CancellationToken ct);

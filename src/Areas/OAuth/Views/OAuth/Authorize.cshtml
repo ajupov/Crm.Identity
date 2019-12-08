@@ -1,3 +1,4 @@
+@using Crm.Identity.Utils.Phone
 @model Crm.Identity.Areas.OAuth.ViewModels.Authorize.AuthorizeViewModel
 
 @{
@@ -15,6 +16,7 @@
 
     @Html.AntiForgeryToken()
 
+    <input type="hidden" name="Country" value="@Country.Russia"/>
     <input type="hidden" name="client_id" value="@Model.ClientId"/>
     <input type="hidden" name="scope" value="@Model.Scope"/>
     <input type="hidden" name="state" value="@Model.State"/>
