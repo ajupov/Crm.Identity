@@ -1,4 +1,5 @@
-@using Crm.Identity.Utils.Phone
+@using Ajupov.Utils.All.Country
+@using Ajupov.Utils.All.Phone
 @model Crm.Identity.Areas.OAuth.ViewModels.ChangePhone.ChangePhoneViewModel
 
 @{
@@ -26,10 +27,10 @@
 
     @Html.AntiForgeryToken()
 
-    <input type="hidden" name="Country" value="@Country.Russia"/>
-    <span class="phone-prefix">@PhoneUtils.GetFullInternationalPrefix(Country.Russia)</span>
+    <input type="hidden" name="Country" value="@CountryName.Russia"/>
+    <span class="phone-prefix">@CountryName.Russia.GetFullInternationalPhonePrefix()</span>
     <input class="phone-value" type="tel" name="OldPhone" value="@Model.OldPhone" required="required" placeholder="Старый телефон (в формате 9999999999)" pattern="[0-9]{10}" autofocus="autofocus"/>
-    <span class="phone-prefix">@PhoneUtils.GetFullInternationalPrefix(Country.Russia)</span>
+    <span class="phone-prefix">@CountryName.Russia.GetFullInternationalPhonePrefix()</span>
     <input class="phone-value" type="tel" name="NewPhone" value="@Model.NewPhone" required="required" placeholder="Новый телефон (в формате 9999999999)" pattern="[0-9]{10}"/>
     <input type="password" name="Password" required="required" placeholder="Пароль" autocomplete="none"/>
     <input type="submit" value="Изменить"/>

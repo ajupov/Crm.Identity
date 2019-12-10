@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Ajupov.Utils.All.Phone;
 using Crm.Identity.Areas.AccessTokens.Services;
 using Crm.Identity.Areas.Claims.Services;
 using Crm.Identity.Areas.Codes.Services;
@@ -14,7 +15,6 @@ using Crm.Identity.Areas.OAuth.Models.Types;
 using Crm.Identity.Areas.Profiles.Services;
 using Crm.Identity.Areas.RedirectUri.Services;
 using Crm.Identity.Areas.RefreshTokens.Services;
-using Crm.Identity.Utils.Phone;
 
 namespace Crm.Identity.Areas.OAuth.Services
 {

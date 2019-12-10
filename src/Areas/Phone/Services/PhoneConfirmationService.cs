@@ -2,9 +2,9 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Ajupov.Infrastructure.All.SmsSending.SmsSender;
+using Ajupov.Utils.All.Phone;
 using Crm.Identity.Areas.Identities.Models;
 using Crm.Identity.Areas.Identities.Services;
-using Crm.Identity.Utils.Phone;
 
 namespace Crm.Identity.Areas.Phone.Services
 {
@@ -49,7 +49,7 @@ namespace Crm.Identity.Areas.Phone.Services
 
             var id = await _identityTokensService.CreateAsync(token, ct);
 
-            var phoneWithPrefix = PhoneUtils.GetInternationalPrefix(country) + phone;
+            var phoneWithPrefix = country.GetInternationalPhonePrefix() + phone;
 
             await SendCodeAsync(phoneWithPrefix, code);
 
