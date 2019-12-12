@@ -48,9 +48,11 @@ namespace Crm.Identity
     {
         public static Task Main()
         {
-            return ConfigurationExtensions.GetConfiguration()
+            var configuration = ConfigurationExtensions.GetConfiguration();
+
+            return configuration
                 .ConfigureHost()
-                .ConfigureLogging()
+                .ConfigureLogging(configuration)
                 .UseWebRoot(Directory.GetCurrentDirectory())
                 .ConfigureServices((context, services) => services
                     .ConfigureMvc(typeof(ValidationFilter))
