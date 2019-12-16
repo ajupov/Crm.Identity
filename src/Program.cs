@@ -56,7 +56,7 @@ namespace Crm.Identity
                 .UseWebRoot(Directory.GetCurrentDirectory())
                 .ConfigureServices((context, services) => services
                     .ConfigureMvc(typeof(ValidationFilter))
-                    .ConfigureTracing()
+                    .ConfigureTracing(configuration)
                     .ConfigureApiDocumentation()
                     .ConfigureMetrics(context.Configuration)
                     .ConfigureMigrator(context.Configuration)
