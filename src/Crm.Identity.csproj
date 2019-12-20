@@ -5,12 +5,15 @@
         <RootNamespace>Crm.Identity</RootNamespace>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Ajupov.Infrastructure.All" Version="1.2.1" />
-        <PackageReference Include="Ajupov.Utils.All" Version="1.0.3" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.0" />
+        <PackageReference Include="Ajupov.Infrastructure.All" Version="1.2.1"/>
+        <PackageReference Include="Ajupov.Utils.All" Version="1.0.3"/>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.0"/>
     </ItemGroup>
     <ItemGroup>
         <Content Include="Areas\OAuth\Styles\styles.min.css">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Areas\OAuth\Images\favicon.ico">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
