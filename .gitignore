@@ -40,3 +40,4 @@ Nuget.exe
 
 # Settings
 *.local.json
+Program.cs
