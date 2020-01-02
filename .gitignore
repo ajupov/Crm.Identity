@@ -39,4 +39,4 @@ Nuget.exe
 *.log
 
 # Settings
-appsettings.local.json
+*.local.json
