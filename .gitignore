@@ -37,3 +37,6 @@ Nuget.exe
 
 # Logs
 *.log
+
+# Settings
+appsettings.local.json

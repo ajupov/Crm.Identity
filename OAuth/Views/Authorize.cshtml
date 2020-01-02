@@ -1,0 +1,29 @@
+@using Ajupov.Utils.All.Country
+@model Crm.Identity.OAuth.ViewModels.Authorize.AuthorizeViewModel
+
+@{
+    Layout = "~/OAuth/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Авторизация";
+}
+
+<form method="post" action="/oauth/authorize">
+    <h2>Авторизация</h2>
+
+    @if (Model.IsInvalidCredentials)
+    {
+        <p class="error">Неправильный логин или пароль</p>
+    }
+
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" name="Country" value="@CountryName.Russia"/>
+    <input type="hidden" name="client_id" value="@Model.ClientId"/>
+    <input type="hidden" name="scope" value="@Model.Scope"/>
+    <input type="hidden" name="state" value="@Model.State"/>
+    <input type="hidden" name="response_type" value="@Model.ResponseType"/>
+    <input type="hidden" name="redirect_uri" value="@Model.RedirectUri"/>
+    <input type="text" name="Login" required="required" placeholder="Логин" autofocus="autofocus"/>
+    <input type="password" name="Password" required="required" placeholder="Пароль" autocomplete="none"/>
+    <input type="submit" value="Войти"/>
+    <a href="/oauth/register?client_id=@Model.ClientId&response_type=@Model.ResponseType&scope=@Model.Scope&state=@Model.State&redirect_uri=@Model.RedirectUri">Зарегистрироваться</a>
+</form>

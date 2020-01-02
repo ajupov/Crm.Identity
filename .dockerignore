@@ -1,0 +1,9 @@
+﻿.git
+.gitignore
+.idea
+bin
+obj
+Dockerfile
+Folder.DotSettings.user
+appsettings.local.json
+README.md
