@@ -1,43 +1,6 @@
-# User-specific files
-*.rsuser
-*.suo
-*.user
-
-# Build results
-[Dd]ebug/
-[Dd]ebugPublic/
-[Rr]elease/
-[Rr]eleases/
-x64/
-x86/
-[Aa][Rr][Mm]/
-[Aa][Rr][Mm]64/
-[Bb]in/
-[Oo]bj/
-[Ll]og/
-[Oo]ut/
-
-# ReSharper is a .NET coding add-in
-_ReSharper*/
-*.[Rr]e[Ss]harper
+﻿.idea
+bin
+obj
 *.DotSettings.user
-
-# NuGet Packages
-*.nupkg
-
-# NuGet v3's project.json files produces more ignorable files
-*.nuget.props
-*.nuget.targets
-
-# JetBrains Rider
-.idea/
-
-# Nuget.exe
-Nuget.exe
-NuGet.config
-
-# Logs
-*.log
-
-# Settings
 *.local.json
+NuGet.config
