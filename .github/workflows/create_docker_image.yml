@@ -14,11 +14,10 @@ jobs:
         uses: actions/checkout@master
         
       - name: Generate image
-        run: docker build . \
-          --tag crm.identity:latest \
-          --build-arg NUGET_SOURCE=${{ secrets.NUGET_SOURCE }} \
-          --build-arg NUGET_USERNAME=${{ secrets.NUGET_USERNAME }} \
-          --build-arg NUGET_PASSWORD=${{ secrets.NUGET_PASSWORD }} \
+        run: docker build . --tag crm.identity:latest \
+              --build-arg NUGET_SOURCE=${{ secrets.NUGET_SOURCE }} \
+              --build-arg NUGET_USERNAME=${{ secrets.NUGET_USERNAME }} \
+            --build-arg NUGET_PASSWORD=${{ secrets.NUGET_PASSWORD }} \
         
 #       - name: Push image
 #         run: docker push docker.pkg.github.com/ajupov/crm.identity/crm.identity:latest
