@@ -4,8 +4,8 @@ using PasswordUtils = Ajupov.Utils.All.Password.Password;
 
 namespace Crm.Identity.OAuthClients.Migrations
 {
-    [Migration(20190915194015)]
-    public class Migration20190915194015InsertOAuthClients : Migration
+    [Migration(20200106174644)]
+    public class Migration20200106174644InsertLocalOAuthClients : Migration
     {
         public override void Up()
         {
@@ -15,9 +15,9 @@ namespace Crm.Identity.OAuthClients.Migrations
                 new
                 {
                     Id = clientId,
-                    ClientId = "site",
-                    ClientSecret = PasswordUtils.ToPasswordHash("site"),
-                    RedirectUriPattern = "http://api.litecrm.org/Auth/Callback",
+                    ClientId = "site-local",
+                    ClientSecret = PasswordUtils.ToPasswordHash("site-local"),
+                    RedirectUriPattern = "http://localhost:9000/Auth/Callback",
                     IsLocked = false,
                     IsDeleted = false,
                     CreateDateTime = DateTime.UtcNow
@@ -34,7 +34,7 @@ namespace Crm.Identity.OAuthClients.Migrations
 
         public override void Down()
         {
-            Delete.FromTable("OAuthClients").Row(new {ClientId = "site"});
+            Delete.FromTable("OAuthClients").Row(new {ClientId = "site-local"});
         }
     }
 }

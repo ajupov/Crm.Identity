@@ -173,22 +173,22 @@ namespace Crm.Identity.OAuth.Controllers
                 request.scope.ToList(),
                 ct);
 
-            if (!response.IsInvalidCredentials)
+            if (response.IsInvalidCredentials)
             {
-                return Redirect(response.CallbackUri);
+                var newRequest = new GetAuthorizeRequest
+                {
+                    client_id = request.client_id,
+                    response_type = request.response_type,
+                    scope = request.scope,
+                    state = request.state,
+                    redirect_uri = request.redirect_uri,
+                    IsInvalidCredentials = true
+                };
+
+                return RedirectToAction("Authorize", newRequest);
             }
 
-            var newRequest = new GetAuthorizeRequest
-            {
-                client_id = request.client_id,
-                response_type = request.response_type,
-                scope = request.scope,
-                state = request.state,
-                redirect_uri = request.redirect_uri,
-                IsInvalidCredentials = true
-            };
-
-            return RedirectToAction("Authorize", newRequest);
+            return Redirect(response.CallbackUri);
         }
 
         [HttpPost("Register")]

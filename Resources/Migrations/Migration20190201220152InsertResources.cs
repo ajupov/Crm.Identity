@@ -15,7 +15,7 @@ namespace Crm.Identity.Resources.Migrations
                     Name = "All",
                     Scope = "all",
                     Description = "All API",
-                    Uri = "http://localhost:9000",
+                    Uri = "http://api.litecrm.org",
                     IsLocked = false,
                     IsDeleted = false,
                     CreateDateTime = DateTime.UtcNow,
