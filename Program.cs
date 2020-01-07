@@ -4,6 +4,7 @@ using Ajupov.Infrastructure.All.ApiDocumentation;
 using Ajupov.Infrastructure.All.Configuration;
 using Ajupov.Infrastructure.All.Hosting;
 using Ajupov.Infrastructure.All.HotStorage;
+using Ajupov.Infrastructure.All.Jwt;
 using Ajupov.Infrastructure.All.Logging;
 using Ajupov.Infrastructure.All.MailSending;
 using Ajupov.Infrastructure.All.Metrics;
@@ -21,7 +22,6 @@ using Crm.Identity.Email.Settings;
 using Crm.Identity.Identities.Services;
 using Crm.Identity.Identities.Storages;
 using Crm.Identity.OAuth.Filters;
-using Crm.Identity.OAuth.Options;
 using Crm.Identity.OAuth.Services;
 using Crm.Identity.OAuthClients.Services;
 using Crm.Identity.OAuthClients.Storages;
@@ -36,12 +36,10 @@ using Crm.Identity.RefreshTokens.Storages;
 using Crm.Identity.Registration.Services;
 using Crm.Identity.Resources.Services;
 using Crm.Identity.Resources.Storages;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Crm.Identity
 {
@@ -57,6 +55,7 @@ namespace Crm.Identity
                 .UseWebRoot(Directory.GetCurrentDirectory())
                 .ConfigureServices((context, services) => services
                     .ConfigureMvc(typeof(ValidationFilter))
+                    .ConfigureJwtGenerator(configuration)
                     .ConfigureTracing(configuration)
                     .ConfigureApiDocumentation()
                     .ConfigureMetrics(context.Configuration)
@@ -95,27 +94,7 @@ namespace Crm.Identity
                     .AddTransient<IScopeRolesService, ScopeRolesService>()
                     .AddTransient<IClaimsService, ClaimsService>()
                     .AddTransient<ICallbackUriService, CallbackUriService>()
-                    .AddAuthentication(x =>
-                    {
-                        x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                        x.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
-                        x.DefaultSignOutScheme = JwtBearerDefaults.AuthenticationScheme;
-                        x.DefaultForbidScheme = JwtBearerDefaults.AuthenticationScheme;
-                        x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    }).AddJwtBearer(options =>
-                    {
-                        options.RequireHttpsMetadata = false;
-                        options.TokenValidationParameters = new TokenValidationParameters
-                        {
-                            ValidateLifetime = true,
-                            ValidateIssuer = true,
-                            ValidateIssuerSigningKey = true,
-                            ValidIssuer = AuthOptions.Issuer,
-                            IssuerSigningKey = AuthOptions.GetKey(),
-                            ValidateAudience = true,
-                            ValidAudience = AuthOptions.Audience
-                        };
-                    }))
+                )
                 .Configure((context, builder) =>
                 {
                     if (context.HostingEnvironment.IsDevelopment())

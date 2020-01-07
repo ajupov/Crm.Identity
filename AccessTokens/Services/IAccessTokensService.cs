@@ -7,6 +7,6 @@ namespace Crm.Identity.AccessTokens.Services
 {
     public interface IAccessTokensService
     {
-        Task<string> CreateAsync(IEnumerable<Claim> claims, CancellationToken ct);
+        Task<string> CreateAsync(IEnumerable<Claim> claimModels, CancellationToken ct);
     }
 }

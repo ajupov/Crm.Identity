@@ -41,6 +41,7 @@ namespace Crm.Identity.Resources.Services
         {
             return Task.FromResult(new Dictionary<string, string[]>
             {
+                // TODO: Move to persist storage
                 {"all", new[] {"AccountOwning", "ProductsManagement", "LeadsManagement", "SalesManagement"}}
             });
         }
