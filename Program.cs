@@ -13,6 +13,7 @@ using Ajupov.Infrastructure.All.Mvc;
 using Ajupov.Infrastructure.All.Orm;
 using Ajupov.Infrastructure.All.SmsSending;
 using Ajupov.Infrastructure.All.Tracing;
+using Crm.Identity.AccessTokens;
 using Crm.Identity.AccessTokens.Services;
 using Crm.Identity.CallbackUri.Services;
 using Crm.Identity.Claims.Services;
@@ -36,6 +37,7 @@ using Crm.Identity.RefreshTokens.Storages;
 using Crm.Identity.Registration.Services;
 using Crm.Identity.Resources.Services;
 using Crm.Identity.Resources.Storages;
+using Crm.Identity.UserInfo.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -53,48 +55,59 @@ namespace Crm.Identity
                 .ConfigureHost()
                 .ConfigureLogging(configuration)
                 .UseWebRoot(Directory.GetCurrentDirectory())
-                .ConfigureServices((context, services) => services
-                    .ConfigureMvc(typeof(ValidationFilter))
-                    .ConfigureJwtGenerator(configuration)
-                    .ConfigureTracing(configuration)
-                    .ConfigureApiDocumentation()
-                    .ConfigureMetrics(context.Configuration)
-                    .ConfigureMigrator(context.Configuration)
-                    .ConfigureMailSending(context.Configuration)
-                    .ConfigureSmsSending(context.Configuration)
-                    .ConfigureOrm<OAuthClientsStorage>(context.Configuration)
-                    .ConfigureOrm<IdentitiesStorage>(context.Configuration)
-                    .ConfigureOrm<ProfilesStorage>(context.Configuration)
-                    .ConfigureOrm<ResourcesStorage>(context.Configuration)
-                    .ConfigureOrm<RefreshTokensStorage>(context.Configuration)
-                    .ConfigureHotStorage(context.Configuration)
-                    .Configure<VerifyEmailSettings>(context.Configuration.GetSection("VerifyEmailSettings"))
-                    .Configure<ResetPasswordSettings>(context.Configuration.GetSection("ResetPasswordSettings"))
-                    .AddTransient<IOAuthService, OAuthService>()
-                    .AddTransient<IRegistrationService, RegistrationService>()
-                    .AddTransient<IRegistrationIdentityService, RegistrationIdentityService>()
-                    .AddTransient<IEmailChangeService, EmailChangeService>()
-                    .AddTransient<IEmailConfirmationService, EmailConfirmationService>()
-                    .AddTransient<IEmailVerificationService, EmailVerificationService>()
-                    .AddTransient<IPhoneChangeService, PhoneChangeService>()
-                    .AddTransient<IPhoneConfirmationService, PhoneConfirmationService>()
-                    .AddTransient<IPhoneVerificationService, PhoneVerificationService>()
-                    .AddTransient<IPasswordChangeService, PasswordChangeService>()
-                    .AddTransient<IPasswordResetService, PasswordResetService>()
-                    .AddTransient<IPasswordConfirmationService, PasswordConfirmationService>()
-                    .AddTransient<IOAuthClientsService, OAuthClientsService>()
-                    .AddTransient<IIdentitiesService, IdentitiesService>()
-                    .AddTransient<IIdentityTokensService, IdentityTokensService>()
-                    .AddTransient<IIdentityStatusService, IdentityStatusService>()
-                    .AddTransient<IProfilesService, ProfilesService>()
-                    .AddTransient<ICodesService, CodesService>()
-                    .AddTransient<IAccessTokensService, AccessTokensService>()
-                    .AddTransient<IRefreshTokensService, RefreshTokensService>()
-                    .AddTransient<IResourcesService, ResourcesService>()
-                    .AddTransient<IScopeRolesService, ScopeRolesService>()
-                    .AddTransient<IClaimsService, ClaimsService>()
-                    .AddTransient<ICallbackUriService, CallbackUriService>()
-                )
+                .ConfigureServices((context, services) =>
+                {
+                    services
+                        .AddAuthorization()
+                        .AddJwtAuthentication()
+                        .AddJwtValidator(AccessTokenDefaults.SigningKey);
+
+                    services
+                        .ConfigureMvc(typeof(ValidationFilter))
+                        .ConfigureJwtGenerator()
+                        .ConfigureJwtReader()
+                        .ConfigureTracing(configuration)
+                        .ConfigureApiDocumentation()
+                        .ConfigureMetrics(configuration)
+                        .ConfigureMigrator(configuration)
+                        .ConfigureMailSending(configuration)
+                        .ConfigureSmsSending(configuration)
+                        .ConfigureOrm<OAuthClientsStorage>(configuration)
+                        .ConfigureOrm<IdentitiesStorage>(configuration)
+                        .ConfigureOrm<ProfilesStorage>(configuration)
+                        .ConfigureOrm<ResourcesStorage>(configuration)
+                        .ConfigureOrm<RefreshTokensStorage>(configuration)
+                        .ConfigureHotStorage(configuration)
+                        .Configure<VerifyEmailSettings>(configuration.GetSection(nameof(VerifyEmailSettings)))
+                        .Configure<ResetPasswordSettings>(configuration.GetSection(nameof(ResetPasswordSettings)));
+
+                    services
+                        .AddTransient<IOAuthService, OAuthService>()
+                        .AddTransient<IRegistrationService, RegistrationService>()
+                        .AddTransient<IRegistrationIdentityService, RegistrationIdentityService>()
+                        .AddTransient<IEmailChangeService, EmailChangeService>()
+                        .AddTransient<IEmailConfirmationService, EmailConfirmationService>()
+                        .AddTransient<IEmailVerificationService, EmailVerificationService>()
+                        .AddTransient<IPhoneChangeService, PhoneChangeService>()
+                        .AddTransient<IPhoneConfirmationService, PhoneConfirmationService>()
+                        .AddTransient<IPhoneVerificationService, PhoneVerificationService>()
+                        .AddTransient<IPasswordChangeService, PasswordChangeService>()
+                        .AddTransient<IPasswordResetService, PasswordResetService>()
+                        .AddTransient<IPasswordConfirmationService, PasswordConfirmationService>()
+                        .AddTransient<IOAuthClientsService, OAuthClientsService>()
+                        .AddTransient<IIdentitiesService, IdentitiesService>()
+                        .AddTransient<IIdentityTokensService, IdentityTokensService>()
+                        .AddTransient<IIdentityStatusService, IdentityStatusService>()
+                        .AddTransient<IProfilesService, ProfilesService>()
+                        .AddTransient<ICodesService, CodesService>()
+                        .AddTransient<IAccessTokensService, AccessTokensService>()
+                        .AddTransient<IRefreshTokensService, RefreshTokensService>()
+                        .AddTransient<IResourcesService, ResourcesService>()
+                        .AddTransient<IScopeRolesService, ScopeRolesService>()
+                        .AddTransient<IClaimsService, ClaimsService>()
+                        .AddTransient<ICallbackUriService, CallbackUriService>()
+                        .AddTransient<IUserInfoService, UserInfoService>();
+                })
                 .Configure((context, builder) =>
                 {
                     if (context.HostingEnvironment.IsDevelopment())
@@ -102,10 +115,13 @@ namespace Crm.Identity
                         builder.UseDeveloperExceptionPage();
                     }
 
-                    builder.UseStaticFiles()
+                    builder
+                        .UseStaticFiles()
                         .UseApiDocumentationsMiddleware()
                         .UseMigrationsMiddleware()
                         .UseMetricsMiddleware()
+                        .UseAuthentication()
+                        .UseAuthorization()
                         .UseMvcMiddleware();
                 })
                 .Build()

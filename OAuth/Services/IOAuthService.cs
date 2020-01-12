@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Crm.Identity.OAuth.Models.Authorize;
 using Crm.Identity.OAuth.Models.Tokens;
+using Crm.Identity.OAuth.Models.UserInfo;
 
 namespace Crm.Identity.OAuth.Services
 {
@@ -19,6 +20,8 @@ namespace Crm.Identity.OAuth.Services
             string userAgent,
             IEnumerable<string> scopes,
             CancellationToken ct);
+
+        Task<UserInfoResponse> GetUserInfoAsync(string accessToken, CancellationToken ct);
 
         Task<TokenResponse> GetTokenAsync(
             string grandType,

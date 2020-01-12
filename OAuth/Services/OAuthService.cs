@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Ajupov.Infrastructure.All.Jwt;
 using Ajupov.Utils.All.Phone;
 using Crm.Identity.AccessTokens.Services;
 using Crm.Identity.Claims.Services;
@@ -12,9 +14,11 @@ using Crm.Identity.Identities.Services;
 using Crm.Identity.OAuth.Models.Authorize;
 using Crm.Identity.OAuth.Models.Tokens;
 using Crm.Identity.OAuth.Models.Types;
+using Crm.Identity.OAuth.Models.UserInfo;
 using Crm.Identity.Profiles.Services;
 using Crm.Identity.RedirectUri.Services;
 using Crm.Identity.RefreshTokens.Services;
+using Crm.Identity.UserInfo.Services;
 
 namespace Crm.Identity.OAuth.Services
 {
@@ -27,6 +31,7 @@ namespace Crm.Identity.OAuth.Services
         private readonly IAccessTokensService _accessTokensService;
         private readonly IRefreshTokensService _refreshTokensService;
         private readonly ICallbackUriService _callbackUriService;
+        private readonly IUserInfoService _userInfoService;
 
         public OAuthService(
             IProfilesService profilesService,
@@ -35,7 +40,8 @@ namespace Crm.Identity.OAuth.Services
             ICodesService codesService,
             IAccessTokensService accessTokensService,
             IRefreshTokensService refreshTokensService,
-            ICallbackUriService callbackUriService)
+            ICallbackUriService callbackUriService,
+            IUserInfoService userInfoService)
         {
             _profilesService = profilesService;
             _identitiesService = identitiesService;
@@ -44,6 +50,7 @@ namespace Crm.Identity.OAuth.Services
             _accessTokensService = accessTokensService;
             _refreshTokensService = refreshTokensService;
             _callbackUriService = callbackUriService;
+            _userInfoService = userInfoService;
         }
 
         public async Task<PostAuthorizeResponse> AuthorizeAsync(
@@ -95,7 +102,7 @@ namespace Crm.Identity.OAuth.Services
                 }
                 case ResponseType.Token:
                 {
-                    var accessToken = await _accessTokensService.CreateAsync(claims, ct);
+                    var accessToken = _accessTokensService.Create(claims);
                     var refreshToken =
                         await _refreshTokensService.CreateAsync(claims, profile, ipAddress, userAgent, ct);
                     var callbackUri = _callbackUriService.GetByTokens(redirectUri, state, accessToken, refreshToken);
@@ -105,6 +112,26 @@ namespace Crm.Identity.OAuth.Services
                 default:
                     throw new ArgumentOutOfRangeException(responseType);
             }
+        }
+
+        public async Task<UserInfoResponse> GetUserInfoAsync(string accessToken, CancellationToken ct)
+        {
+            var claims = _accessTokensService.Read(accessToken);
+            
+            if (!Guid.TryParse(claims.First(x => x.Type == JwtDefaults.IdentifierClaimType)?.Value, out var profileId))
+            {
+                return new UserInfoResponse("Invalid access token");
+            }
+
+            var profile = await _profilesService.GetAsync(profileId, ct);
+            if (profile == null)
+            {
+                return new UserInfoResponse("Invalid access token");
+            }
+
+            var userInfo = await _userInfoService.GetByScopesAsync(profile, ct);
+
+            return new UserInfoResponse(userInfo.Id, userInfo.Email, userInfo.Phone, userInfo.Surname, userInfo.Name);
         }
 
         public async Task<TokenResponse> GetTokenAsync(
@@ -128,7 +155,7 @@ namespace Crm.Identity.OAuth.Services
                         return new TokenResponse("Invalid code");
                     }
 
-                    var accessToken = await _accessTokensService.CreateAsync(profileWithClaims.Claims, ct);
+                    var accessToken = _accessTokensService.Create(profileWithClaims.Claims);
                     var refreshToken = await _refreshTokensService.CreateAsync(profileWithClaims.Claims,
                         profileWithClaims.Profile, ipAddress, userAgent, ct);
 
@@ -156,7 +183,7 @@ namespace Crm.Identity.OAuth.Services
                     }
 
                     var claims = await _claimsService.GetByScopesAsync(scopes, profile, ct);
-                    var accessToken = await _accessTokensService.CreateAsync(claims, ct);
+                    var accessToken = _accessTokensService.Create(claims);
                     var refreshToken =
                         await _refreshTokensService.CreateAsync(claims, profile, ipAddress, userAgent, ct);
 
@@ -184,7 +211,7 @@ namespace Crm.Identity.OAuth.Services
                     }
 
                     var claims = await _claimsService.GetByRefreshTokenAsync(oldRefreshToken, profile, ct);
-                    var accessToken = await _accessTokensService.CreateAsync(claims, ct);
+                    var accessToken = _accessTokensService.Create(claims);
                     var refreshToken =
                         await _refreshTokensService.CreateAsync(claims, profile, ipAddress, userAgent, ct);
 

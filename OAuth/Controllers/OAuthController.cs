@@ -14,6 +14,7 @@ using Crm.Identity.OAuth.Models.ChangePhone;
 using Crm.Identity.OAuth.Models.Register;
 using Crm.Identity.OAuth.Models.ResetPassword;
 using Crm.Identity.OAuth.Models.Tokens;
+using Crm.Identity.OAuth.Models.UserInfo;
 using Crm.Identity.OAuth.Models.VerifyEmail;
 using Crm.Identity.OAuth.Models.VerifyPhone;
 using Crm.Identity.OAuth.Services;
@@ -29,6 +30,8 @@ using Crm.Identity.OAuthClients.Services;
 using Crm.Identity.Password.Services;
 using Crm.Identity.Phone.Services;
 using Crm.Identity.Registration.Services;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Crm.Identity.OAuth.Controllers
@@ -304,6 +307,20 @@ namespace Crm.Identity.OAuth.Controllers
             };
 
             return RedirectToAction("VerifyPhone", getVerifyPhoneRequest);
+        }
+
+        [HttpGet("UserInfo")]
+        [Authorize]
+        public async Task<ActionResult<UserInfoResponse>> UserInfo(CancellationToken ct)
+        {
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
+            var response = await _oauthService.GetUserInfoAsync(accessToken, ct);
+            if (!response.error.IsEmpty())
+            {
+                return BadRequest(response.error);
+            }
+
+            return response;
         }
 
         [HttpPost("Token")]
