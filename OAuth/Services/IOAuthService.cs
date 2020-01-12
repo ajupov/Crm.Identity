@@ -19,6 +19,7 @@ namespace Crm.Identity.OAuth.Services
             string ipAddress,
             string userAgent,
             IEnumerable<string> scopes,
+            string audience,
             CancellationToken ct);
 
         Task<UserInfoResponse> GetUserInfoAsync(string accessToken, CancellationToken ct);
@@ -32,6 +33,7 @@ namespace Crm.Identity.OAuth.Services
             string ipAddress,
             string userAgent,
             IEnumerable<string> scopes,
+            string audience,
             CancellationToken ct);
     }
 }

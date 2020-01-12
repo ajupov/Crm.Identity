@@ -174,6 +174,7 @@ namespace Crm.Identity.OAuth.Controllers
                 IpAddress,
                 UserAgent,
                 request.scope.ToList(),
+                client.Audience,
                 ct);
 
             if (response.IsInvalidCredentials)
@@ -282,6 +283,7 @@ namespace Crm.Identity.OAuth.Controllers
                 IpAddress,
                 UserAgent,
                 request.scope.ToList(),
+                client.Audience,
                 ct);
 
             if (authorizeResponse.IsInvalidCredentials)
@@ -352,6 +354,7 @@ namespace Crm.Identity.OAuth.Controllers
                 IpAddress,
                 UserAgent,
                 client.Scopes.Select(x => x.Value).ToList(),
+                client.Audience,
                 ct);
 
             if (!response.error.IsEmpty())

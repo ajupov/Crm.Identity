@@ -5,7 +5,7 @@ namespace Crm.Identity.AccessTokens.Services
 {
     public interface IAccessTokensService
     {
-        string Create(IEnumerable<Claim> claimModels);
+        string Create(string audience, IEnumerable<Claim> claimModels);
 
         List<Claim> Read(string tokenString);
     }

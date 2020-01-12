@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Ajupov.Infrastructure.All.Jwt;
 using Ajupov.Infrastructure.All.Jwt.JwtGenerator;
 using Ajupov.Infrastructure.All.Jwt.JwtReader;
 using Crm.Identity.Claims.Models;
@@ -20,11 +19,11 @@ namespace Crm.Identity.AccessTokens.Services
             _jwtReader = jwtReader;
         }
 
-        public string Create(IEnumerable<Claim> claimModels)
+        public string Create(string audience, IEnumerable<Claim> claimModels)
         {
             var claims = claimModels.Select(x => new SystemClaim(x.Type, x.Value));
 
-            return _jwtGenerator.Generate(AccessTokenDefaults.SigningKey, JwtDefaults.Scheme, claims,
+            return _jwtGenerator.Generate(AccessTokenDefaults.SigningKey, audience, claims,
                 TimeSpan.FromSeconds(AccessTokenDefaults.ExpiresSeconds));
         }
 
