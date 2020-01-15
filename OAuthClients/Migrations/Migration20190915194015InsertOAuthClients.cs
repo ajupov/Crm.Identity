@@ -18,7 +18,7 @@ namespace Crm.Identity.OAuthClients.Migrations
                     ClientId = "site",
                     ClientSecret = PasswordUtils.ToPasswordHash("site"),
                     RedirectUriPattern = "http://api.litecrm.org/Auth/Callback",
-                    Audience = "http://api.litecrm.org",
+                    Audience = "api.litecrm.org",
                     IsLocked = false,
                     IsDeleted = false,
                     CreateDateTime = DateTime.UtcNow

@@ -18,7 +18,7 @@ namespace Crm.Identity.OAuthClients.Migrations
                     ClientId = "site-local",
                     ClientSecret = PasswordUtils.ToPasswordHash("site-local"),
                     RedirectUriPattern = "http://localhost:9000/Auth/Callback",
-                    Audience = "http://localhost:9000",
+                    Audience = "localhost:9000",
                     IsLocked = false,
                     IsDeleted = false,
                     CreateDateTime = DateTime.UtcNow
