@@ -5,6 +5,7 @@ using Ajupov.Infrastructure.All.Mvc;
 using Ajupov.Utils.All.String;
 using Crm.Identity.Email.Services;
 using Crm.Identity.Identities.Services;
+using Crm.Identity.OAuth.Attributes.Roles;
 using Crm.Identity.OAuth.Attributes.Security;
 using Crm.Identity.OAuth.Extensions;
 using Crm.Identity.OAuth.Models.Authorize;
@@ -144,8 +145,8 @@ namespace Crm.Identity.OAuth.Controllers
             return View("~/OAuth/Views/Register.cshtml", model);
         }
 
-        [HttpPost("Authorize")]
         [ValidateAntiForgeryToken]
+        [HttpPost("Authorize")]
         public async Task<ActionResult> Authorize([FromForm] PostAuthorizeRequest request, CancellationToken ct)
         {
             var client = await _ioAuthClientsService.GetByClientIdAsync(request.client_id, ct);
@@ -195,8 +196,8 @@ namespace Crm.Identity.OAuth.Controllers
             return Redirect(response.CallbackUri);
         }
 
-        [HttpPost("Register")]
         [ValidateAntiForgeryToken]
+        [HttpPost("Register")]
         public async Task<ActionResult> Register([FromForm] PostRegisterRequest request, CancellationToken ct)
         {
             var client = await _ioAuthClientsService.GetByClientIdAsync(request.client_id, ct);
@@ -311,8 +312,8 @@ namespace Crm.Identity.OAuth.Controllers
             return RedirectToAction("VerifyPhone", getVerifyPhoneRequest);
         }
 
+        [RequireProfileRole]
         [HttpGet("UserInfo")]
-        [Authorize("Profile")]
         public async Task<ActionResult<UserInfoResponse>> UserInfo(CancellationToken ct)
         {
             var accessToken = await HttpContext.GetTokenAsync("access_token");
@@ -325,8 +326,8 @@ namespace Crm.Identity.OAuth.Controllers
             return response;
         }
 
-        [HttpPost("Token")]
         [IgnoreAntiforgeryToken]
+        [HttpPost("Token")]
         public async Task<ActionResult<TokenResponse>> Token([FromForm] TokenRequest request, CancellationToken ct)
         {
             var client = await _ioAuthClientsService.GetByClientIdAsync(request.client_id, ct);
@@ -378,8 +379,8 @@ namespace Crm.Identity.OAuth.Controllers
             return View("~/OAuth/Views/ChangeEmail.cshtml", model);
         }
 
-        [HttpPost("ChangeEmail")]
         [ValidateAntiForgeryToken]
+        [HttpPost("ChangeEmail")]
         public async Task<ActionResult> ChangeEmail([FromForm] PostChangeEmailRequest request, CancellationToken ct)
         {
             if (request.OldEmail.Trim().ToLower() == request.NewEmail.Trim().ToLower())
@@ -455,8 +456,8 @@ namespace Crm.Identity.OAuth.Controllers
             return View("~/OAuth/Views/ChangePhone.cshtml", model);
         }
 
-        [HttpPost("ChangePhone")]
         [ValidateAntiForgeryToken]
+        [HttpPost("ChangePhone")]
         public async Task<ActionResult> ChangePhone([FromForm] PostChangePhoneRequest request, CancellationToken ct)
         {
             if (request.OldPhone.Trim().ToLower() == request.NewPhone.Trim().ToLower())
@@ -525,8 +526,8 @@ namespace Crm.Identity.OAuth.Controllers
             return View("~/OAuth/Views/VerifyPhone.cshtml", model);
         }
 
-        [HttpPost("VerifyPhone")]
         [ValidateAntiForgeryToken]
+        [HttpPost("VerifyPhone")]
         public async Task<ActionResult> VerifyPhone([FromForm] PostVerifyPhoneRequest request, CancellationToken ct)
         {
             var isVerified = await _phoneVerificationService.VerifyAsync(request.TokenId, request.Code, ct);
@@ -561,8 +562,8 @@ namespace Crm.Identity.OAuth.Controllers
             return View("~/OAuth/Views/ChangePassword.cshtml", model);
         }
 
-        [HttpPost("ChangePassword")]
         [ValidateAntiForgeryToken]
+        [HttpPost("ChangePassword")]
         public async Task<ActionResult> ChangePassword([FromForm] PostChangePasswordRequest request,
             CancellationToken ct)
         {
@@ -606,8 +607,8 @@ namespace Crm.Identity.OAuth.Controllers
             return View("~/OAuth/Views/ResetPassword.cshtml", model);
         }
 
-        [HttpPost("ResetPassword")]
         [ValidateAntiForgeryToken]
+        [HttpPost("ResetPassword")]
         public async Task<ActionResult> ResetPassword([FromForm] PostResetPasswordRequest request, CancellationToken ct)
         {
             var response = await _passwordResetService.SendResetMessageAsync(
@@ -650,8 +651,8 @@ namespace Crm.Identity.OAuth.Controllers
             return View("~/OAuth/Views/SetNewPassword.cshtml", model);
         }
 
-        [HttpPost("ResetPasswordConfirmation")]
         [ValidateAntiForgeryToken]
+        [HttpPost("ResetPasswordConfirmation")]
         public async Task<ActionResult> ResetPasswordConfirmation(
             [FromForm] PostResetPasswordConfirmationRequest request,
             CancellationToken ct)
