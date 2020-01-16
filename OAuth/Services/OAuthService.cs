@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Ajupov.Infrastructure.All.Jwt;
 using Ajupov.Utils.All.Phone;
 using Crm.Identity.AccessTokens.Services;
+using Crm.Identity.CallbackUri.Services;
 using Crm.Identity.Claims.Services;
 using Crm.Identity.Codes.Services;
 using Crm.Identity.Identities.Extensions;
@@ -16,7 +17,6 @@ using Crm.Identity.OAuth.Models.Tokens;
 using Crm.Identity.OAuth.Models.Types;
 using Crm.Identity.OAuth.Models.UserInfo;
 using Crm.Identity.Profiles.Services;
-using Crm.Identity.RedirectUri.Services;
 using Crm.Identity.RefreshTokens.Services;
 using Crm.Identity.UserInfo.Services;
 
@@ -62,7 +62,7 @@ namespace Crm.Identity.OAuth.Services
             string state,
             string ipAddress,
             string userAgent,
-            IEnumerable<string> scopes,
+            List<string> scopes,
             string audience,
             CancellationToken ct)
         {
@@ -143,7 +143,7 @@ namespace Crm.Identity.OAuth.Services
             string oldRefreshTokenValue,
             string ipAddress,
             string userAgent,
-            IEnumerable<string> scopes,
+            List<string> clientScopes,
             string audience,
             CancellationToken ct)
         {
@@ -184,7 +184,7 @@ namespace Crm.Identity.OAuth.Services
                         return new TokenResponse("Invalid credentials");
                     }
 
-                    var claims = await _claimsService.GetByScopesAsync(scopes, profile, ct);
+                    var claims = await _claimsService.GetByScopesAsync(clientScopes, profile, ct);
                     var accessToken = _accessTokensService.Create(audience, claims);
                     var refreshToken =
                         await _refreshTokensService.CreateAsync(claims, profile, ipAddress, userAgent, ct);

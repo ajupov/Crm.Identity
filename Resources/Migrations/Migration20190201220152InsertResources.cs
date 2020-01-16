@@ -1,4 +1,5 @@
 ﻿using System;
+using Crm.Identity.Scopes;
 using FluentMigrator;
 
 namespace Crm.Identity.Resources.Migrations
@@ -12,9 +13,37 @@ namespace Crm.Identity.Resources.Migrations
                 new
                 {
                     Id = Guid.NewGuid(),
-                    Name = "All",
-                    Scope = "all",
-                    Description = "All API",
+                    Name = "OpenID",
+                    Scope = ScopeNames.OpenId,
+                    Description = "API",
+                    Uri = "http://identity.litecrm.org",
+                    IsLocked = false,
+                    IsDeleted = false,
+                    CreateDateTime = DateTime.UtcNow,
+                    ModifyDateTime = (DateTime?) null
+                });
+
+            Insert.IntoTable("Resources").Row(
+                new
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Profile",
+                    Scope = ScopeNames.Profile,
+                    Description = "Profile",
+                    Uri = "http://identity.litecrm.org",
+                    IsLocked = false,
+                    IsDeleted = false,
+                    CreateDateTime = DateTime.UtcNow,
+                    ModifyDateTime = (DateTime?) null
+                });
+
+            Insert.IntoTable("Resources").Row(
+                new
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "API",
+                    Scope = ScopeNames.Api,
+                    Description = "API",
                     Uri = "http://api.litecrm.org",
                     IsLocked = false,
                     IsDeleted = false,
@@ -25,7 +54,9 @@ namespace Crm.Identity.Resources.Migrations
 
         public override void Down()
         {
-            Delete.FromTable("Resources").Row(new {Scope = "all"});
+            Delete.FromTable("Resources").Row(new {Scope = ScopeNames.OpenId});
+            Delete.FromTable("Resources").Row(new {Scope = ScopeNames.Profile});
+            Delete.FromTable("Resources").Row(new {Scope = ScopeNames.Api});
         }
     }
 }

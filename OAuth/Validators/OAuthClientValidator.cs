@@ -7,6 +7,7 @@ using Crm.Identity.OAuth.Models.Register;
 using Crm.Identity.OAuth.Models.Tokens;
 using Crm.Identity.OAuth.Models.Types;
 using Crm.Identity.OAuthClients.Models;
+using Crm.Identity.Scopes;
 using PasswordUtils = Ajupov.Utils.All.Password.Password;
 
 namespace Crm.Identity.OAuth.Validators
@@ -66,10 +67,10 @@ namespace Crm.Identity.OAuth.Validators
                 .ToHashSet();
 
             var requireScopes = value
-                .ToList()
+                .ToScopeList()
                 .ToHashSet();
 
-            return requireScopes.IsSubsetOf(oAuthClientScopes);
+            return requireScopes.IsSubsetOf(oAuthClientScopes) && requireScopes.Contains(ScopeNames.OpenId);
         }
 
         private static bool IsMatchRedirectUri(OAuthClient oAuthClient, string redirectUri)

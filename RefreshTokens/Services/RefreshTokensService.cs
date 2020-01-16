@@ -44,13 +44,14 @@ namespace Crm.Identity.RefreshTokens.Services
                 Id = id,
                 ProfileId = profile.Id,
                 Value = Generator.GenerateAlphaNumericString(128),
-                Claims = claims.Select(x => new RefreshTokenClaim
-                {
-                    Id = Guid.NewGuid(),
-                    RefreshTokenId = id,
-                    Type = x.Type,
-                    Value = x.Value
-                }).ToList(),
+                Claims = claims
+                    .Select(x => new RefreshTokenClaim
+                    {
+                        Id = Guid.NewGuid(),
+                        RefreshTokenId = id,
+                        Type = x.Type,
+                        Value = x.Value
+                    }).ToList(),
                 CreateDateTime = now,
                 ExpirationDateTime = now.AddDays(60),
                 IpAddress = ipAddress,

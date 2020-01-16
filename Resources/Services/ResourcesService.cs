@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Crm.Identity.Resources.Storages;
+using Crm.Identity.Scopes;
 using Microsoft.EntityFrameworkCore;
 
 namespace Crm.Identity.Resources.Services
@@ -10,25 +11,20 @@ namespace Crm.Identity.Resources.Services
     public class ResourcesService : IResourcesService
     {
         private readonly ResourcesStorage _storage;
-        private readonly IScopeRolesService _scopeRolesService;
 
-        public ResourcesService(ResourcesStorage storage, IScopeRolesService scopeRolesService)
+        public ResourcesService(ResourcesStorage storage)
         {
             _storage = storage;
-            _scopeRolesService = scopeRolesService;
         }
 
         public async Task<List<string>> GetRolesByScopesAsync(IEnumerable<string> scopes, CancellationToken ct)
         {
-            var scopeRoles = await _scopeRolesService.GetAsync();
-            var resourceScopes = await _storage.Resources.ToListAsync(ct);
+            var resources = await _storage.Resources.ToListAsync(ct);
+            var resourceScopes = resources.Select(x => x.Scope);
+            var resultScopes = resourceScopes.Intersect(scopes);
 
-            var intersectedScopes = resourceScopes
-                .Select(x => x.Scope)
-                .Intersect(scopes);
-
-            return scopeRoles
-                .Where(x => intersectedScopes.Contains(x.Key))
+            return ScopesWithRoles.Value
+                .Where(x => resultScopes.Contains(x.Key))
                 .SelectMany(x => x.Value)
                 .ToList();
         }

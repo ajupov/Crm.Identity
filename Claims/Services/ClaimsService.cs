@@ -7,6 +7,7 @@ using Ajupov.Infrastructure.All.Jwt;
 using Crm.Identity.Profiles.Models;
 using Crm.Identity.RefreshTokens.Models;
 using Crm.Identity.Resources.Services;
+using Crm.Identity.Scopes;
 using Claim = Crm.Identity.Claims.Models.Claim;
 
 namespace Crm.Identity.Claims.Services
@@ -20,42 +21,43 @@ namespace Crm.Identity.Claims.Services
             _resourcesService = resourcesService;
         }
 
-        public async Task<List<Claim>> GetByScopesAsync(
-            IEnumerable<string> scopes,
-            Profile profile,
-            CancellationToken ct)
+        public async Task<List<Claim>> GetByScopesAsync(List<string> scopes, Profile profile, CancellationToken ct)
         {
-            var profileClaims = GetProfileClaims(profile);
-            var apiClaims = await GetApiClaimsAsync(scopes, ct);
+            var openIdClaims = GetOpenIdClaims(scopes, profile);
+            var roleClaims = await GetRoleClaimsAsync(scopes, ct);
 
-            return profileClaims
-                .Concat(apiClaims)
+            return openIdClaims
+                .Concat(roleClaims)
                 .ToList();
         }
 
-        public Task<List<Claim>> GetByRefreshTokenAsync(
-            RefreshToken refreshToken,
-            Profile profile,
-            CancellationToken ct)
+        public Task<List<Claim>> GetByRefreshTokenAsync(RefreshToken token, Profile profile, CancellationToken ct)
         {
-            var profileClaims = GetProfileClaims(profile);
-            var apiClaims = refreshToken.Claims.Select(x => new Claim {Type = x.Type, Value = x.Value});
+            var claims = token.Claims
+                .Select(x =>
+                    new Claim
+                    {
+                        Type = x.Type,
+                        Value = x.Value
+                    })
+                .ToList();
 
-            return Task.FromResult(
-                profileClaims
-                    .Concat(apiClaims)
-                    .ToList());
+            return Task.FromResult(claims);
         }
 
-        private static List<Claim> GetProfileClaims(Profile profile)
+        private static List<Claim> GetOpenIdClaims(ICollection<string> scopes, Profile profile)
         {
-            return new List<Claim>
+            var claims = new List<Claim>();
+
+            if (scopes.Contains(ScopeNames.OpenId))
             {
-                new Claim {Type = JwtDefaults.IdentifierClaimType, Value = profile.Id.ToString()}
-            };
+                claims.Add(new Claim {Type = JwtDefaults.IdentifierClaimType, Value = profile.Id.ToString()});
+            }
+
+            return claims;
         }
 
-        private async Task<List<Claim>> GetApiClaimsAsync(IEnumerable<string> scopes, CancellationToken ct)
+        private async Task<List<Claim>> GetRoleClaimsAsync(IEnumerable<string> scopes, CancellationToken ct)
         {
             var roles = await _resourcesService.GetRolesByScopesAsync(scopes, ct);
 

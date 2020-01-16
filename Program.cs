@@ -31,7 +31,6 @@ using Crm.Identity.Password.Settings;
 using Crm.Identity.Phone.Services;
 using Crm.Identity.Profiles.Services;
 using Crm.Identity.Profiles.Storages;
-using Crm.Identity.RedirectUri.Services;
 using Crm.Identity.RefreshTokens.Services;
 using Crm.Identity.RefreshTokens.Storages;
 using Crm.Identity.Registration.Services;
@@ -103,7 +102,6 @@ namespace Crm.Identity
                         .AddTransient<IAccessTokensService, AccessTokensService>()
                         .AddTransient<IRefreshTokensService, RefreshTokensService>()
                         .AddTransient<IResourcesService, ResourcesService>()
-                        .AddTransient<IScopeRolesService, ScopeRolesService>()
                         .AddTransient<IClaimsService, ClaimsService>()
                         .AddTransient<ICallbackUriService, CallbackUriService>()
                         .AddTransient<IUserInfoService, UserInfoService>();

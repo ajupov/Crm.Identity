@@ -18,7 +18,7 @@ namespace Crm.Identity.OAuth.Services
             string state,
             string ipAddress,
             string userAgent,
-            IEnumerable<string> scopes,
+            List<string> scopes,
             string audience,
             CancellationToken ct);
 
@@ -32,7 +32,7 @@ namespace Crm.Identity.OAuth.Services
             string oldRefreshTokenValue,
             string ipAddress,
             string userAgent,
-            IEnumerable<string> scopes,
+            List<string> clientScopes,
             string audience,
             CancellationToken ct);
     }

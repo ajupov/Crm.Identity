@@ -173,7 +173,7 @@ namespace Crm.Identity.OAuth.Controllers
                 request.state,
                 IpAddress,
                 UserAgent,
-                request.scope.ToList(),
+                request.scope.ToScopeList(),
                 client.Audience,
                 ct);
 
@@ -282,7 +282,7 @@ namespace Crm.Identity.OAuth.Controllers
                 request.state,
                 IpAddress,
                 UserAgent,
-                request.scope.ToList(),
+                request.scope.ToScopeList(),
                 client.Audience,
                 ct);
 
@@ -312,7 +312,7 @@ namespace Crm.Identity.OAuth.Controllers
         }
 
         [HttpGet("UserInfo")]
-        [Authorize]
+        [Authorize("Profile")]
         public async Task<ActionResult<UserInfoResponse>> UserInfo(CancellationToken ct)
         {
             var accessToken = await HttpContext.GetTokenAsync("access_token");

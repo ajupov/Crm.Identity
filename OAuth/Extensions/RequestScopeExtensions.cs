@@ -5,7 +5,7 @@ namespace Crm.Identity.OAuth.Extensions
 {
     public static class RequestScopeExtensions
     {
-        public static List<string> ToList(this string scope)
+        public static List<string> ToScopeList(this string scope)
         {
             return scope.Split(' ').ToList();
         }

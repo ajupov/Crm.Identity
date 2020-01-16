@@ -9,8 +9,8 @@ namespace Crm.Identity.Claims.Services
 {
     public interface IClaimsService
     {
-        Task<List<Claim>> GetByScopesAsync(IEnumerable<string> scopes, Profile profile, CancellationToken ct);
+        Task<List<Claim>> GetByScopesAsync(List<string> scopes, Profile profile, CancellationToken ct);
 
-        Task<List<Claim>> GetByRefreshTokenAsync(RefreshToken refreshToken, Profile profile, CancellationToken ct);
+        Task<List<Claim>> GetByRefreshTokenAsync(RefreshToken token, Profile profile, CancellationToken ct);
     }
 }

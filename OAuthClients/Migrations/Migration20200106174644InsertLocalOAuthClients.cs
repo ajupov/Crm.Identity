@@ -1,4 +1,5 @@
 ﻿using System;
+using Crm.Identity.Scopes;
 using FluentMigrator;
 using PasswordUtils = Ajupov.Utils.All.Password.Password;
 
@@ -29,7 +30,23 @@ namespace Crm.Identity.OAuthClients.Migrations
                 {
                     Id = Guid.NewGuid(),
                     OAuthClientId = clientId,
-                    Value = "all"
+                    Value = ScopeNames.OpenId
+                }); 
+            
+            Insert.IntoTable("OAuthClientScopes").Row(
+                new
+                {
+                    Id = Guid.NewGuid(),
+                    OAuthClientId = clientId,
+                    Value = ScopeNames.Profile
+                });
+            
+            Insert.IntoTable("OAuthClientScopes").Row(
+                new
+                {
+                    Id = Guid.NewGuid(),
+                    OAuthClientId = clientId,
+                    Value = ScopeNames.Api
                 });
         }
 
