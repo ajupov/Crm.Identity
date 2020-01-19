@@ -13,7 +13,6 @@ using Ajupov.Infrastructure.All.Mvc;
 using Ajupov.Infrastructure.All.Orm;
 using Ajupov.Infrastructure.All.SmsSending;
 using Ajupov.Infrastructure.All.Tracing;
-using Crm.Identity.AccessTokens;
 using Crm.Identity.AccessTokens.Services;
 using Crm.Identity.CallbackUri.Services;
 using Crm.Identity.Claims.Services;
@@ -59,7 +58,7 @@ namespace Crm.Identity
                     services
                         .AddAuthorization()
                         .AddJwtAuthentication()
-                        .AddJwtValidator(AccessTokenDefaults.SigningKey);
+                        .AddJwtValidator(configuration);
 
                     services
                         .ConfigureMvc(typeof(ValidationFilter))

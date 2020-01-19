@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using Ajupov.Infrastructure.All.Mvc;
+﻿using Ajupov.Infrastructure.All.Mvc;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -18,16 +17,7 @@ namespace Crm.Identity.OAuth.Controllers
         [HttpGet("")]
         public ActionResult Index()
         {
-            var assembly = Assembly.GetEntryAssembly();
-            var attribute = assembly?.GetCustomAttribute<AssemblyFileVersionAttribute>();
-
-            var name = assembly?.GetName().Name;
-            var version = attribute?.Version;
-            var message = $"{name} {version}";
-
-            _logger.LogInformation("Index request. message: {0}", message);
-
-            return Content(message);
+            return new RedirectResult("~/swagger");
         }
     }
 }
