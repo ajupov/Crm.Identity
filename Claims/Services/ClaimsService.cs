@@ -3,7 +3,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
-using Ajupov.Infrastructure.All.Jwt;
 using Crm.Identity.Profiles.Models;
 using Crm.Identity.RefreshTokens.Models;
 using Crm.Identity.Resources.Services;
@@ -51,7 +50,7 @@ namespace Crm.Identity.Claims.Services
 
             if (scopes.Contains(ScopeNames.OpenId))
             {
-                claims.Add(new Claim {Type = JwtDefaults.IdentifierClaimType, Value = profile.Id.ToString()});
+                claims.Add(new Claim {Type = ClaimTypes.NameIdentifier, Value = profile.Id.ToString()});
             }
 
             return claims;

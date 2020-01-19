@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
-using Ajupov.Infrastructure.All.Jwt;
 using Ajupov.Utils.All.Phone;
 using Crm.Identity.AccessTokens.Services;
 using Crm.Identity.CallbackUri.Services;
@@ -119,7 +119,7 @@ namespace Crm.Identity.OAuth.Services
         {
             var claims = _accessTokensService.Read(accessToken);
             
-            if (!Guid.TryParse(claims.First(x => x.Type == JwtDefaults.IdentifierClaimType)?.Value, out var profileId))
+            if (!Guid.TryParse(claims.First(x => x.Type == ClaimTypes.NameIdentifier)?.Value, out var profileId))
             {
                 return new UserInfoResponse("Invalid access token");
             }
