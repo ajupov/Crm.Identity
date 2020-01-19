@@ -18,9 +18,7 @@ namespace Crm.Identity.UserInfo.Services
             _identitiesService = identitiesService;
         }
 
-        public async Task<Models.UserInfo> GetByScopesAsync(
-            Profile profile,
-            CancellationToken ct)
+        public async Task<Models.UserInfo> GetByScopesAsync(Profile profile, CancellationToken ct)
         {
             var identityTypes = new List<IdentityType>
             {
