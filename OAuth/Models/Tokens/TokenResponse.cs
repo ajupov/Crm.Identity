@@ -9,7 +9,7 @@ namespace Crm.Identity.OAuth.Models.Tokens
             access_token = accessToken;
             refresh_token = refreshToken;
             token_type = "bearer";
-            expires_in = (int) TimeSpan.FromDays(1).TotalSeconds;
+            expires_in = (int) TimeSpan.FromMinutes(60).TotalSeconds;
         }
 
         public TokenResponse(string error)

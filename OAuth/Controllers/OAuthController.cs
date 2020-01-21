@@ -107,44 +107,6 @@ namespace Crm.Identity.OAuth.Controllers
             return View("~/OAuth/Views/Authorize.cshtml", model);
         }
 
-        [HttpGet("Register")]
-        public async Task<ActionResult> Register(GetRegisterRequest request, CancellationToken ct)
-        {
-            var client = await _ioAuthClientsService.GetByClientIdAsync(request.client_id, ct);
-            if (!client.IsValid())
-            {
-                return BadRequest("Client not found");
-            }
-
-            if (!client.IsMatchRedirectUri(request))
-            {
-                return BadRequest("Invalid redirect uri");
-            }
-
-            if (!client.IsScopesInclude(request.scope))
-            {
-                return BadRequest("Invalid scopes");
-            }
-
-            var model = new RegisterViewModel(
-                request.client_id,
-                request.response_type,
-                request.scope,
-                request.redirect_uri,
-                request.state,
-                request.Surname,
-                request.Name,
-                request.Login,
-                request.Email,
-                request.Phone,
-                request.IsPasswordsNotEqual,
-                request.IsLoginExists,
-                request.IsEmailExists,
-                request.IsPhoneExists);
-
-            return View("~/OAuth/Views/Register.cshtml", model);
-        }
-
         [ValidateAntiForgeryToken]
         [HttpPost("Authorize")]
         public async Task<ActionResult> Authorize([FromForm] PostAuthorizeRequest request, CancellationToken ct)
@@ -194,6 +156,44 @@ namespace Crm.Identity.OAuth.Controllers
             }
 
             return Redirect(response.CallbackUri);
+        }
+
+        [HttpGet("Register")]
+        public async Task<ActionResult> Register(GetRegisterRequest request, CancellationToken ct)
+        {
+            var client = await _ioAuthClientsService.GetByClientIdAsync(request.client_id, ct);
+            if (!client.IsValid())
+            {
+                return BadRequest("Client not found");
+            }
+
+            if (!client.IsMatchRedirectUri(request))
+            {
+                return BadRequest("Invalid redirect uri");
+            }
+
+            if (!client.IsScopesInclude(request.scope))
+            {
+                return BadRequest("Invalid scopes");
+            }
+
+            var model = new RegisterViewModel(
+                request.client_id,
+                request.response_type,
+                request.scope,
+                request.redirect_uri,
+                request.state,
+                request.Surname,
+                request.Name,
+                request.Login,
+                request.Email,
+                request.Phone,
+                request.IsPasswordsNotEqual,
+                request.IsLoginExists,
+                request.IsEmailExists,
+                request.IsPhoneExists);
+
+            return View("~/OAuth/Views/Register.cshtml", model);
         }
 
         [ValidateAntiForgeryToken]
