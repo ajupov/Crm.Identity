@@ -32,7 +32,6 @@ using Crm.Identity.Password.Services;
 using Crm.Identity.Phone.Services;
 using Crm.Identity.Registration.Services;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Crm.Identity.OAuth.Controllers
