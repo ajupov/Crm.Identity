@@ -11,7 +11,7 @@ namespace Crm.Identity.OAuthClients.Migrations
                 .WithColumn("Id").AsGuid().NotNullable()
                 .WithColumn("ClientId").AsString(256).NotNullable()
                 .WithColumn("ClientSecret").AsString(512).NotNullable()
-                .WithColumn("RedirectUriPattern").AsString(2048).NotNullable()
+                .WithColumn("RedirectUriPattern").AsString(2048).Nullable()
                 .WithColumn("Audience").AsString(256).NotNullable()
                 .WithColumn("IsLocked").AsBoolean().NotNullable()
                 .WithColumn("IsDeleted").AsBoolean().NotNullable()
