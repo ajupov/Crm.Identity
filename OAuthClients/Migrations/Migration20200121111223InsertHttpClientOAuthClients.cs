@@ -17,7 +17,7 @@ namespace Crm.Identity.OAuthClients.Migrations
                 {
                     Id = clientId,
                     ClientId = "http-client",
-                    ClientSecret = PasswordUtils.ToPasswordHash("http-client"),
+                    ClientSecret = (string) null,
                     RedirectUriPattern = (string) null,
                     Audience = "http-client",
                     IsLocked = false,

@@ -10,7 +10,7 @@ namespace Crm.Identity.OAuthClients.Migrations
             Create.Table("OAuthClients")
                 .WithColumn("Id").AsGuid().NotNullable()
                 .WithColumn("ClientId").AsString(256).NotNullable()
-                .WithColumn("ClientSecret").AsString(512).NotNullable()
+                .WithColumn("ClientSecret").AsString(512).Nullable()
                 .WithColumn("RedirectUriPattern").AsString(2048).Nullable()
                 .WithColumn("Audience").AsString(256).NotNullable()
                 .WithColumn("IsLocked").AsBoolean().NotNullable()
