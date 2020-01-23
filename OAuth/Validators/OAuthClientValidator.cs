@@ -16,11 +16,7 @@ namespace Crm.Identity.OAuth.Validators
     {
         public static bool IsValid(this OAuthClient oAuthClient)
         {
-            return oAuthClient?.Scopes?.Any() == true &&
-                   !oAuthClient.IsLocked &&
-                   !oAuthClient.IsDeleted &&
-                   !oAuthClient.ClientSecret.IsEmpty() &&
-                   !oAuthClient.RedirectUriPattern.IsEmpty();
+            return oAuthClient?.Scopes?.Any() == true && !oAuthClient.IsLocked && !oAuthClient.IsDeleted;
         }
 
         public static bool IsMatchRedirectUri(this OAuthClient oAuthClient, GetAuthorizeRequest request)
