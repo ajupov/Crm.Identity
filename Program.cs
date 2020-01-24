@@ -38,6 +38,7 @@ using Crm.Identity.Resources.Storages;
 using Crm.Identity.UserInfo.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -61,7 +62,7 @@ namespace Crm.Identity
                         .AddJwtValidator(configuration);
 
                     services
-                        .ConfigureMvc(typeof(ValidationFilter))
+                        .ConfigureMvc(typeof(AutoValidateAntiforgeryTokenAttribute), typeof(ValidationFilter))
                         .ConfigureJwtGenerator()
                         .ConfigureJwtReader()
                         .ConfigureTracing(configuration)

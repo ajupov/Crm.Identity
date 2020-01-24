@@ -5,8 +5,8 @@
         <Authors>U. Ayupov</Authors>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Ajupov.Infrastructure.All" Version="1.4.0" />
-        <PackageReference Include="Ajupov.Utils.All" Version="1.0.8" />
+        <PackageReference Include="Ajupov.Infrastructure.All" Version="1.4.1" />
+        <PackageReference Include="Ajupov.Utils.All" Version="1.2.1" />
     </ItemGroup>
     <ItemGroup>
         <Content Include="OAuth\Styles\styles.min.css">
