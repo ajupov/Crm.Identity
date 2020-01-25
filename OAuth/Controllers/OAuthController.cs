@@ -411,7 +411,7 @@ namespace Crm.Identity.OAuth.Controllers
                 request.OldEmail,
                 request.NewEmail,
                 request.Password,
-                Request.Headers["X-Real-IP"],
+                IpAddress,
                 UserAgent,
                 ct);
 
