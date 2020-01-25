@@ -116,6 +116,7 @@ namespace Crm.Identity
                     }
 
                     builder
+                        .UseForwardedHeaders()
                         .UseStaticFiles()
                         .UseApiDocumentationsMiddleware()
                         .UseMigrationsMiddleware()
