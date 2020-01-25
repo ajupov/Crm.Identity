@@ -2,11 +2,11 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Ajupov.Infrastructure.All.Mvc;
+using Ajupov.Infrastructure.All.Mvc.Attributes;
 using Ajupov.Utils.All.String;
 using Crm.Identity.Email.Services;
 using Crm.Identity.Identities.Services;
 using Crm.Identity.OAuth.Attributes.Roles;
-using Crm.Identity.OAuth.Attributes.Security;
 using Crm.Identity.OAuth.Extensions;
 using Crm.Identity.OAuth.Models.Authorize;
 using Crm.Identity.OAuth.Models.ChangeEmail;
