@@ -48,12 +48,12 @@ namespace Crm.Identity
     {
         public static Task Main()
         {
-            var configuration = ConfigurationExtensions.GetConfiguration();
+            var configuration = Configuration.GetConfiguration();
 
             return configuration
-                .ConfigureHost()
+                .ConfigureHosting()
+                .ConfigureWebRoot()
                 .ConfigureLogging(configuration)
-                .UseWebRoot(Directory.GetCurrentDirectory())
                 .ConfigureServices((context, services) =>
                 {
                     services
@@ -62,21 +62,23 @@ namespace Crm.Identity
                         .AddJwtValidator(configuration);
 
                     services
-                        .ConfigureMvc(typeof(AutoValidateAntiforgeryTokenAttribute), typeof(ValidationFilter))
-                        .ConfigureJwtGenerator()
-                        .ConfigureJwtReader()
-                        .ConfigureTracing(configuration)
-                        .ConfigureApiDocumentation()
-                        .ConfigureMetrics(configuration)
-                        .ConfigureMigrator(configuration)
-                        .ConfigureMailSending(configuration)
-                        .ConfigureSmsSending(configuration)
-                        .ConfigureOrm<OAuthClientsStorage>(configuration)
-                        .ConfigureOrm<IdentitiesStorage>(configuration)
-                        .ConfigureOrm<ProfilesStorage>(configuration)
-                        .ConfigureOrm<ResourcesStorage>(configuration)
-                        .ConfigureOrm<RefreshTokensStorage>(configuration)
-                        .ConfigureHotStorage(configuration)
+                        .AddMvc(typeof(AutoValidateAntiforgeryTokenAttribute), typeof(ValidationFilter))
+                        .AddJwtGenerator()
+                        .AddJwtReader()
+                        .AddTracing(configuration)
+                        .AddApiDocumentation()
+                        .AddMetrics(configuration)
+                        .AddMigrator(configuration)
+                        .AddMailSending(configuration)
+                        .AddSmsSending(configuration)
+                        .AddOrm<OAuthClientsStorage>(configuration)
+                        .AddOrm<IdentitiesStorage>(configuration)
+                        .AddOrm<ProfilesStorage>(configuration)
+                        .AddOrm<ResourcesStorage>(configuration)
+                        .AddOrm<RefreshTokensStorage>(configuration)
+                        .AddHotStorage(configuration);
+
+                    services
                         .Configure<VerifyEmailSettings>(configuration.GetSection(nameof(VerifyEmailSettings)))
                         .Configure<ResetPasswordSettings>(configuration.GetSection(nameof(ResetPasswordSettings)));
 
