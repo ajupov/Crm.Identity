@@ -38,6 +38,7 @@ using Crm.Identity.Resources.Storages;
 using Crm.Identity.UserInfo.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -62,6 +63,11 @@ namespace Crm.Identity
                         .AddJwtValidator(configuration);
 
                     services
+                        .Configure<ForwardedHeadersOptions>(options =>
+                        {
+                            options.ForwardedHeaders =
+                                ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+                        })
                         .AddMvc(typeof(AutoValidateAntiforgeryTokenAttribute), typeof(ValidationFilter))
                         .AddJwtGenerator()
                         .AddJwtReader()
