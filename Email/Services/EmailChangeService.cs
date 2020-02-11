@@ -32,7 +32,7 @@ namespace Crm.Identity.Email.Services
             CancellationToken ct)
         {
             var identityTypes = new[] {IdentityType.EmailAndPassword};
-            var identity = await _identitiesService.GetVerifiedByKeyAndTypesAsync(oldEmail, identityTypes, ct);
+            var identity = await _identitiesService.GetByKeyAndTypesAsync(oldEmail, identityTypes, ct);
             if (identity == null)
             {
                 return new PostChangeEmailResponse(true);
