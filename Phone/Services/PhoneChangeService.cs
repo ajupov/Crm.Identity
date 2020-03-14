@@ -33,7 +33,7 @@ namespace Crm.Identity.Phone.Services
             CancellationToken ct)
         {
             var identityTypes = new[] {IdentityType.PhoneAndPassword};
-            var identity = await _identitiesService.GetVerifiedByKeyAndTypesAsync(oldPhone, identityTypes, ct);
+            var identity = await _identitiesService.GetByKeyAndTypesAsync(oldPhone, identityTypes, ct);
             if (identity == null)
             {
                 return new PostChangePhoneResponse(true);
