@@ -1,3 +1,3 @@
 # Crm.Identity
 
-Identity server for http://litecrm.org
+Identity server for https://litecrm.org
