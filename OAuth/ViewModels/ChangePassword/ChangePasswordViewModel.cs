@@ -12,7 +12,7 @@ namespace Crm.Identity.OAuth.ViewModels.ChangePassword
         public string Login { get; }
 
         public bool IsPasswordsNotEqual { get; }
-        
+
         public bool IsInvalidCredentials { get; }
     }
 }

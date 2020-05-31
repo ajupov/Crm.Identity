@@ -13,15 +13,15 @@ namespace Crm.Identity.Identities.Helpers
 
             return sortBy switch
             {
-                nameof(Models.Identity.Type) => (isDesc
+                nameof(Models.Identity.Type) => isDesc
                     ? queryable.OrderByDescending(x => x.Type)
-                    : queryable.OrderBy(x => x.Type)),
-                nameof(Models.Identity.CreateDateTime) => (isDesc
+                    : queryable.OrderBy(x => x.Type),
+                nameof(Models.Identity.CreateDateTime) => isDesc
                     ? queryable.OrderByDescending(x => x.CreateDateTime)
-                    : queryable.OrderBy(x => x.CreateDateTime)),
-                nameof(Models.Identity.ModifyDateTime) => (isDesc
+                    : queryable.OrderBy(x => x.CreateDateTime),
+                nameof(Models.Identity.ModifyDateTime) => isDesc
                     ? queryable.OrderByDescending(x => x.ModifyDateTime)
-                    : queryable.OrderBy(x => x.ModifyDateTime)),
+                    : queryable.OrderBy(x => x.ModifyDateTime),
                 _ => queryable.OrderByDescending(x => x.CreateDateTime)
             };
         }

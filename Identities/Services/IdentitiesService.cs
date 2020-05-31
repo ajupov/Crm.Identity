@@ -177,7 +177,7 @@ namespace Crm.Identity.Identities.Services
                     x.PasswordHash = passwordHash;
                     x.ModifyDateTime = DateTime.UtcNow;
                 }, ct);
-                
+
             await _storage.SaveChangesAsync(ct);
         }
     }

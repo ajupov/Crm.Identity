@@ -5,7 +5,7 @@ namespace Crm.Identity.OAuth.Models.ChangePassword
         public string Login { get; set; }
 
         public bool IsPasswordsNotEqual { get; set; }
-        
+
         public bool IsInvalidCredentials { get; set; }
     }
 }

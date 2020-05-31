@@ -30,7 +30,7 @@ namespace Crm.Identity.OAuth.Models.Register
         public string Phone { get; set; }
 
         public bool IsPasswordsNotEqual { get; set; }
-        
+
         public bool IsLoginExists { get; set; }
 
         public bool IsEmailExists { get; set; }

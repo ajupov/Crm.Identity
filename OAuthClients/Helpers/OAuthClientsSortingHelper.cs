@@ -14,12 +14,12 @@ namespace Crm.Identity.OAuthClients.Helpers
 
             return sortBy switch
             {
-                nameof(OAuthClient.CreateDateTime) => (isDesc
+                nameof(OAuthClient.CreateDateTime) => isDesc
                     ? queryable.OrderByDescending(x => x.CreateDateTime)
-                    : queryable.OrderBy(x => x.CreateDateTime)),
-                nameof(OAuthClient.ModifyDateTime) => (isDesc
+                    : queryable.OrderBy(x => x.CreateDateTime),
+                nameof(OAuthClient.ModifyDateTime) => isDesc
                     ? queryable.OrderByDescending(x => x.ModifyDateTime)
-                    : queryable.OrderBy(x => x.ModifyDateTime)),
+                    : queryable.OrderBy(x => x.ModifyDateTime),
                 _ => queryable.OrderByDescending(x => x.CreateDateTime)
             };
         }

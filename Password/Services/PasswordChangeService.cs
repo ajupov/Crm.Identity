@@ -33,7 +33,7 @@ namespace Crm.Identity.Password.Services
             var identity = await _identitiesService.GetVerifiedByKeyAndTypesAsync(key, identityTypes, ct) ??
                            await _identitiesService.GetVerifiedByKeyAndTypesAsync(key.GetPhoneWithoutPrefixes(country),
                                phoneIdentityType, ct);
-            
+
             if (identity == null)
             {
                 return new PostChangePasswordResponse(true);

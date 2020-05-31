@@ -7,7 +7,7 @@ namespace Crm.Identity.OAuth.Models.ChangePassword
     {
         [CountryValidation]
         public string Country { get; set; }
-        
+
         [Required]
         [StringLength(256)]
         [DataType(DataType.Text)]

@@ -12,7 +12,7 @@ namespace Crm.Identity.OAuthClients.Models
         public string ClientSecret { get; set; }
 
         public string RedirectUriPattern { get; set; }
-        
+
         public string Audience { get; set; }
 
         public bool IsLocked { get; set; }

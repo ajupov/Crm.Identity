@@ -11,21 +11,21 @@ namespace Crm.Identity.Profiles.Helpers
 
             return sortBy switch
             {
-                nameof(Profile.Surname) => (isDesc
+                nameof(Profile.Surname) => isDesc
                     ? queryable.OrderByDescending(x => x.Surname)
-                    : queryable.OrderBy(x => x.Surname)),
-                nameof(Profile.Name) => (isDesc
+                    : queryable.OrderBy(x => x.Surname),
+                nameof(Profile.Name) => isDesc
                     ? queryable.OrderByDescending(x => x.Name)
-                    : queryable.OrderBy(x => x.Name)),
-                nameof(Profile.BirthDate) => (isDesc
+                    : queryable.OrderBy(x => x.Name),
+                nameof(Profile.BirthDate) => isDesc
                     ? queryable.OrderByDescending(x => x.BirthDate)
-                    : queryable.OrderBy(x => x.BirthDate)),
-                nameof(Profile.CreateDateTime) => (isDesc
+                    : queryable.OrderBy(x => x.BirthDate),
+                nameof(Profile.CreateDateTime) => isDesc
                     ? queryable.OrderByDescending(x => x.CreateDateTime)
-                    : queryable.OrderBy(x => x.CreateDateTime)),
-                nameof(Profile.ModifyDateTime) => (isDesc
+                    : queryable.OrderBy(x => x.CreateDateTime),
+                nameof(Profile.ModifyDateTime) => isDesc
                     ? queryable.OrderByDescending(x => x.ModifyDateTime)
-                    : queryable.OrderBy(x => x.ModifyDateTime)),
+                    : queryable.OrderBy(x => x.ModifyDateTime),
                 _ => queryable.OrderByDescending(x => x.CreateDateTime)
             };
         }

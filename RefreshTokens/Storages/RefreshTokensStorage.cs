@@ -14,7 +14,7 @@ namespace Crm.Identity.RefreshTokens.Storages
         }
 
         public DbSet<RefreshToken> RefreshTokens { get; set; }
-        
+
         public DbSet<RefreshTokenClaim> RefreshTokenClaims { get; set; }
     }
 }

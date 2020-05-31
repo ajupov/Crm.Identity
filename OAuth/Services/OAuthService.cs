@@ -101,6 +101,7 @@ namespace Crm.Identity.OAuth.Services
 
                     return new PostAuthorizeResponse(callbackUri, false);
                 }
+
                 case ResponseType.Token:
                 {
                     var accessToken = _accessTokensService.Create(audience, claims);
@@ -110,6 +111,7 @@ namespace Crm.Identity.OAuth.Services
 
                     return new PostAuthorizeResponse(callbackUri, false);
                 }
+
                 default:
                     throw new ArgumentOutOfRangeException(responseType);
             }
@@ -118,7 +120,7 @@ namespace Crm.Identity.OAuth.Services
         public async Task<UserInfoResponse> GetUserInfoAsync(string accessToken, CancellationToken ct)
         {
             var claims = _accessTokensService.Read(accessToken);
-            
+
             if (!Guid.TryParse(claims.First(x => x.Type == ClaimTypes.NameIdentifier)?.Value, out var profileId))
             {
                 return new UserInfoResponse("Invalid access token");
@@ -163,6 +165,7 @@ namespace Crm.Identity.OAuth.Services
 
                     return new TokenResponse(accessToken, refreshToken);
                 }
+
                 case GrandType.Password:
                 {
                     var identityTypes = new[] {IdentityType.LoginAndPassword};
@@ -191,6 +194,7 @@ namespace Crm.Identity.OAuth.Services
 
                     return new TokenResponse(accessToken, refreshToken);
                 }
+
                 case GrandType.RefreshToken:
                 {
                     var oldRefreshToken = await _refreshTokensService.GetByValueAsync(oldRefreshTokenValue, ct);
@@ -219,6 +223,7 @@ namespace Crm.Identity.OAuth.Services
 
                     return new TokenResponse(accessToken, refreshToken);
                 }
+
                 default:
                     return new TokenResponse("Invalid grand type");
             }

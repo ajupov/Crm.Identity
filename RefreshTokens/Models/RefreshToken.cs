@@ -10,7 +10,7 @@ namespace Crm.Identity.RefreshTokens.Models
         public Guid ProfileId { get; set; }
 
         public string Value { get; set; }
-        
+
         public DateTime CreateDateTime { get; set; }
 
         public DateTime ExpirationDateTime { get; set; }
@@ -18,7 +18,7 @@ namespace Crm.Identity.RefreshTokens.Models
         public string UserAgent { get; set; }
 
         public string IpAddress { get; set; }
-        
+
         public List<RefreshTokenClaim> Claims { get; set; }
     }
 }

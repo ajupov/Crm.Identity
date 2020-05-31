@@ -55,7 +55,7 @@ namespace Crm.Identity.OAuth.ViewModels.Register
         public string Phone { get; }
 
         public bool IsPasswordsNotEqual { get; }
-        
+
         public bool IsLoginExists { get; }
 
         public bool IsEmailExists { get; }
