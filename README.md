@@ -1,9 +1,7 @@
 # Crm.Identity
-
-Identity server for https://litecrm.org
+Identity server for [Lite CRM](https://litecrm.org)
 
 ## Usage
-
 ### Requirements
 - [Docker](https://hub.docker.com/editions/community/docker-ce-desktop-windows)
 
