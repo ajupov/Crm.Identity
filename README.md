@@ -47,7 +47,8 @@ Identity server for https://litecrm.org
 }
 ```
 
-You can `build` and `run` the application
+You can `build` and `run` the application.
+The application will be run on http://localhost:3000
 
 ## Development
 1. Clone this repository
