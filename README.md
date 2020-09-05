@@ -1,6 +1,5 @@
 # Crm.Identity
-
-Identity server for https://litecrm.org
+(Identity server for Lite CRM)[https://identity.litecrm.org]
 
 ## Usage
 
