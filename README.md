@@ -8,13 +8,17 @@ Identity server for https://litecrm.org
 - [Docker](https://hub.docker.com/editions/community/docker-ce-desktop-windows)
 
 ### Steps
-1. Run `posgres` in the Docker: `docker run --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=postgres -d postgres `
+1. Run `posgres` in the Docker: `docker run --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=postgres -d postgres`
 2. Run `redis` in the Docker: `docker run --name redis -p 6379:6379 -d redis`
 3. Create `appsettings.local.json` file in the root of the repository with content:
 ```
 {
   "ApplicationHost": "http://*:3000",
   "LoggingHost": "http://localhost:9200",
+  "MetricsSettings": {
+    "Host": "localhost",
+    "Port": 3001
+  },
   "ConnectionStrings": {
     "MigrationsConnectionString": "Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=postgres",
     "HotStorageConnectionString": "redis://id:redis@localhost:6379?ssl=false&db=1"
