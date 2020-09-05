@@ -2,7 +2,6 @@
 [Identity server for Lite CRM](https://identity.litecrm.org)
 
 ## Usage
-
 ### Requirements
 - [Docker](https://hub.docker.com/editions/community/docker-ce-desktop-windows)
 
