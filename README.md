@@ -1,52 +1,17 @@
 # Crm.Identity
-[Identity server for Lite CRM](https://identity.litecrm.org)
+
+Identity server for https://litecrm.org
 
 ## Usage
+
 ### Requirements
 - [Docker](https://hub.docker.com/editions/community/docker-ce-desktop-windows)
 
 ### Steps
-1. Run `posgres` in the Docker: `docker run --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=postgres -d postgres`
+1. Run `posgres` in the Docker: `docker run --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=postgres -d postgres `
 2. Run `redis` in the Docker: `docker run --name redis -p 6379:6379 -d redis`
-3. Create `appsettings.local.json` file in the root of the repository with content:
-```
-{
-  "ApplicationHost": "http://*:3000",
-  "LoggingHost": "http://localhost:9200",
-  "MetricsSettings": {
-    "Host": "localhost",
-    "Port": 3001
-  },
-  "ConnectionStrings": {
-    "MigrationsConnectionString": "Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=postgres",
-    "HotStorageConnectionString": "redis://id:redis@localhost:6379?ssl=false&db=1"
-  },
-  "OrmSettings": {
-    "IsTestMode": false,
-    "MainConnectionString": "Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=postgres",
-    "ReadonlyConnectionString": "Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=postgres"
-  },
-  "JwtValidatorSettings": {
-    "Audience": "",
-    "SigningKey": "C59A10DF-962F-411F-A8B1-3362E43C2784"
-  },
-  "MailSendingSettings": {
-    "IsTestMode": true
-  },
-  "SmsSendingSettings": {
-    "IsTestMode": true
-  },
-  "VerifyEmailSettings": {
-    "VerifyUriPattern": "http://localhost:3000/oauth/verifyemail?TokenId={0}&Code={1}"
-  },
-  "ResetPasswordSettings": {
-    "ResetUriPattern": "http://localhost:3000/oauth/resetpasswordconfirmation?TokenId={0}&Code={1}"
-  }
-}
-```
-
-You can `build` and `run` the application.
-The application will be run on http://localhost:3000
+3. Build and run application
+4. Application will be started on http://localhost:3000
 
 ## Development
 1. Clone this repository
