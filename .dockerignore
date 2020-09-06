@@ -6,4 +6,5 @@ obj
 Dockerfile
 Folder.DotSettings.user
 appsettings.local.json
+appsettings.local-example.json
 README.md

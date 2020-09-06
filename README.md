@@ -8,8 +8,9 @@ Identity server for [Lite CRM](https://litecrm.org)
 ### Steps
 1. Run `posgres` in the Docker: `docker run --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=postgres -d postgres`
 2. Run `redis` in the Docker: `docker run --name redis -p 6379:6379 -d redis`
-3. Build and run application
-4. Connect to Postgres on `localhost:5432` and run script on database with name `postgres`:
+3. Clone file `appsettings.local-example.json` and rename to `appsettings.local.json`
+4. Build and run application
+5. Connect to Postgres on `localhost:5432` and run script on database with name `postgres`:
     ```
     insert into "Resources" ("Id", "Name", "Scope", "Description", "Uri", "IsLocked", "IsDeleted", "CreateDateTime")
     values ('dc928c0c-dc5d-408e-a51f-253527d0c6fe', 'OpenID', 'openid', 'API', 'http://localhost:3000', false, false, now()),
@@ -32,7 +33,7 @@ Identity server for [Lite CRM](https://litecrm.org)
     do nothing;
     ```
 
-5. The application will be run on http://localhost:3000
+6. The application will be run on http://localhost:3000
 
 ## Development
 1. Clone this repository
