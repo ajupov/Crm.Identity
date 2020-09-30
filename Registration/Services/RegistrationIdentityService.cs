@@ -3,16 +3,20 @@ using System.Threading;
 using System.Threading.Tasks;
 using Crm.Identity.Identities.Models;
 using Crm.Identity.Identities.Services;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 
 namespace Crm.Identity.Registration.Services
 {
     public class RegistrationIdentityService : IRegistrationIdentityService
     {
         private readonly IIdentitiesService _identitiesService;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public RegistrationIdentityService(IIdentitiesService identitiesService)
+        public RegistrationIdentityService(IIdentitiesService identitiesService, IWebHostEnvironment webHostEnvironment)
         {
             _identitiesService = identitiesService;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public async Task CreateLoginIdentityAsync(
@@ -45,7 +49,7 @@ namespace Crm.Identity.Registration.Services
                 Type = IdentityType.EmailAndPassword,
                 Key = email,
                 PasswordHash = passwordHash,
-                IsVerified = false
+                IsVerified = _webHostEnvironment.IsDevelopment()
             };
 
             await _identitiesService.CreateAsync(emailIdentity, ct);

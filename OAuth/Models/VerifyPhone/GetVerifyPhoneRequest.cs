@@ -10,6 +10,8 @@ namespace Crm.Identity.OAuth.Models.VerifyPhone
 
         public string CallbackUri { get; set; }
 
+        public string Code { get; set; }
+
         public bool IsInvalidCode { get; set; }
     }
 }

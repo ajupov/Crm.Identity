@@ -32,7 +32,9 @@ using Crm.Identity.Password.Services;
 using Crm.Identity.Phone.Services;
 using Crm.Identity.Registration.Services;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 
 namespace Crm.Identity.OAuth.Controllers
 {
@@ -51,6 +53,8 @@ namespace Crm.Identity.OAuth.Controllers
         private readonly IPasswordResetService _passwordResetService;
         private readonly IEmailVerificationService _emailVerificationService;
         private readonly IPhoneVerificationService _phoneVerificationService;
+        private readonly IIdentityTokensService _identityTokensService;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
         public OAuthController(
             IOAuthService oauthService,
@@ -62,7 +66,9 @@ namespace Crm.Identity.OAuth.Controllers
             IPasswordChangeService passwordChangeService,
             IPasswordResetService passwordResetService,
             IEmailVerificationService emailVerificationService,
-            IPhoneVerificationService phoneVerificationService)
+            IPhoneVerificationService phoneVerificationService,
+            IIdentityTokensService identityTokensService,
+            IWebHostEnvironment webHostEnvironment)
         {
             _oauthService = oauthService;
             _ioAuthClientsService = ioAuthClientsService;
@@ -74,6 +80,8 @@ namespace Crm.Identity.OAuth.Controllers
             _passwordResetService = passwordResetService;
             _emailVerificationService = emailVerificationService;
             _phoneVerificationService = phoneVerificationService;
+            _identityTokensService = identityTokensService;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         [HttpGet("Authorize")]
@@ -308,6 +316,13 @@ namespace Crm.Identity.OAuth.Controllers
                 IsInvalidCode = false
             };
 
+            if (_webHostEnvironment.IsDevelopment())
+            {
+                var phoneIdentityToken = await _identityTokensService.GetAsync(phoneIdentityTokenId, ct);
+
+                getVerifyPhoneRequest.Code = phoneIdentityToken?.Value;
+            }
+
             return RedirectToAction("VerifyPhone", getVerifyPhoneRequest);
         }
 
@@ -520,6 +535,7 @@ namespace Crm.Identity.OAuth.Controllers
             var model = new VerifyPhoneViewModel(
                 request.TokenId,
                 request.CallbackUri,
+                request.Code,
                 request.IsInvalidCode);
 
             return View("~/OAuth/Views/VerifyPhone.cshtml", model);
