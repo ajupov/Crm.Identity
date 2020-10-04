@@ -19,7 +19,10 @@ namespace Crm.Identity.Resources.Services
 
         public async Task<List<string>> GetRolesByScopesAsync(IEnumerable<string> scopes, CancellationToken ct)
         {
-            var resources = await _storage.Resources.ToListAsync(ct);
+            var resources = await _storage.Resources
+                .AsNoTracking()
+                .ToListAsync(ct);
+
             var resourceScopes = resources.Select(x => x.Scope);
             var resultScopes = resourceScopes.Intersect(scopes);
 
