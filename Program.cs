@@ -111,13 +111,13 @@ namespace Crm.Identity
                 {
                     if (context.HostingEnvironment.IsDevelopment())
                     {
-                        builder.UseDeveloperExceptionPage();
+                        builder.UseDeveloperExceptionPage()
+                            .UseForwardedHeaders()
+                            .UseHttpsRedirection()
+                            .UseHsts();
                     }
 
                     builder
-                        .UseForwardedHeaders()
-                        .UseHttpsRedirection()
-                        .UseHsts()
                         .UseStaticFiles()
                         .UseApiDocumentationsMiddleware()
                         .UseMigrationsMiddleware()

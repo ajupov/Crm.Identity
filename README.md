@@ -10,7 +10,7 @@ Identity server for [Lite CRM](https://litecrm.org)
 2. Run `redis` in the Docker: `docker run --name redis -p 6379:6379 -d redis`
 3. Clone file `appsettings.local-example.json` and rename to `appsettings.local.json`
 4. Build and run application
-5. The application will be run on https://localhost:3000
+5. The application will be run on http://localhost:3000
 
 ## Development
 1. Clone this repository
