@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ajupov.Infrastructure.All.Api;
 using Ajupov.Infrastructure.All.Api.Attributes;
+using Ajupov.Infrastructure.All.ApiDocumentation.Attributes;
 using Ajupov.Utils.All.String;
 using Crm.Identity.Email.Services;
 using Crm.Identity.Identities.Services;
@@ -84,6 +85,7 @@ namespace Crm.Identity.OAuth.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
+        [IgnoreApiDocumentation]
         [HttpGet("Authorize")]
         public async Task<ActionResult> Authorize(GetAuthorizeRequest request, CancellationToken ct)
         {
@@ -114,6 +116,7 @@ namespace Crm.Identity.OAuth.Controllers
             return View("~/OAuth/Views/Authorize.cshtml", model);
         }
 
+        [IgnoreApiDocumentation]
         [ValidateAntiForgeryToken]
         [HttpPost("Authorize")]
         public async Task<ActionResult> Authorize([FromForm] PostAuthorizeRequest request, CancellationToken ct)
@@ -165,6 +168,7 @@ namespace Crm.Identity.OAuth.Controllers
             return Redirect(response.CallbackUri);
         }
 
+        [IgnoreApiDocumentation]
         [HttpGet("Register")]
         public async Task<ActionResult> Register(GetRegisterRequest request, CancellationToken ct)
         {
@@ -203,6 +207,7 @@ namespace Crm.Identity.OAuth.Controllers
             return View("~/OAuth/Views/Register.cshtml", model);
         }
 
+        [IgnoreApiDocumentation]
         [ValidateAntiForgeryToken]
         [HttpPost("Register")]
         public async Task<ActionResult> Register([FromForm] PostRegisterRequest request, CancellationToken ct)
@@ -380,6 +385,7 @@ namespace Crm.Identity.OAuth.Controllers
             return response;
         }
 
+        [IgnoreApiDocumentation]
         [HttpGet("ChangeEmail")]
         public ActionResult ChangeEmail(GetChangeEmailRequest request)
         {
@@ -393,6 +399,7 @@ namespace Crm.Identity.OAuth.Controllers
             return View("~/OAuth/Views/ChangeEmail.cshtml", model);
         }
 
+        [IgnoreApiDocumentation]
         [ValidateAntiForgeryToken]
         [HttpPost("ChangeEmail")]
         public async Task<ActionResult> ChangeEmail([FromForm] PostChangeEmailRequest request, CancellationToken ct)
@@ -445,6 +452,7 @@ namespace Crm.Identity.OAuth.Controllers
             return View("~/OAuth/Views/ChangeEmailConfirmation.cshtml");
         }
 
+        [IgnoreApiDocumentation]
         [HttpGet("VerifyEmail")]
         public async Task<ActionResult> VerifyEmail(VerifyEmailRequest request, CancellationToken ct)
         {
@@ -457,6 +465,7 @@ namespace Crm.Identity.OAuth.Controllers
             return View("~/OAuth/Views/VerifyEmail.cshtml");
         }
 
+        [IgnoreApiDocumentation]
         [HttpGet("ChangePhone")]
         public ActionResult ChangePhone(GetChangePhoneRequest request)
         {
@@ -470,6 +479,7 @@ namespace Crm.Identity.OAuth.Controllers
             return View("~/OAuth/Views/ChangePhone.cshtml", model);
         }
 
+        [IgnoreApiDocumentation]
         [ValidateAntiForgeryToken]
         [HttpPost("ChangePhone")]
         public async Task<ActionResult> ChangePhone([FromForm] PostChangePhoneRequest request, CancellationToken ct)
@@ -529,6 +539,7 @@ namespace Crm.Identity.OAuth.Controllers
             return RedirectToAction("VerifyPhone", getVerifyPhoneRequest);
         }
 
+        [IgnoreApiDocumentation]
         [HttpGet("VerifyPhone")]
         public ActionResult VerifyPhone(GetVerifyPhoneRequest request)
         {
@@ -541,6 +552,7 @@ namespace Crm.Identity.OAuth.Controllers
             return View("~/OAuth/Views/VerifyPhone.cshtml", model);
         }
 
+        [IgnoreApiDocumentation]
         [ValidateAntiForgeryToken]
         [HttpPost("VerifyPhone")]
         public async Task<ActionResult> VerifyPhone([FromForm] PostVerifyPhoneRequest request, CancellationToken ct)
@@ -566,6 +578,7 @@ namespace Crm.Identity.OAuth.Controllers
             return Redirect(request.CallbackUri);
         }
 
+        [IgnoreApiDocumentation]
         [HttpGet("ChangePassword")]
         public ActionResult ChangePassword(GetChangePasswordRequest request)
         {
@@ -577,6 +590,7 @@ namespace Crm.Identity.OAuth.Controllers
             return View("~/OAuth/Views/ChangePassword.cshtml", model);
         }
 
+        [IgnoreApiDocumentation]
         [ValidateAntiForgeryToken]
         [HttpPost("ChangePassword")]
         public async Task<ActionResult> ChangePassword([FromForm] PostChangePasswordRequest request,
@@ -614,6 +628,7 @@ namespace Crm.Identity.OAuth.Controllers
             return View("~/OAuth/Views/PasswordChanged.cshtml");
         }
 
+        [IgnoreApiDocumentation]
         [HttpGet("ResetPassword")]
         public ActionResult ResetPassword(GetResetPasswordRequest request)
         {
@@ -622,6 +637,7 @@ namespace Crm.Identity.OAuth.Controllers
             return View("~/OAuth/Views/ResetPassword.cshtml", model);
         }
 
+        [IgnoreApiDocumentation]
         [ValidateAntiForgeryToken]
         [HttpPost("ResetPassword")]
         public async Task<ActionResult> ResetPassword([FromForm] PostResetPasswordRequest request, CancellationToken ct)
@@ -647,6 +663,7 @@ namespace Crm.Identity.OAuth.Controllers
             return View("~/OAuth/Views/ResetPasswordConfirmation.cshtml");
         }
 
+        [IgnoreApiDocumentation]
         [HttpGet("ResetPasswordConfirmation")]
         public async Task<ActionResult> ResetPasswordConfirmation(
             ResetPasswordConfirmationRequest request,
@@ -666,6 +683,7 @@ namespace Crm.Identity.OAuth.Controllers
             return View("~/OAuth/Views/SetNewPassword.cshtml", model);
         }
 
+        [IgnoreApiDocumentation]
         [ValidateAntiForgeryToken]
         [HttpPost("ResetPasswordConfirmation")]
         public async Task<ActionResult> ResetPasswordConfirmation(
