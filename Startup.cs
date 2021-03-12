@@ -1,11 +1,10 @@
-﻿using Ajupov.Infrastructure.All.ApiDocumentation;
+﻿using Ajupov.Infrastructure.All.Api;
+using Ajupov.Infrastructure.All.ApiDocumentation;
 using Ajupov.Infrastructure.All.HotStorage;
 using Ajupov.Infrastructure.All.Jwt;
 using Ajupov.Infrastructure.All.MailSending;
 using Ajupov.Infrastructure.All.Metrics;
 using Ajupov.Infrastructure.All.Migrations;
-using Ajupov.Infrastructure.All.Mvc;
-using Ajupov.Infrastructure.All.Mvc.Filters;
 using Ajupov.Infrastructure.All.Orm;
 using Ajupov.Infrastructure.All.SmsSending;
 using Ajupov.Infrastructure.All.Tracing;
@@ -33,7 +32,6 @@ using Crm.Identity.Resources.Storages;
 using Crm.Identity.UserInfo.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -57,7 +55,7 @@ namespace Crm.Identity
                 .AddJwtValidator(Configuration);
 
             services
-                .AddMvc(typeof(AutoValidateAntiforgeryTokenAttribute), typeof(ValidationFilter))
+                .AddApiControllersWithViews()
                 .AddJwtGenerator()
                 .AddJwtReader()
                 .AddTracing(Configuration)
@@ -108,8 +106,11 @@ namespace Crm.Identity
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage()
-                    .UseForwardedHeaders()
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseForwardedHeaders()
                     .UseHttpsRedirection()
                     .UseHsts();
             }
@@ -119,8 +120,9 @@ namespace Crm.Identity
                 .UseMigrationsMiddleware()
                 .UseMetricsMiddleware()
                 .UseAuthentication()
+                .UseRouting()
                 .UseAuthorization()
-                .UseMvcMiddleware();
+                .UseControllers();
         }
     }
 }

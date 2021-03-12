@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Ajupov.Infrastructure.All.Mvc;
-using Ajupov.Infrastructure.All.Mvc.Attributes;
+using Ajupov.Infrastructure.All.Api;
+using Ajupov.Infrastructure.All.Api.Attributes;
 using Ajupov.Utils.All.String;
 using Crm.Identity.Email.Services;
 using Crm.Identity.Identities.Services;

@@ -4,10 +4,13 @@ namespace Crm.Identity.Scopes
 {
     public static class ScopesWithRoles
     {
-        public static Dictionary<string, string[]> Value = new Dictionary<string, string[]>
+        public static Dictionary<string, string[]> Value = new ()
         {
             {ScopeNames.Profile, new[] {"Profile"}},
-            {ScopeNames.Api, new[] {"Products", "Leads", "Sales"}}
+            {
+                ScopeNames.Api,
+                new[] {"Account", "User", "Products", "Leads", "Companies", "Contacts", "Deals", "Activities"}
+            }
         };
     }
 }
