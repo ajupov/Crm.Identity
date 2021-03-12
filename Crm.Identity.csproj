@@ -1,15 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
-        <PackageVersion>1.2.2</PackageVersion>
+        <PackageVersion>1.2.3</PackageVersion>
         <Authors>U. Ajupov</Authors>
         <RepositoryUrl>https://github.com/ajupov/Crm.Identity.git</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <NoWarn>SA0001;SA1003;SA1009;SA1012;SA1013;SA1101;SA1116;SA1117;SA1200;SA1300;SA1309;SA1401;SA1413;SA1600;SA1633</NoWarn>
+        <AssemblyVersion>1.2.3</AssemblyVersion>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Ajupov.Infrastructure.All" Version="1.9.8" />
+        <PackageReference Include="Ajupov.Infrastructure.All" Version="1.9.10" />
         <PackageReference Include="Ajupov.Utils.All" Version="1.7.0" />
         <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" />
     </ItemGroup>
