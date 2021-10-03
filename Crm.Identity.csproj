@@ -10,8 +10,8 @@
         <AssemblyVersion>1.2.3</AssemblyVersion>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Ajupov.Infrastructure.All" Version="1.9.10" />
-        <PackageReference Include="Ajupov.Utils.All" Version="1.7.0" />
+        <PackageReference Include="Ajupov.Infrastructure.All" Version="1.10.0" />
+        <PackageReference Include="Ajupov.Utils.All" Version="1.9.7" />
         <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" />
     </ItemGroup>
     <ItemGroup>

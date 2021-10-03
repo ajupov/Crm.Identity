@@ -9,7 +9,7 @@ namespace Crm.Identity.Scopes
             {ScopeNames.Profile, new[] {"Profile"}},
             {
                 ScopeNames.Api,
-                new[] {"Account", "User", "Products", "Leads", "Companies", "Contacts", "Deals", "Activities"}
+                new[] {"Account", "User", "Products", "Customers", "Orders", "Tasks"}
             }
         };
     }
