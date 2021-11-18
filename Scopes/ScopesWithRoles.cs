@@ -6,10 +6,10 @@ namespace Crm.Identity.Scopes
     {
         public static Dictionary<string, string[]> Value = new ()
         {
-            {ScopeNames.Profile, new[] {"Profile"}},
+            { ScopeNames.Profile, new[] { "Profile" } },
             {
                 ScopeNames.Api,
-                new[] {"Account", "User", "Products", "Customers", "Orders", "Tasks"}
+                new[] { "Account", "User", "Products", "Customers", "Orders", "Tasks", "Suppliers", "Stock" }
             }
         };
     }
